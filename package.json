@@ -1,0 +1,67 @@
+{
+  "name": "@webtoon/psd",
+  "version": "0.1.0",
+  "description": "lightweight psd file parser with no dependency written in typescript",
+  "homepage": "https://webtoon.github.io/psd.ts",
+  "license": "MIT",
+  "author": "W FE Tech <dl_wfetech@webtoonscorp.com>",
+  "contributors": [
+    "Lee Dong Hyun <moving.hyun@webtoonscorp.com>",
+    "Kang Ye Hyoung <yehyoung.kang@webtoonscorp.com>"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run clear && webpack --mode=production",
+    "build:browser": "npm run build && webpack -c examples/browser/webpack.config.js --mode=production && cp -a examples/browser/statics/. examples/browser/dist",
+    "clear": "rimraf dist/",
+    "deploy": "npm run build:browser && gh-pages -d examples/browser/dist",
+    "fix": "eslint --fix . && prettier --write .",
+    "lint": "eslint . && prettier --check .",
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build",
+    "release": "env-cmd release-it",
+    "start:browser": "npm run clear && webpack serve -c examples/browser/webpack.config.js --mode=development",
+    "start:node": "npm run clear && tsc-watch -p ./tsconfig.json --onSuccess \"node --experimental-specifier-resolution=node --trace-uncaught ./examples/node/script.js\"",
+    "test": "jest"
+  },
+  "browserslist": [
+    "chrome >= 38",
+    "firefox >= 20",
+    "safari >= 10.1"
+  ],
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "css-loader": "^6.5.1",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-compat": "^4.0.0",
+    "eslint-plugin-header": "^3.1.1",
+    "eslint-plugin-import": "^2.25.3",
+    "gh-pages": "^3.2.3",
+    "husky": "^7.0.4",
+    "jest": "^27.4.3",
+    "prettier": "^2.5.1",
+    "prettier-plugin-packagejson": "^2.2.15",
+    "release-it": "^14.11.8",
+    "rimraf": "^3.0.2",
+    "style-loader": "^3.3.1",
+    "ts-jest": "^27.1.1",
+    "ts-loader": "^9.2.6",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.5.2",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

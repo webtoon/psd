@@ -1,0 +1,4 @@
+.idea
+.npmignore
+webpack.config.js
+example/

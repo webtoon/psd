@@ -1,0 +1,20 @@
+/**
+ * Config file for API Extractor.  For more info, please visit: https://api-extractor.com
+ */
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "apiReport": {
+    // We can enable this when we decide to integrate the API report into our PR
+    // review process
+    "enabled": false
+  },
+  "docModel": {
+    // We can enable this when we decide to generate API docs
+    "enabled": false
+  },
+  "dtsRollup": {
+    "enabled": true
+  },
+  "newlineKind": "lf"
+}
