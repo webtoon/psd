@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PSD.ts - PSD file parser in typescript with zero dependency</title>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <aside>
+      <div class="aside-content">
+        <h1>PSD.ts</h1>
+        <p>A lightweight Adobe Photoshop .psd file parser in typescript with zero-dependency for browsers and NodeJS.</p>
+        <div class="badges">
+          <a href="https://github.com/webtoon/psd.ts"><img src="https://img.shields.io/badge/Github-webtoon%2FPSD.ts-00d564?logo=github&logoColor=%23FFF" alt="go github" /></a>
+          <a href="https://github.com/webtoon/psd.ts"><img src="https://img.shields.io/github/stars/webtoon/psd.ts?style=social" alt="stars - psd.ts"></a>
+        </div>
+        <h2>Installation</h2>
+        <code>$ npm install @webtoon/psd.ts --save</code>
+        <h2>Browser compatibility</h2>
+        <table class="browser-compatibility">
+          <tr>
+            <td><img src="./chrome.svg" alt="Chrome" /><br/><span>Chrome <b>38+</b></span></td>
+            <td><img src="./firefox.svg" alt="FireFox" /><br/><span>FireFox <b>20+</b></span></td>
+            <td><img src="./safari.svg" alt="Safari" /><br/><span>Safari <b>10.1+</b></span></td>
+            <td><img src="./internetexplorer.svg" alt="Internet Explorer" /><br/><span>IE <b>✕</b></span></td>
+          </tr>
+        </table>
+        <h2>Features</h2>
+        <ul>
+          <li>Parse each layer information (offset, size, image data, etc)</li>
+          <li>Parse string value in text layer</li>
+          <li>Parse guides and slices</li>
+          <li>Supports .psb file</li>
+          <li>Supports unicode text (ex, layer title)</li>
+        </ul>
+      </div>
+      <div class="aside-bottom">
+        <p>PSD.ts maintained with ♥ by <a href="https://webtoonscorp.com" target="_blank"><img src="webtoon.svg" alt="logo" />WEBTOON Inc.</a></p>
+        <p>Contributions are welcome!</p>
+      </div>
+    </aside>
+    <section>
+      <div class="section-content">
+        <h2>Select psd/psb file</h2>
+        <input type="file" accept="image/vnd.adobe.photoshop,.psb" />
+        <h2>Results</h2>
+        <p>After the file is selected, the PSD file parsing result is shown below.</p>
+        <div id="results"></div>
+      </div>
+    </section>
+  </body>
+</html>
