@@ -114,7 +114,7 @@ A `Psd` object contains a tree of `Layer` and `Group` (i.e. layer group) objects
 - Each `Group` object provides a `children` property, which is an array of `Layers` and `Group`s that belong immediately under the current layer group .
 
 ```ts
-import Psd, {Group, Layer, Node} from "./src";
+import Psd, {Group, Layer, Node} from "@webtoon/psd";
 
 // Recursively traverse layers and layer groups
 function traverseNode(node: Node) {
