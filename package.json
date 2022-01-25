@@ -16,8 +16,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clear && webpack --mode=production",
-    "build:browser": "npm run build && webpack -c examples/browser/webpack.config.js --mode=production && cp -a examples/browser/statics/. examples/browser/dist",
+    "build": "webpack --mode=production",
+    "build:browser": "webpack -c examples/browser/webpack.config.js --mode=production && cp -a examples/browser/statics/. examples/browser/dist",
     "clear": "rimraf dist/",
     "deploy": "npm run build:browser && gh-pages -d examples/browser/dist",
     "fix": "eslint --fix . && prettier --write .",
