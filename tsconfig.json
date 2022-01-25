@@ -69,6 +69,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/index.ts"],
+  "include": ["src/index.ts", "./examples/"],
   "exclude": ["node_modules", "dist", "__tests__"]
 }

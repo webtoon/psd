@@ -1,36 +1,61 @@
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import * as path from "path";
 import {fileURLToPath} from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default {
-  entry: {
-    script: path.resolve(__dirname, "./src/script.ts"),
-    worker: path.resolve(__dirname, "./src/worker.ts"),
-  },
-  output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
-  },
-  target: ["web", "es2018"],
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: "ts-loader",
-      },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
+/**
+ * @param {Record<string, string | boolean>} env
+ * @param {Record<string, string>} argv
+ * @returns {import("webpack").Configuration}
+ */
+export default (env, argv) => {
+  const isDevMode = argv.mode !== "production";
+
+  return {
+    entry: {
+      script: path.resolve(__dirname, "./src/script.ts"),
+    },
+    output: {
+      clean: true,
+      filename: "[name].js",
+      assetModuleFilename: "[name][ext]",
+      path: path.resolve(__dirname, "dist"),
+    },
+    target: ["web", "es2018"],
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: "ts-loader",
+        },
+        {
+          test: /\.html$/i,
+          use: "html-loader",
+        },
+        {
+          test: /\.css$/i,
+          use: [
+            isDevMode ? "style-loader" : MiniCssExtractPlugin.loader,
+            "css-loader",
+          ],
+        },
+      ],
+    },
+    resolve: {
+      extensions: [".ts", ".js"],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, "statics/index.html"),
+      }),
+      ...(isDevMode ? [] : [new MiniCssExtractPlugin()]),
     ],
-  },
-  resolve: {
-    extensions: [".ts", ".js"],
-  },
-  devServer: {
-    static: path.resolve(__dirname, "./statics"),
-    host: "localhost",
-    port: 4200,
-  },
+    devServer: {
+      static: path.resolve(__dirname, "./statics"),
+      host: "localhost",
+      port: 4200,
+    },
+  };
 };

@@ -24,6 +24,7 @@ const generateCanvas = (data: {
 
   return canvasEl;
 };
+
 const readFileAsArrayBuffer = (file: File) => {
   if (file.arrayBuffer) {
     return file.arrayBuffer();
@@ -42,6 +43,7 @@ const readFileAsArrayBuffer = (file: File) => {
     });
   }
 };
+
 const workerCallback = ({data}: MessageEvent<any>, element: HTMLDivElement) => {
   const {type, timestamp, value} = data;
   validateMessage(data);
@@ -74,7 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputEl = document.querySelector(
     'input[type="file"]'
   ) as HTMLInputElement;
-  const worker = new Worker("./worker.js", {type: "module"});
+  // eslint-disable-next-line compat/compat
+  const worker = new Worker(new URL("./worker.ts", import.meta.url), {
+    type: "module",
+  });
   worker.addEventListener("message", (e: MessageEvent<any>) =>
     workerCallback(e, resultsEl)
   );
