@@ -3,7 +3,7 @@
 // MIT License
 
 /**
- * Base class for all exceptions thrown by Psd.ts
+ * Base class for all exceptions thrown by @webtoon/psd
  */
 export class PsdError extends Error {
   // Workaround to properly set the prototype chain in Node.js
@@ -33,7 +33,7 @@ export class InvalidCompression extends PsdError {}
 
 /**
  * Error thrown when the PSD file uses a compression format that is valid, but
- * currently unsupported by Psd.ts.
+ * currently unsupported by @webtoon/psd.
  */
 export class UnsupportedCompression extends PsdError {}
 export class UnsupportedDepth extends PsdError {}

@@ -91,7 +91,7 @@ const psdFile = Psd.parse(psdData.buffer);
 Since `@webtoon/psd` is provided as an ES module, you must use dynamic `import()` or a bundler to run it in CommonJS code:
 
 ```ts
-const Psd = await import("webtoon/psd.ts");
+const Psd = await import("@webtoon/psd");
 ```
 
 ## API Docs

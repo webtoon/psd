@@ -2,7 +2,7 @@
   "name": "@webtoon/psd",
   "version": "0.1.0",
   "description": "lightweight psd file parser with no dependency written in typescript",
-  "homepage": "https://webtoon.github.io/psd.ts",
+  "homepage": "https://webtoon.github.io/psd",
   "license": "MIT",
   "author": "W FE Tech <dl_wfetech@webtoonscorp.com>",
   "contributors": [
