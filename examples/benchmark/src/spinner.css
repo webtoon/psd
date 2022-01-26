@@ -1,0 +1,108 @@
+/*
+  @webtoon/psd
+  Copyright 2021-present NAVER WEBTOON
+  MIT License
+*/
+
+.progress-spinner {
+  --spinner-width: 3em;
+  --spinner-height: 2em;
+  --spinning-bgcolor: hsl(200, 80%, 50%);
+  --animation-name: square-spinner-1;
+
+  position: relative;
+  background: hsl(0, 0%, 70%);
+  margin: auto;
+  margin-bottom: calc(var(--spinner-height) * 2 / 3);
+}
+
+.progress-spinner::before,
+.progress-spinner::after {
+  position: absolute;
+  left: 0;
+  content: "";
+}
+
+.progress-spinner::before {
+  --spinning-bgcolor: hsl(200, 90%, 65%);
+  --animation-name: square-spinner-2;
+
+  top: calc(var(--spinner-height) / 3);
+  background: hsl(0, 0%, 80%);
+}
+
+.progress-spinner::after {
+  --spinning-bgcolor: hsl(200, 100%, 80%);
+  --animation-name: square-spinner-3;
+
+  top: calc(var(--spinner-height) * 2 / 3);
+  background: hsl(0, 0%, 90%);
+}
+
+.progress-spinner,
+.progress-spinner::before,
+.progress-spinner::after {
+  width: var(--spinner-width);
+  height: calc(var(--spinner-height) / 3);
+}
+
+.progress-spinner[data-state="spinning"],
+.progress-spinner[data-state="spinning"]::before,
+.progress-spinner[data-state="spinning"]::after {
+  animation: 2s infinite var(--animation-name) ease-in-out;
+  background: var(--spinning-bgcolor);
+}
+
+@keyframes square-spinner-1 {
+  30% {
+    transform: translateX(0) scaleX(1);
+  }
+
+  45% {
+    transform: translateX(50%) scaleX(0);
+  }
+
+  46% {
+    transform: translateX(-50%) scaleX(0);
+  }
+
+  61% {
+    transform: translateX(0) scaleX(1);
+  }
+}
+
+@keyframes square-spinner-2 {
+  15% {
+    transform: translateX(0) scaleX(1);
+  }
+
+  30% {
+    transform: translateX(50%) scaleX(0);
+  }
+
+  61% {
+    transform: translateX(-50%) scaleX(0);
+  }
+
+  76% {
+    transform: translateX(0) scaleX(1);
+  }
+}
+
+@keyframes square-spinner-3 {
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+
+  15% {
+    transform: translateX(50%) scaleX(0);
+  }
+
+  76% {
+    transform: translateX(-50%) scaleX(0);
+  }
+
+  91% {
+    transform: translateX(0) scaleX(1);
+  }
+}
