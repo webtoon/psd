@@ -14,9 +14,7 @@ export default (env, argv) => {
   const isDevMode = argv.mode !== "production";
 
   return {
-    entry: {
-      script: path.resolve(__dirname, "./src/script.ts"),
-    },
+    entry: path.resolve(__dirname, "./src/main.ts"),
     output: {
       clean: true,
       filename: "[name].js",
