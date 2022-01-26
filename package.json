@@ -18,8 +18,8 @@
   "scripts": {
     "build": "webpack --mode=production",
     "build:browser": "webpack -c examples/browser/webpack.config.js --mode=production",
-    "clear": "rimraf dist/",
-    "deploy": "npm run build:browser && gh-pages -d examples/browser/dist",
+    "clear": "rimraf dist/ dist-web/",
+    "deploy": "npm run build:browser && gh-pages -d dist-web/",
     "fix": "eslint --fix . && prettier --write .",
     "lint": "eslint . && prettier --check .",
     "prepare": "husky install",

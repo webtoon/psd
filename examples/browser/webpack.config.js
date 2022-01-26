@@ -19,7 +19,7 @@ export default (env, argv) => {
       clean: true,
       filename: "[name].js",
       assetModuleFilename: "[name][ext]",
-      path: path.resolve(__dirname, "dist"),
+      path: path.resolve(__dirname, "../../dist-web"),
     },
     target: ["web", "es2018"],
     module: {
