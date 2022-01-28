@@ -14,6 +14,10 @@ A lightweight Adobe Photoshop .psd/.psb file parser in typescript with zero-depe
 $ npm install @webtoon/psd
 ```
 
+## Benchmarks
+
+You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github.io/psd/benchmark/).
+
 ## Features
 
 #### ✅ Supported
@@ -160,10 +164,6 @@ layerPixelData = layer.composite(true, false);
 // Extract the pixel data of a layer, without any effects
 layerPixelData = layer.composite(false);
 ```
-
-## Benchmarks
-
-You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github.io/psd/benchmark/).
 
 ## License
 
