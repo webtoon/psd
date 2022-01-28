@@ -161,6 +161,10 @@ layerPixelData = layer.composite(true, false);
 layerPixelData = layer.composite(false);
 ```
 
+## Benchmarks
+
+You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github.io/psd/benchmark/).
+
 ## License
 
 `@webtoon/psd` is released under the [MIT license](https://github.com/webtoon/psd/blob/master/LICENSE).
