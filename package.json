@@ -34,7 +34,9 @@
   "browserslist": [
     "chrome >= 38",
     "firefox >= 20",
-    "safari >= 10.1"
+    "safari >= 10.1",
+    "edge >= 79",
+    "node >= 12"
   ],
   "devDependencies": {
     "@types/jest": "^27.0.3",

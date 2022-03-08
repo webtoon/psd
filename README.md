@@ -4,9 +4,11 @@ A lightweight Adobe Photoshop .psd/.psb file parser in typescript with zero-depe
 
 ## Browser Support
 
-| Chrome | Firefox | Safari | Internet Explorer |
-| :----: | :-----: | :----: | :---------------: |
-|   38   |   20    |  10.1  |   Not Supported   |
+| Chrome | Firefox | Safari | Edge | Node |
+| :----: | :-----: | :----: | :--: | :--: |
+|   38   |   20    |  10.1  |  79  |  12  |
+
+\*Internet Explorer is not supported
 
 ## Installation
 
