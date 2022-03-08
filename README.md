@@ -1,6 +1,13 @@
 # @webtoon/psd
 
-A lightweight Adobe Photoshop .psd/.psb file parser in typescript with zero-dependency for WebBrowser and NodeJS
+![@webtoon/psd logo](./images/webtoon-psd-logo.png)
+
+> A lightweight Adobe Photoshop .psd/.psb file parser in typescript with zero-dependency for web browsers and NodeJS
+
+`@webtoon/psd` is a fast, lightweight parser for Adobe Photoshop PSD/PSB files. It uses standard (ES2015+) features and can be used both in web browsers and in Node.js. It pulls in zero dependencies, making it smaller ([~25 KiB minified](https://bundlephobia.com/package/@webtoon/psd@0.1.0)) than other PSD parsers ([ag-psd]: [139 KiB](https://bundlephobia.com/package/ag-psd@14.3.6), [PSD.js]: [443 KiB](https://github.com/meltingice/psd.js/blob/master/dist/psd.min.js)).
+
+[ag-psd]: https://github.com/Agamnentzar/ag-psd
+[psd.js]: https://github.com/meltingice/psd.js
 
 ## Browser Support
 
