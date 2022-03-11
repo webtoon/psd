@@ -59,9 +59,9 @@
 }
 
 .control-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   font-size: 14px;
 }
 

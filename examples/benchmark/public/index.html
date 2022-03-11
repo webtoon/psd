@@ -43,30 +43,33 @@
       </header>
       <div class="app__section control-panel">
         <div>
-          <label>
-            Select a PSD file:&nbsp;
-            <input id="file-input" type="file" accept=".psd,.psb" />
-          </label>
+          <label for="file-input">Select a PSD file: </label>
         </div>
         <div>
-          <label>
-            # of times to parse the file:&nbsp;
-            <input
-              id="repeat-count-input"
-              type="number"
-              min="1"
-              max="1000"
-              value="3"
-            />
-          </label>
+          <input id="file-input" type="file" accept=".psd,.psb" />
         </div>
         <div>
-          <label>
-            <input id="apply-opacity-checkbox" type="checkbox" />
-            Apply opacity when decoding (supported by
-            <span class="webtoon-psd-name">@webtoon/psd</span> only)
+          <label for="repeat-count-input"># of times to parse the file:</label>
+        </div>
+        <div>
+          <input
+            id="repeat-count-input"
+            type="number"
+            min="1"
+            max="1000"
+            value="3"
+          />
+        </div>
+        <div>
+          <label for="apply-opacity-checkbox">
+            Apply opacity when decoding<br />
+            <small>
+              (only supported by
+              <span class="webtoon-psd-name">@webtoon/psd</span>)
+            </small>
           </label>
         </div>
+        <div><input id="apply-opacity-checkbox" type="checkbox" /></div>
       </div>
       <div class="app__section progress-panel">
         <label class="progress-panel__description" for="progressbar"
