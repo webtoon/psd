@@ -4,19 +4,14 @@
 
 import * as AgPsd from "ag-psd";
 import Psd from "../../../src";
+import {BenchmarkMeasurements} from "./model";
 
 // Use the require() function provided by the browser bundle of PSD.js
 // Because TypeScript prevents us from calling `require()` inside an ESM module,
 // we must call `globalThis.require()` instead
 const PsdJs = globalThis.require("psd") as typeof import("./psd-js");
 
-export interface BenchmarkResult {
-  parseTime: number;
-  imageRenderTime: number;
-  layerRenderTime: number;
-}
-
-export function benchmarkPsdJs(arrayBuffer: ArrayBuffer): BenchmarkResult {
+export function benchmarkPsdJs(arrayBuffer: ArrayBuffer) {
   const parseBegin = performance.now();
   const psd = new PsdJs(new Uint8Array(arrayBuffer));
   psd.parse();
@@ -35,17 +30,17 @@ export function benchmarkPsdJs(arrayBuffer: ArrayBuffer): BenchmarkResult {
     .forEach((node) => node.type === "layer" && node.layer.image.pixelData);
   const layerRenderEnd = performance.now();
 
-  return {
+  return new BenchmarkMeasurements({
     parseTime: parseEnd - parseBegin,
-    imageRenderTime: imageRenderEnd - imageRenderBegin,
-    layerRenderTime: layerRenderEnd - layerRenderBegin,
-  };
+    imageDecodeTime: imageRenderEnd - imageRenderBegin,
+    layerDecodeTime: layerRenderEnd - layerRenderBegin,
+  });
 }
 
 export function benchmarkPsdTs(
   arrayBuffer: ArrayBuffer,
   options: {applyOpacity: boolean}
-): BenchmarkResult {
+) {
   const parseBegin = performance.now();
   const psd = Psd.parse(arrayBuffer);
   const parseEnd = performance.now();
@@ -58,14 +53,14 @@ export function benchmarkPsdTs(
   psd.layers.forEach((layer) => layer.composite(options.applyOpacity));
   const layerRenderEnd = performance.now();
 
-  return {
+  return new BenchmarkMeasurements({
     parseTime: parseEnd - parseBegin,
-    imageRenderTime: imageRenderEnd - imageRenderBegin,
-    layerRenderTime: layerRenderEnd - layerRenderBegin,
-  };
+    imageDecodeTime: imageRenderEnd - imageRenderBegin,
+    layerDecodeTime: layerRenderEnd - layerRenderBegin,
+  });
 }
 
-export function benchmarkAgPsd(arrayBuffer: ArrayBuffer): BenchmarkResult {
+export function benchmarkAgPsd(arrayBuffer: ArrayBuffer) {
   const parseBegin = performance.now();
   AgPsd.readPsd(arrayBuffer, {
     skipCompositeImageData: true,
@@ -99,11 +94,11 @@ export function benchmarkAgPsd(arrayBuffer: ArrayBuffer): BenchmarkResult {
 
   const parseTime = parseEnd - parseBegin;
 
-  return {
+  return new BenchmarkMeasurements({
     parseTime,
-    imageRenderTime:
+    imageDecodeTime:
       parseAndImageRenderEnd - parseAndImageRenderBegin - parseTime,
-    layerRenderTime:
+    layerDecodeTime:
       parseAndLayerRenderEnd - parseAndLayerRenderBegin - parseTime,
-  };
+  });
 }

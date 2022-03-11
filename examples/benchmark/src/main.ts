@@ -3,142 +3,70 @@
 // MIT License
 
 import {benchmarkAgPsd, benchmarkPsdJs, benchmarkPsdTs} from "./bench";
-import {getAverageResult, runBenchmark} from "./runner";
+import {BenchmarkTaskSetup, initialAppState} from "./model";
 import "./style.css";
-import {sleepUntilNextAnimationFrame} from "./util";
-import {
-  getProgress,
-  getRepeatCount,
-  getShouldApplyOpacityWhenDecoding,
-  observeFileInputChange,
-  resetFileInput,
-  setBenchmarkToCompleted,
-  setBenchmarkToHalted,
-  setBenchmarkToRunning,
-  setControlPanelActive,
-  setErrorMessage,
-  setProgress,
-  setProgressMessage,
-} from "./view";
+import {initialize, render} from "./views";
 
-function incrementProgress(value: number) {
-  const current = getProgress();
-  if (typeof current === "number") {
-    setProgress(current + value);
-  }
-}
+const benchmarkSetup: BenchmarkTaskSetup[] = [
+  {
+    libraryName: "@webtoon/psd",
+    benchmarkCallback: (psdFileData) =>
+      benchmarkPsdTs(psdFileData, {
+        applyOpacity: appState.options.shouldApplyOpacity,
+      }),
+  },
+  {
+    libraryName: "PSD.js",
+    benchmarkCallback: benchmarkPsdJs,
+  },
+  {
+    libraryName: "ag-psd",
+    benchmarkCallback: benchmarkAgPsd,
+  },
+];
 
-observeFileInputChange(async (file) => {
-  if (!file) return;
+let appState = initialAppState;
 
-  try {
-    setControlPanelActive(false);
-    setBenchmarkToRunning();
+// Initial render
+render(appState);
+initialize({
+  async onFileInputChange(file) {
+    if (!file) return;
 
-    // Repeat benchmark for each library, plus one step to load the file
-    const repeatCount = getRepeatCount();
-    const totalStepCount = repeatCount * 3 + 1;
+    try {
+      appState = appState.start(benchmarkSetup, file);
+      await raf(() => render(appState));
 
-    const shouldApplyOpacityWhenDecoding = getShouldApplyOpacityWhenDecoding();
+      while (appState.isRunning()) {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await raf(() => {});
+        appState = await appState.runNextSubtask();
+        await raf(() => render(appState));
+      }
+    } catch (error) {
+      appState = appState.setError(error);
+      render(appState);
+    }
+  },
 
-    await sleepUntilNextAnimationFrame();
+  onShouldApplyOpacityChange(shouldApplyOpacity) {
+    appState = appState.updateOptions({shouldApplyOpacity});
+    render(appState);
+  },
 
-    setBenchmarkToRunning();
-    setProgress(0);
-    setProgressMessage(`Loading file... (size: ${file.size} bytes)`);
-    setErrorMessage(null);
-
-    await sleepUntilNextAnimationFrame();
-    const arrayBuffer = await file.arrayBuffer();
-    await sleepUntilNextAnimationFrame();
-
-    const psdTsResults = getAverageResult(
-      await runBenchmark(
-        () =>
-          benchmarkPsdTs(arrayBuffer, {
-            applyOpacity: shouldApplyOpacityWhenDecoding,
-          }),
-        {
-          count: repeatCount,
-          beforeEach: (step) => {
-            incrementProgress(1 / totalStepCount);
-            setProgressMessage(
-              `Parsing with @webtoon/psd... (${step + 1} / ${repeatCount})`
-            );
-          },
-          onError: () =>
-            setErrorMessage("@webtoon/psd failed to parse the file"),
-        }
-      )
-    );
-
-    const psdJsResults = getAverageResult(
-      await runBenchmark(() => benchmarkPsdJs(arrayBuffer), {
-        count: repeatCount,
-        beforeEach: (step) => {
-          incrementProgress(1 / totalStepCount);
-          setProgressMessage(
-            `Parsing with PSD.js... (${step + 1} / ${repeatCount})`
-          );
-        },
-        onError: () => setErrorMessage("PSD.js failed to parse the file"),
-      })
-    );
-
-    const agPsdResults = getAverageResult(
-      await runBenchmark(() => benchmarkAgPsd(arrayBuffer), {
-        count: repeatCount,
-        beforeEach: (step) => {
-          incrementProgress(1 / totalStepCount);
-          setProgressMessage(
-            `Parsing with ag-psd... (${step + 1} / ${repeatCount})`
-          );
-        },
-        onError: () => setErrorMessage("ag-psd failed to parse the file"),
-      })
-    );
-
-    setProgress(1); // Just in case progress does not add up to a perfect 1
-    setProgressMessage(`Finished parsing ${file.name}`);
-    setBenchmarkToCompleted({
-      categories: [
-        "Metadata",
-        "Decoding (merged image)",
-        "Decoding (all layers)",
-      ],
-      measurements: [
-        {
-          parserName: "@webtoon/psd",
-          values: [
-            psdTsResults.parseTime,
-            psdTsResults.imageRenderTime,
-            psdTsResults.layerRenderTime,
-          ],
-        },
-        {
-          parserName: "PSD.js",
-          values: [
-            psdJsResults.parseTime,
-            psdJsResults.imageRenderTime,
-            psdJsResults.layerRenderTime,
-          ],
-        },
-        {
-          parserName: "ag-psd",
-          values: [
-            agPsdResults.parseTime,
-            agPsdResults.imageRenderTime,
-            agPsdResults.layerRenderTime,
-          ],
-        },
-      ],
-    });
-
-    resetFileInput();
-  } catch (e) {
-    console.error(e);
-    setBenchmarkToHalted();
-  } finally {
-    setControlPanelActive(true);
-  }
+  onTrialCountChange(trialCount) {
+    appState = appState.updateOptions({trialCount});
+    render(appState);
+  },
 });
+
+/**
+ * `window.requestAnimationFrame` promisified
+ * @returns
+ */
+function raf<T>(task: () => T) {
+  // eslint-disable-next-line compat/compat
+  return new Promise<T>((resolve) =>
+    window.requestAnimationFrame(() => resolve(task()))
+  );
+}
