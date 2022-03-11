@@ -65,6 +65,20 @@
   font-size: 14px;
 }
 
+.control-panel__psd-source-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 16px 4px;
+}
+
+#use-sample-psd-button {
+  margin-left: 4px;
+}
+
+#file-input {
+  width: 160px;
+}
+
 .progress-panel {
   display: flex;
   flex-direction: column;

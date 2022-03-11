@@ -27,22 +27,51 @@ const benchmarkSetup: BenchmarkTaskSetup[] = [
 
 let appState = initialAppState;
 
+async function runBenchmark() {
+  await raf(() => render(appState));
+
+  while (appState.isRunning()) {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    await raf(() => {});
+    appState = await appState.runNextSubtask();
+    await raf(() => render(appState));
+  }
+}
+
 // Initial render
 render(appState);
 initialize({
+  onUseDefaultPsdCheckboxClick() {
+    appState = appState.updateOptions({preferDefaultPsd: true});
+    render(appState);
+  },
+  onUseUploadedPsdCheckboxClick() {
+    appState = appState.updateOptions({preferDefaultPsd: false});
+    render(appState);
+  },
+
   async onFileInputChange(file) {
     if (!file) return;
 
     try {
       appState = appState.start(benchmarkSetup, file);
-      await raf(() => render(appState));
+      runBenchmark();
+    } catch (error) {
+      appState = appState.setError(error);
+      render(appState);
+    }
+  },
 
-      while (appState.isRunning()) {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await raf(() => {});
-        appState = await appState.runNextSubtask();
-        await raf(() => render(appState));
-      }
+  async onUseDefaultPsdFileButtonClick() {
+    if (!appState.defaultPsdFileData) {
+      appState = appState.setError("Default PSD file not loaded yet");
+      render(appState);
+      return;
+    }
+
+    try {
+      appState = appState.startWithDefaultPsdFile(benchmarkSetup);
+      runBenchmark();
     } catch (error) {
       appState = appState.setError(error);
       render(appState);
@@ -59,6 +88,17 @@ initialize({
     render(appState);
   },
 });
+
+// Load default PSD file
+(async () => {
+  try {
+    appState = await appState.loadDefaultPsdFile();
+    render(appState);
+  } catch (error) {
+    appState = appState.setError(error);
+    render(appState);
+  }
+})();
 
 /**
  * `window.requestAnimationFrame` promisified

@@ -6,14 +6,33 @@ import type {AppState} from "../model";
 import {findElement} from "./common";
 
 export function initControlPanel({
+  onUseDefaultPsdCheckboxClick,
+  onUseUploadedPsdCheckboxClick,
   onFileInputChange,
+  onUseDefaultPsdFileButtonClick,
   onTrialCountChange,
   onShouldApplyOpacityChange,
 }: {
+  onUseDefaultPsdCheckboxClick?: () => void;
+  onUseUploadedPsdCheckboxClick?: () => void;
   onFileInputChange?: (file: File | null) => void;
+  onUseDefaultPsdFileButtonClick?: () => void;
   onTrialCountChange?: (value: number) => void;
   onShouldApplyOpacityChange?: (value: boolean) => void;
 }) {
+  const {useDefaultPsdCheckbox, useUploadedPsdCheckbox} =
+    getPsdSourceCheckboxes();
+  useDefaultPsdCheckbox.addEventListener("click", () => {
+    onUseDefaultPsdCheckboxClick?.();
+  });
+  useUploadedPsdCheckbox.addEventListener("click", () => {
+    onUseUploadedPsdCheckboxClick?.();
+  });
+
+  getRunWithDefaultPsdButton().addEventListener("click", () =>
+    onUseDefaultPsdFileButtonClick?.()
+  );
+
   getFileInput().addEventListener("change", (event) => {
     const fileInput = event.target as ReturnType<typeof getFileInput>;
     const file = fileInput.files?.[0] ?? null;
@@ -39,8 +58,32 @@ export function initControlPanel({
 }
 
 export function renderControlPanel(appState: AppState) {
+  const {useDefaultPsdCheckbox, useUploadedPsdCheckbox} =
+    getPsdSourceCheckboxes();
+  if (appState.options.preferDefaultPsd) {
+    useDefaultPsdCheckbox.checked = true;
+  } else {
+    useUploadedPsdCheckbox.checked = true;
+  }
+
+  useDefaultPsdCheckbox.disabled = appState.isRunning();
+  useUploadedPsdCheckbox.disabled = appState.isRunning();
+
+  const samplePsdDownloadAnchor = findElement<HTMLAnchorElement>(
+    "a#sample-psd-download-link",
+    "'Download sample PSD' anchor"
+  );
+  samplePsdDownloadAnchor.href = String(appState.defaultPsdFileUrl);
+
+  const isLoadingDefaultPsdFile = appState.defaultPsdFileData === null;
+  getRunWithDefaultPsdButton().disabled =
+    !appState.options.preferDefaultPsd ||
+    isLoadingDefaultPsdFile ||
+    appState.isRunning();
+
   const fileInput = getFileInput();
-  fileInput.disabled = appState.isRunning();
+  fileInput.disabled =
+    appState.options.preferDefaultPsd || appState.isRunning();
 
   const trialCountInput = getTrialCountInput();
   trialCountInput.valueAsNumber = appState.options.trialCount;
@@ -49,6 +92,26 @@ export function renderControlPanel(appState: AppState) {
   const applyOpacityCheckbox = getApplyOpacityCheckbox();
   applyOpacityCheckbox.checked = appState.options.shouldApplyOpacity;
   applyOpacityCheckbox.disabled = appState.isRunning();
+}
+
+function getPsdSourceCheckboxes() {
+  return {
+    useDefaultPsdCheckbox: findElement<HTMLInputElement>(
+      "input#use-sample-psd-checkbox",
+      "'Use sample PSD' checkbox"
+    ),
+    useUploadedPsdCheckbox: findElement<HTMLInputElement>(
+      "input#use-uploaded-psd-checkbox",
+      "'Use uploaded PSD' checkbox"
+    ),
+  };
+}
+
+function getRunWithDefaultPsdButton() {
+  return findElement<HTMLButtonElement>(
+    "button#use-sample-psd-button",
+    "'Run with sample PSD' button element"
+  );
 }
 
 function getFileInput() {

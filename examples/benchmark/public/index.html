@@ -42,11 +42,35 @@
         </p>
       </header>
       <div class="app__section control-panel">
-        <div>
-          <label for="file-input">Select a PSD file: </label>
-        </div>
-        <div>
-          <input id="file-input" type="file" accept=".psd,.psb" />
+        <div>Run benchmark with PSD file:</div>
+        <div class="control-panel__psd-source-grid">
+          <div>
+            <input
+              type="radio"
+              name="choose-file-source"
+              id="use-sample-psd-checkbox"
+              checked
+            />
+          </div>
+          <div>
+            <label for="use-sample-psd-checkbox">
+              Use <a id="sample-psd-download-link">sample PSD file</a>
+            </label>
+            <button type="button" id="use-sample-psd-button">
+              Run benchmark
+            </button>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="choose-file-source"
+              id="use-uploaded-psd-checkbox"
+            />
+          </div>
+          <div>
+            <label for="use-uploaded-psd-checkbox">Open PSD:</label>
+            <input id="file-input" type="file" accept=".psd,.psb" disabled />
+          </div>
         </div>
         <div>
           <label for="repeat-count-input"># of times to parse the file:</label>

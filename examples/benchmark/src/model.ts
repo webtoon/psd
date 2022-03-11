@@ -32,6 +32,8 @@ export class AppState {
   readonly psdFileName: string | null;
   readonly psdFileData: ArrayBuffer | null;
   readonly error: string | null;
+  readonly defaultPsdFileUrl: URL;
+  readonly defaultPsdFileData: ArrayBuffer | null;
 
   constructor({
     tasks,
@@ -41,6 +43,8 @@ export class AppState {
     psdFileData,
     psdFileName,
     error,
+    defaultPsdFileUrl,
+    defaultPsdFileData,
   }: AppStateProperties) {
     this.tasks = Object.freeze([...tasks]);
     this.benchmarkResults = Object.freeze([...benchmarkResults]);
@@ -51,6 +55,8 @@ export class AppState {
     this.psdFileName = psdFileName;
     this.psdFileData = psdFileData;
     this.error = error;
+    this.defaultPsdFileUrl = defaultPsdFileUrl;
+    this.defaultPsdFileData = defaultPsdFileData;
 
     Object.freeze(this);
   }
@@ -64,6 +70,8 @@ export class AppState {
       psdFileData = this.psdFileData,
       psdFileName = this.psdFileName,
       error = this.error,
+      defaultPsdFileUrl = this.defaultPsdFileUrl,
+      defaultPsdFileData = this.defaultPsdFileData,
     } = properties;
     return new AppState({
       tasks,
@@ -73,6 +81,8 @@ export class AppState {
       psdFileData,
       psdFileName,
       error,
+      defaultPsdFileUrl,
+      defaultPsdFileData,
     });
   }
 
@@ -140,6 +150,28 @@ export class AppState {
     });
   }
 
+  startWithDefaultPsdFile(setups: readonly BenchmarkTaskSetup[]) {
+    if (!this.defaultPsdFileData) {
+      throw new Error("Default PSD file has not been loaded yet");
+    }
+
+    return this.#update({
+      tasks: setups.map(
+        (setup) =>
+          new BenchmarkTask({
+            libraryName: setup.libraryName,
+            benchmarkCallback: setup.benchmarkCallback,
+            remainingTrialCount: this.options.trialCount,
+          })
+      ),
+      currentTaskTrialMeasurements: [],
+      benchmarkResults: [],
+      psdFileName: this.defaultPsdFileUrl.pathname,
+      psdFileData: this.defaultPsdFileData,
+      error: null,
+    });
+  }
+
   async runNextSubtask() {
     if (!this.isRunning()) {
       throw new Error("Cannot run next trial because the app has halted");
@@ -198,12 +230,14 @@ export class AppState {
     const {
       trialCount = this.options.trialCount,
       shouldApplyOpacity = this.options.shouldApplyOpacity,
+      preferDefaultPsd = this.options.preferDefaultPsd,
     } = newOptions;
 
     return this.#update({
       options: new BenchmarkOptions({
         trialCount,
         shouldApplyOpacity,
+        preferDefaultPsd,
       }),
     });
   }
@@ -213,16 +247,32 @@ export class AppState {
       error: error === null ? error : String(error),
     });
   }
+
+  async loadDefaultPsdFile() {
+    if (this.defaultPsdFileData) {
+      throw new Error(`${this.defaultPsdFileUrl} has already been loaded`);
+    }
+
+    // eslint-disable-next-line compat/compat
+    const response = await fetch(String(this.defaultPsdFileUrl));
+    return this.#update({
+      defaultPsdFileData: await response.arrayBuffer(),
+    });
+  }
 }
 
 export const initialAppState = new AppState({
   tasks: [],
   benchmarkResults: [],
   currentTaskTrialMeasurements: [],
-  options: {trialCount: 3, shouldApplyOpacity: false},
+  options: {trialCount: 3, shouldApplyOpacity: false, preferDefaultPsd: true},
   psdFileName: null,
   psdFileData: null,
   error: null,
+  // Webpack will resolve this as a resource asset
+  // eslint-disable-next-line compat/compat
+  defaultPsdFileUrl: new URL("../../node/example.psd", import.meta.url),
+  defaultPsdFileData: null,
 });
 
 export type Task = LoadFileTask | BenchmarkTask;
@@ -365,8 +415,13 @@ export class BenchmarkOptions {
   readonly trialCount: number;
   /** Whether to apply opacity when decoding image data */
   readonly shouldApplyOpacity: boolean;
+  readonly preferDefaultPsd: boolean;
 
-  constructor({trialCount, shouldApplyOpacity}: BenchmarkOptionsProperties) {
+  constructor({
+    trialCount,
+    shouldApplyOpacity,
+    preferDefaultPsd,
+  }: BenchmarkOptionsProperties) {
     if (!(Number.isSafeInteger(trialCount) && trialCount > 0)) {
       throw new Error(
         `trialCount must be a positive safe integer (got ${trialCount})`
@@ -375,6 +430,7 @@ export class BenchmarkOptions {
 
     this.trialCount = trialCount;
     this.shouldApplyOpacity = shouldApplyOpacity;
+    this.preferDefaultPsd = preferDefaultPsd;
 
     Object.freeze(this);
   }
