@@ -11,11 +11,11 @@ export function renderProgressPanel(appState: AppState) {
     "progressbar element"
   );
 
-  if (appState.psdFileName === null) {
-    // Show indeterminate status on initial load
-    progressBar.removeAttribute("value");
+  const progress = appState.getProgress();
+  if (Number.isNaN(progress)) {
+    progressBar.value = 0; // Show empty progressbar on initial load
   } else {
-    progressBar.value = appState.getProgress();
+    progressBar.value = progress;
   }
 
   if (appState.isRunning() || appState.error !== null) {
