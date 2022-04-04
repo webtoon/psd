@@ -1,0 +1,21 @@
+name: "Publish demo & benchmark pages to GitHub Pages"
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+      - run: npm ci
+      - name: Configure Git for pushing commits
+        # Embed the access token directly into the remote URL so that the gh-pages library can pick it up
+        run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      - run: npm run deploy
