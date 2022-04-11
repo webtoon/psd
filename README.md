@@ -1,6 +1,6 @@
-# @webtoon/psd
+<p align="center"><img src="./images/webtoon-psd-logo.png" height="128" /></p>
 
-![@webtoon/psd logo](./images/webtoon-psd-logo.png)
+# @webtoon/psd
 
 [![Package on NPM](https://img.shields.io/npm/v/@webtoon/psd)](https://www.npmjs.com/package/@webtoon/psd) [![Minified size](https://img.shields.io/bundlephobia/min/@webtoon/psd)](https://bundlephobia.com/package/@webtoon/psd)
 
