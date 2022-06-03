@@ -10,8 +10,8 @@
     "Kang Ye Hyoung <yehyoung.kang@webtoonscorp.com>"
   ],
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/main.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
     "dist"
   ],
