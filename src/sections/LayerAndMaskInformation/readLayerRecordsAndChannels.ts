@@ -203,7 +203,7 @@ function readLayerFlag(cursor: Cursor): boolean {
   // There are better ways of parsing a bitfield...
   // TODO: Rewrite this
   const flags = cursor.read("u8").toString(2).padStart(8, "0");
-  const visible = flags[7];
+  const visible = flags[6];
 
   return visible === "0";
 }
