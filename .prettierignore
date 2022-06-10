@@ -1,3 +1,5 @@
 /coverage/
 dist/
 /dist-web/
+**/rust-wasm/pkg/
+**/rust-wasm/target/
