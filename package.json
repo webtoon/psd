@@ -1,35 +1,19 @@
 {
-  "name": "@webtoon/psd",
-  "version": "0.1.2",
-  "description": "lightweight psd file parser with no dependency written in typescript",
-  "homepage": "https://webtoon.github.io/psd",
-  "license": "MIT",
-  "author": "W FE Tech <dl_wfetech@webtoonscorp.com>",
-  "contributors": [
-    "Lee Dong Hyun <moving.hyun@webtoonscorp.com>",
-    "Kang Ye Hyoung <yehyoung.kang@webtoonscorp.com>"
-  ],
-  "type": "module",
-  "main": "./dist/main.js",
-  "types": "./dist/src/index.d.ts",
-  "files": [
-    "dist"
+  "private": true,
+  "workspaces": [
+    "packages/*/"
   ],
   "scripts": {
-    "build": "webpack --mode=production",
-    "build:benchmark": "webpack -c examples/benchmark/webpack.config.js --mode=production",
-    "build:browser": "webpack -c examples/browser/webpack.config.js --mode=production",
-    "clear": "rimraf dist/ dist-web/",
-    "deploy": "npm run build:browser && npm run build:benchmark && gh-pages -d dist-web/",
+    "build": "npm -w @webtoon/psd run build",
+    "clear": "rimraf packages/psd/dist/ dist-web/",
+    "deploy": "npm -w @webtoon/psd-example-browser -w @webtoon/psd-benchmark run build && gh-pages -d dist-web/",
     "fix": "eslint --fix . && prettier --write .",
     "lint": "eslint . && prettier --check .",
     "prepare": "husky install",
-    "prepublishOnly": "npm run build",
-    "release": "env-cmd release-it",
-    "start:benchmark": "webpack serve -c examples/benchmark/webpack.config.js --mode=development",
-    "start:browser": "webpack serve -c examples/browser/webpack.config.js --mode=development",
-    "start:node": "npm run clear && tsc-watch -p ./tsconfig.json --onSuccess \"node --experimental-specifier-resolution=node --trace-uncaught ./examples/node/script.js\"",
-    "test": "jest"
+    "release": "env-cmd npm -w @webtoon/psd run release",
+    "start:benchmark": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-benchmark start",
+    "start:browser": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-example-browser start",
+    "start:node": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-example-node start"
   },
   "browserslist": [
     "chrome >= 38",
@@ -39,12 +23,8 @@
     "node >= 12"
   ],
   "devDependencies": {
-    "@types/jest": "^28.1.1",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
-    "ag-psd": "^14.3.12",
-    "chart.js": "^3.8.0",
-    "css-loader": "^6.7.1",
     "env-cmd": "^10.1.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
@@ -52,25 +32,9 @@
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.26.0",
     "gh-pages": "^4.0.0",
-    "html-loader": "^3.1.0",
-    "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.1",
-    "jest": "^28.1.1",
-    "mini-css-extract-plugin": "^2.6.0",
     "prettier": "^2.6.2",
     "prettier-plugin-packagejson": "^2.2.18",
-    "release-it": "^15.0.0",
-    "rimraf": "^3.0.2",
-    "style-loader": "^3.3.1",
-    "ts-jest": "^28.0.4",
-    "ts-loader": "^9.3.0",
-    "tsc-watch": "^5.0.3",
-    "typescript": "^4.7.3",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.2"
-  },
-  "publishConfig": {
-    "access": "public"
+    "rimraf": "^3.0.2"
   }
 }

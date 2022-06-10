@@ -20,7 +20,7 @@ export default /** @type {import("webpack").Configuration} */ ({
   },
   output: {
     clean: true,
-    filename: "[name].js",
+    filename: "index.js",
     path: path.resolve(__dirname, "dist"),
     library: {
       type: "module",

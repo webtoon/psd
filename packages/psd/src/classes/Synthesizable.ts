@@ -3,7 +3,7 @@
 // MIT License
 
 import {ImageData} from "../interfaces";
-import {generateRgba, applyOpacity} from "../methods";
+import {applyOpacity, generateRgba} from "../methods";
 
 export abstract class Synthesizable {
   public abstract get width(): number;

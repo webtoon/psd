@@ -2,8 +2,8 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
+import Psd from "@webtoon/psd";
 import * as AgPsd from "ag-psd";
-import Psd from "../../../src";
 import {BenchmarkMeasurements} from "./model";
 
 // Use the require() function provided by the browser bundle of PSD.js

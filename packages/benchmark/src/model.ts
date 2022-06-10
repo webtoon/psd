@@ -271,7 +271,7 @@ export const initialAppState = new AppState({
   error: null,
   // Webpack will resolve this as a resource asset
   // eslint-disable-next-line compat/compat
-  defaultPsdFileUrl: new URL("../../node/example.psd", import.meta.url),
+  defaultPsdFileUrl: new URL("../public/example.psd", import.meta.url),
   defaultPsdFileData: null,
 });
 
