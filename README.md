@@ -56,7 +56,7 @@ You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github
 
 ### Web Browsers
 
-Check out the [live demo](https://webtoon.github.io/psd) and the the [source](https://github.com/webtoon/psd/tree/master/examples/browser) for web browser.
+Check out the [live demo](https://webtoon.github.io/psd) and the the [source](https://github.com/webtoon/psd/tree/main/examples/browser) for web browser.
 
 `@webtoon/psd` must be bundled with a bundler such as Webpack or Rollup.
 
@@ -178,7 +178,7 @@ layerPixelData = layer.composite(false);
 
 ## License
 
-`@webtoon/psd` is released under the [MIT license](https://github.com/webtoon/psd/blob/master/LICENSE).
+`@webtoon/psd` is released under the [MIT license](https://github.com/webtoon/psd/blob/main/LICENSE).
 
 ```
 Copyright 2021-present NAVER WEBTOON
