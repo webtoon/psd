@@ -2,11 +2,11 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import * as path from "path";
 import * as fs from "fs";
+import * as path from "path";
 import {fileURLToPath} from "url";
 
-import * as Psd from "../..";
+import * as Psd from "@webtoon/psd";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

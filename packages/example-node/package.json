@@ -1,0 +1,14 @@
+{
+  "name": "@webtoon/psd-example-node",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node-dev --respawn --debounce 1000 --trace-uncaught -- ./script.js"
+  },
+  "dependencies": {
+    "@webtoon/psd": "*"
+  },
+  "devDependencies": {
+    "node-dev": "^7.4.3"
+  }
+}

@@ -1,0 +1,14 @@
+// Base tsconfig used by individual packages
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "ES2018"],
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2018",
+    "types": []
+  }
+}

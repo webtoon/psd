@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import Psd from "./../../../src";
+import Psd from "@webtoon/psd";
 import {createMessage, validateMessage} from "./messaging";
 
 self.addEventListener("message", ({data}) => {
