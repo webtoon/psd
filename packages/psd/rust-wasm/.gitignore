@@ -1,0 +1,11 @@
+# Don't ignore package.json, which is needed for running `wasm-pack test`
+/target/*
+!/target/wasm32-unknown-unknown
+/target/wasm32-unknown-unknown/*
+!/target/wasm32-unknown-unknown/package.json
+
+**/*.rs.bk
+# Cargo.lock
+bin/
+pkg/
+wasm-pack.log

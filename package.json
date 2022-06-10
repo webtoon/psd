@@ -11,9 +11,9 @@
     "lint": "eslint . && prettier --check .",
     "prepare": "husky install",
     "release": "env-cmd npm -w @webtoon/psd run release",
-    "start:benchmark": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-benchmark start",
-    "start:browser": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-example-browser start",
-    "start:node": "npm -w @webtoon/psd run watch & sleep 1 && npm -w @webtoon/psd-example-node start"
+    "start:benchmark": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-benchmark start",
+    "start:browser": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-browser start",
+    "start:node": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start"
   },
   "browserslist": [
     "chrome >= 38",

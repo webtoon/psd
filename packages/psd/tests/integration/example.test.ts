@@ -2,12 +2,10 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import * as fs from "fs";
+import * as fsPromises from "fs/promises";
 import * as path from "path";
 import {beforeAll, describe, expect, it} from "vitest";
-
 import type Psd from "../../src/index";
-import PSD, {ColorMode, GuideDirection, SliceOrigin} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures/example");
 
@@ -22,15 +20,19 @@ describe.each([
   let data: ArrayBuffer;
   let psd: Psd;
 
-  beforeAll(() => {
-    data = fs.readFileSync(path.resolve(FIXTURE_DIR, fixtureFile)).buffer;
+  beforeAll(async () => {
+    const fixturePath = path.resolve(FIXTURE_DIR, fixtureFile);
+    data = (await fsPromises.readFile(fixturePath)).buffer;
   });
 
-  it(`should parse the file successfully`, () => {
+  it(`should parse the file successfully`, async () => {
+    const {default: PSD} = await import("../../src");
     psd = PSD.parse(data);
   });
 
-  it("should correctly parse file properties", () => {
+  it("should correctly parse file properties", async () => {
+    const {ColorMode} = await import("../../src");
+
     expect(psd.width).toBe(400);
     expect(psd.height).toBe(800);
 
@@ -147,9 +149,9 @@ describe.each([
 
   it.each([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])(
     "should correctly parse layer %i raw image data",
-    (layerIndex) => {
+    async (layerIndex) => {
       const layerImageData = psd.layers[layerIndex].composite(false, false);
-      const fixtureLayerImageData = fs.readFileSync(
+      const fixtureLayerImageData = await fsPromises.readFile(
         path.resolve(FIXTURE_DIR, `layer${layerIndex}`)
       );
       expect(layerImageData).toHaveLength(fixtureLayerImageData.length);
@@ -161,9 +163,9 @@ describe.each([
     }
   );
 
-  it("should correctly parse the combined raw image data", () => {
+  it("should correctly parse the combined raw image data", async () => {
     const combinedImageData = psd.composite(true, true);
-    const fixtureCombinedImageData = fs.readFileSync(
+    const fixtureCombinedImageData = await fsPromises.readFile(
       path.resolve(FIXTURE_DIR, "imageData")
     );
 
@@ -174,7 +176,9 @@ describe.each([
     ).toBe(true);
   });
 
-  it("should correctly parse Grid and Guides", () => {
+  it("should correctly parse Grid and Guides", async () => {
+    const {GuideDirection} = await import("../../src");
+
     expect(psd.guides).toHaveLength(3);
     expect(psd.guides).toContainEqual({
       direction: GuideDirection.Horizontal,
@@ -190,7 +194,9 @@ describe.each([
     });
   });
 
-  it("should correctly parse Slices", () => {
+  it("should correctly parse Slices", async () => {
+    const {SliceOrigin} = await import("../../src");
+
     expect(psd.slices).toHaveLength(9);
 
     expect(psd.slices[0].origin).toBe(SliceOrigin.LayerGenerated);

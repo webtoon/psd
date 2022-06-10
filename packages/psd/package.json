@@ -16,17 +16,22 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "wasm-pack build ./rust-wasm/ && vite build",
     "prepublishOnly": "npm run build",
     "release": "release-it",
     "test": "vitest",
-    "watch": "vite build --watch --logLevel warn"
+    "test-wasm": "wasm-pack test --node ./rust-wasm/",
+    "watch": "onchange -i '**/*.rs' -- wasm-pack build ./rust-wasm/ & sleep 1 && vite build --mode=watch --logLevel=warn"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.2",
+    "onchange": "^7.1.0",
     "release-it": "^15.0.0",
     "typescript": "^4.7.3",
+    "vi-fetch": "^0.7.1",
     "vite": "^2.9.11",
+    "vite-plugin-top-level-await": "^1.0.0",
+    "vite-plugin-wasm": "^1.0.0",
     "vitest": "^0.14.2"
   },
   "publishConfig": {

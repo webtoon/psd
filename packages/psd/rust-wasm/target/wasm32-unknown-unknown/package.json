@@ -1,0 +1,4 @@
+{
+  "description": "This package.json ensures that the wasm-pack test runner script (wbg-tmp/run.js) is executed as CommonJS, even though the containing package is ESM.",
+  "type": "commonjs"
+}

@@ -4,9 +4,12 @@
 
 import * as path from "path";
 import typescript from "@rollup/plugin-typescript";
-import {defineConfig} from "vite";
+import topLevelAwait from "vite-plugin-top-level-await";
+import wasm from "vite-plugin-wasm";
+// eslint-disable-next-line import/no-unresolved
+import {defineConfig} from "vitest/config";
 
-export default defineConfig({
+export default defineConfig((env) => ({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
@@ -26,5 +29,16 @@ export default defineConfig({
         }),
       ],
     },
+    // Prevent rebuilding multiple times while wasm-pack is rebuilding
+    watch: env.mode === "watch" ? {buildDelay: 1000} : undefined,
   },
-});
+  plugins: [
+    wasm(),
+    topLevelAwait({
+      promiseExportName: "init",
+    }),
+  ],
+  test: {
+    setupFiles: "./tests/setup.ts",
+  },
+}));
