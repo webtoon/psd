@@ -2,7 +2,7 @@ name: "Publish demo & benchmark pages to GitHub Pages"
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   publish:
