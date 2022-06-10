@@ -18,4 +18,4 @@ jobs:
       - name: Configure Git for pushing commits
         # Embed the access token directly into the remote URL so that the gh-pages library can pick it up
         run: git remote set-url origin https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-      - run: npm run deploy
+      - run: npm run deploy -- -u 'github-actions-bot <support+actions@github.com>'
