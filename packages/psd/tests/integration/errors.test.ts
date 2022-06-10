@@ -4,6 +4,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import {describe, expect, it} from "vitest";
 
 import PSD from "../../src/index";
 import {
