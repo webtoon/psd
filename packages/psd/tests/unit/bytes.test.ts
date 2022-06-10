@@ -2,6 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
+import {describe, expect, it} from "vitest";
 import {PanicOutOfBoundArray} from "../../src/utils";
 import {Cursor, ReadType} from "../../src/utils/bytes";
 

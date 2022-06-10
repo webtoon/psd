@@ -19,17 +19,15 @@
     "build": "vite build",
     "prepublishOnly": "npm run build",
     "release": "release-it",
-    "test": "jest",
+    "test": "vitest",
     "watch": "vite build --watch --logLevel warn"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.2",
-    "@types/jest": "^28.1.1",
-    "jest": "^28.1.1",
     "release-it": "^15.0.0",
-    "ts-jest": "^28.0.4",
     "typescript": "^4.7.3",
-    "vite": "^2.9.11"
+    "vite": "^2.9.11",
+    "vitest": "^0.14.2"
   },
   "publishConfig": {
     "access": "public"

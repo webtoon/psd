@@ -4,9 +4,10 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import {beforeAll, describe, expect, it} from "vitest";
 
-import PSD, {ColorMode, GuideDirection, SliceOrigin} from "../../src/index";
 import type Psd from "../../src/index";
+import PSD, {ColorMode, GuideDirection, SliceOrigin} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures/example");
 
