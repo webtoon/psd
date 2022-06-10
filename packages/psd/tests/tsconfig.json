@@ -4,5 +4,6 @@
     // 테스트 코드에서 import할 API
     "types": ["node", "jest"]
   },
-  "include": ["./"]
+  "include": ["./"],
+  "exclude": []
 }

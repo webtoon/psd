@@ -3,9 +3,11 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "lib": ["DOM", "ES2018"],
     "module": "ES2020",
     "moduleResolution": "node",
+    "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2018",
