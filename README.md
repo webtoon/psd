@@ -6,7 +6,7 @@
 
 > A lightweight Adobe Photoshop .psd/.psb file parser in typescript with zero-dependency for web browsers and NodeJS
 
-`@webtoon/psd` is a fast, lightweight parser for Adobe Photoshop PSD/PSB files. It uses standard (ES2015+) features and can be used both in web browsers and in Node.js. It pulls in zero dependencies, making it smaller ([~25 KiB minified](https://bundlephobia.com/package/@webtoon/psd@0.1.0)) than other PSD parsers ([ag-psd]: [139 KiB](https://bundlephobia.com/package/ag-psd@14.3.6), [PSD.js]: [443 KiB](https://github.com/meltingice/psd.js/blob/master/dist/psd.min.js)).
+`@webtoon/psd` is a fast, lightweight parser for Adobe Photoshop PSD/PSB files. It uses standard (ES2015+) features and can be used both in web browsers and in Node.js. It pulls in zero dependencies, making it smaller ([~73 KiB minified](https://bundlephobia.com/package/@webtoon/psd@0.1.0)) than other PSD parsers ([ag-psd]: [139 KiB](https://bundlephobia.com/package/ag-psd@14.3.6), [PSD.js]: [443 KiB](https://github.com/meltingice/psd.js/blob/master/dist/psd.min.js)). It uses WebAssembly to speed up decoding image data.
 
 [ag-psd]: https://github.com/Agamnentzar/ag-psd
 [psd.js]: https://github.com/meltingice/psd.js
@@ -15,7 +15,7 @@
 
 | Chrome | Firefox | Safari | Edge | Node |
 | :----: | :-----: | :----: | :--: | :--: |
-|   38   |   20    |  10.1  |  79  |  12  |
+|   57   |   52    |   11   |  79  |  12  |
 
 \*Internet Explorer is not supported
 
@@ -53,6 +53,41 @@ You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github
 ## Usage
 
 `@webtoon/psd` is provided as a pure ECMAScript module.
+
+Because `@webtoon/psd` uses WebAssembly under the hood, it must be initialized _asynchronously_ before use. This is done for you immediately when `@webtoon/psd` is imported; it exports a promise named `init` which resolves when the library is ready.
+
+```ts
+import Psd, {init} from "@webtoon/psd";
+
+// This will fail, since the library is not ready
+Psd.parse(/* ... */); // TypeError: undefined is not an object
+
+//To ensure that the library is loaded, use:
+init.then(() => {
+  Psd.parse(/* ... */); // OK
+});
+
+// ...or, an async IIFE:
+(async () => {
+  await init; // Note that init is a promise, not a function!
+  Psd.parse(/* ... */); // OK
+})();
+
+// ...or, if you can, use top-level await:
+await init;
+Psd.parse(/* ... */);
+```
+
+Since the initialization task is queued during the import, `@webtoon/psd` will be ready in any callback that is fired afterwards:
+
+```ts
+import Psd from "@webtoon/psd";
+
+someElement.addEventListener("click", () => {
+  // This will _probably_ work without having to await 'init'.
+  Psd.parse(/* ... */);
+});
+```
 
 ### Web Browsers
 
@@ -98,11 +133,13 @@ Check out the [source code for the Node.js example](https://github.com/webtoon/p
 
 ```ts
 import * as fs from "fs";
-import Psd from "@webtoon/psd";
+import Psd, {init} from "@webtoon/psd";
 
-const psdData = fs.readFileSync("./my-file.psd");
-// Pass the ArrayBuffer instance inside the Buffer
-const psdFile = Psd.parse(psdData.buffer);
+init.then(() => {
+  const psdData = fs.readFileSync("./my-file.psd");
+  // Pass the ArrayBuffer instance inside the Buffer
+  const psdFile = Psd.parse(psdData.buffer);
+});
 ```
 
 Since `@webtoon/psd` is provided as an ES module, you must use dynamic `import()` or a bundler to run it in CommonJS code:
