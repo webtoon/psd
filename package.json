@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm -w @webtoon/psd run build",
     "clear": "rimraf packages/psd/dist/ dist-web/",
-    "deploy": "npm -w @webtoon/psd-example-browser -w @webtoon/psd-benchmark run build && gh-pages -d dist-web/",
+    "deploy": "npm -w @webtoon/psd -w @webtoon/psd-example-browser -w @webtoon/psd-benchmark run build && gh-pages -d dist-web/",
     "fix": "eslint --fix . && prettier --write .",
     "lint": "eslint . && prettier --check .",
     "prepare": "husky install",
