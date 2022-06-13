@@ -16,9 +16,9 @@
     "start:node": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start"
   },
   "browserslist": [
-    "chrome >= 38",
-    "firefox >= 20",
-    "safari >= 10.1",
+    "chrome >= 57",
+    "firefox >= 52",
+    "safari >= 11",
     "edge >= 79",
     "node >= 12"
   ],
