@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import * as wasm from "../../rust-wasm/pkg/webtoon_psd";
+import * as wasmDecoder from "@webtoon/psd-decoder";
 import {ChannelBytes, ChannelCompression} from "../interfaces";
 import {UnsupportedCompression} from "../utils";
 
@@ -17,14 +17,14 @@ import {UnsupportedCompression} from "../utils";
  * @returns `Uint8ClampedArray` containing the pixel data of the decoded image.
  *    Each pixel takes up 4 bytes--1 byte for red, blue, green, and alpha.
  */
-export function generateRgba(
+export async function generateRgba(
   width: number,
   height: number,
   red: ChannelBytes,
   green?: ChannelBytes,
   blue?: ChannelBytes,
   alpha?: ChannelBytes
-): Uint8ClampedArray {
+): Promise<Uint8ClampedArray> {
   const pixelCount = width * height;
 
   if (!(pixelCount > 0 && Number.isInteger(pixelCount))) {
@@ -35,9 +35,9 @@ export function generateRgba(
 
   let result: Uint8Array;
   if (green && blue) {
-    result = decodeRgb(pixelCount, red, green, blue, alpha);
+    result = await decodeRgb(pixelCount, red, green, blue, alpha);
   } else if (!blue && !green) {
-    result = decodeGrayscale(pixelCount, red, alpha);
+    result = await decodeGrayscale(pixelCount, red, alpha);
   } else {
     throw new Error(`Missing ${blue ? "green" : "blue"} channel in RGB image`);
   }
@@ -64,13 +64,15 @@ function validateSupportedCompression(
   );
 }
 
-export function decodeRgb(
+export async function decodeRgb(
   pixels: number,
   red: ChannelBytes,
   green: ChannelBytes,
   blue: ChannelBytes,
   alpha?: ChannelBytes
 ) {
+  await wasmDecoder.init;
+
   validateSupportedCompression(red.compression);
   validateSupportedCompression(blue.compression);
   validateSupportedCompression(red.compression);
@@ -79,7 +81,7 @@ export function decodeRgb(
   }
 
   return alpha
-    ? wasm.decode_rgba(
+    ? wasmDecoder.decode_rgba(
         pixels,
         red.data,
         red.compression,
@@ -90,7 +92,7 @@ export function decodeRgb(
         alpha.data,
         alpha.compression
       )
-    : wasm.decode_rgb(
+    : wasmDecoder.decode_rgb(
         pixels,
         red.data,
         red.compression,
@@ -101,23 +103,25 @@ export function decodeRgb(
       );
 }
 
-export function decodeGrayscale(
+export async function decodeGrayscale(
   pixels: number,
   color: ChannelBytes,
   alpha?: ChannelBytes
 ) {
+  await wasmDecoder.init;
+
   validateSupportedCompression(color.compression);
   if (alpha) {
     validateSupportedCompression(alpha.compression);
   }
 
   return alpha
-    ? wasm.decode_grayscale_a(
+    ? wasmDecoder.decode_grayscale_a(
         pixels,
         color.data,
         color.compression,
         alpha.data,
         alpha.compression
       )
-    : wasm.decode_grayscale(pixels, color.data, color.compression);
+    : wasmDecoder.decode_grayscale(pixels, color.data, color.compression);
 }

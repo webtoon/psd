@@ -208,7 +208,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "webtoon-psd"
+name = "webtoon-psd-decoder"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",

@@ -4,10 +4,7 @@
 
 import * as path from "path";
 import typescript from "@rollup/plugin-typescript";
-import topLevelAwait from "vite-plugin-top-level-await";
-import wasm from "vite-plugin-wasm";
-// eslint-disable-next-line import/no-unresolved
-import {defineConfig} from "vitest/config";
+import {defineConfig} from "vite";
 
 export default defineConfig((env) => ({
   build: {
@@ -32,13 +29,10 @@ export default defineConfig((env) => ({
     // Prevent rebuilding multiple times while wasm-pack is rebuilding
     watch: env.mode === "watch" ? {buildDelay: 1000} : undefined,
   },
-  plugins: [
-    wasm(),
-    topLevelAwait({
-      promiseExportName: "init",
-    }),
-  ],
-  test: {
-    setupFiles: "./tests/setup.ts",
+  // If our code imports another package (@webtoon/psd-decoder in this case),
+  // Vite disables build.minify when build.lib.formats includes 'es'.
+  // Since we do not want this behavior, force esbuild to minify our code.
+  esbuild: {
+    minify: true,
   },
 }));

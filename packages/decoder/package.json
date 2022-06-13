@@ -1,0 +1,21 @@
+{
+  "name": "@webtoon/psd-decoder",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./index.ts",
+  "scripts": {
+    "build": "vite build",
+    "test": "wasm-pack test --node",
+    "watch": "vite build --mode=watch"
+  },
+  "devDependencies": {
+    "rollup-plugin-shell": "^1.0.3",
+    "rollup-plugin-watcher": "^1.0.1",
+    "typescript": "^4.7.3",
+    "vite": "^2.9.11",
+    "vite-plugin-top-level-await": "^1.0.0",
+    "vite-plugin-wasm": "^1.0.0",
+    "wasm-pack": "^0.10.2"
+  }
+}

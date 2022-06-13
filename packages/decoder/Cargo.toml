@@ -8,7 +8,7 @@
 
 [package]
 edition = "2021"
-name = "webtoon-psd"
+name = "webtoon-psd-decoder"
 version = "0.1.0"
 
 [lib]

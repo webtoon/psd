@@ -5,7 +5,7 @@
 import Psd from "@webtoon/psd";
 import {createMessage, validateMessage} from "./messaging";
 
-self.addEventListener("message", ({data}) => {
+self.addEventListener("message", async ({data}) => {
   const {type, timestamp, value} = data;
 
   validateMessage(data);
@@ -23,9 +23,9 @@ self.addEventListener("message", ({data}) => {
 
     console.log(psd);
 
-    psd.layers.forEach((layer, index) => {
+    for (const [index, layer] of psd.layers.entries()) {
       console.time(`Compositing layer ${index}`);
-      const pixelData = layer.composite(true, true);
+      const pixelData = await layer.composite(true, true);
       console.timeEnd(`Compositing layer ${index}`);
 
       (self as unknown as Worker).postMessage(
@@ -39,7 +39,7 @@ self.addEventListener("message", ({data}) => {
         }),
         [pixelData.buffer]
       );
-    });
+    }
   } else {
     console.error(`Worker received a message that it cannot handle: %o`, data);
   }

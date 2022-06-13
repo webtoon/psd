@@ -13,11 +13,11 @@ export abstract class Synthesizable {
 
   protected abstract get imageData(): ImageData;
 
-  composite(effect = true, composed = true): Uint8ClampedArray {
+  async composite(effect = true, composed = true): Promise<Uint8ClampedArray> {
     const {red, green, blue, alpha} = this.imageData;
     const {width, height} = this;
 
-    const rgba = generateRgba(width, height, red, green, blue, alpha);
+    const rgba = await generateRgba(width, height, red, green, blue, alpha);
 
     if (effect === true) {
       if (composed === true) {
