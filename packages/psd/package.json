@@ -32,7 +32,8 @@
     "vite": "^2.9.11",
     "vite-plugin-top-level-await": "^1.0.0",
     "vite-plugin-wasm": "^1.0.0",
-    "vitest": "^0.14.2"
+    "vitest": "^0.14.2",
+    "wasm-pack": "^0.10.2"
   },
   "publishConfig": {
     "access": "public"
