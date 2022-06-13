@@ -1,1 +1,130 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><link rel="icon" type="image/x-icon" href="favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>PSD Benchmark Runner - @webtoon/psd</title><script defer="defer" src="main.js"></script><link href="main.css" rel="stylesheet"></head><body><noscript>You need JavaScript to run benchmarks</noscript><main id="app" class="app"><header class="app__section app-header"><h1>Benchmark runner for <span class="webtoon-psd-name">@webtoon/psd</span> and other parsers</h1><p>Compare the performance of <span class="webtoon-psd-name">@webtoon/psd</span> and other JavaScript PSD parsers (<a target="_blank" href="https://github.com/meltingice/psd.js" rel="noopener">PSD.js</a>, <a target="_blank" href="https://github.com/Agamnentzar/ag-psd" rel="noopener">ag-psd</a>) by selecting a PSD file on your device.</p><p>(Note: Some features from the PSD file spec are not supported by all parsers. As such, this page should be treated as a rough indicator of performance.)</p></header><div class="app__section control-panel"><div>Run benchmark with PSD file:</div><div class="control-panel__psd-source-grid"><div><input type="radio" name="choose-file-source" id="use-sample-psd-checkbox" checked="checked"/></div><div><label for="use-sample-psd-checkbox">Use <a id="sample-psd-download-link">sample PSD file</a></label> <button type="button" id="use-sample-psd-button">Run benchmark</button></div><div><input type="radio" name="choose-file-source" id="use-uploaded-psd-checkbox"/></div><div><label for="use-uploaded-psd-checkbox">Open PSD:</label> <input id="file-input" type="file" accept=".psd,.psb" disabled="disabled"/></div></div><div><label for="repeat-count-input"># of times to parse the file:</label></div><div><input id="repeat-count-input" type="number" min="1" max="1000" value="3"/></div><div><label for="apply-opacity-checkbox">Apply opacity when decoding<br/><small>(only supported by <span class="webtoon-psd-name">@webtoon/psd</span>)</small></label></div><div><input id="apply-opacity-checkbox" type="checkbox"/></div></div><div class="app__section progress-panel"><label class="progress-panel__description" for="progressbar">Select a file</label><progress class="progress-panel__progressbar" id="progressbar"></progress></div><div class="app__section result-panel" style="display:none"><div class="result-panel__spinner-container"><div class="progress-spinner" data-state="spinning"></div></div><div class="result-panel__table-container"></div><canvas id="result-chart-canvas" width="400" height="100">Cannot display chart because your browser does not support canvas</canvas></div><div class="app__section error-panel" style="display:none"><div class="error-panel__message"></div></div></main><script src="https://cdn.jsdelivr.net/gh/meltingice/psd.js@master/dist/psd.js"></script></body></html>
+<!DOCTYPE html>
+<!--
+  @webtoon/psd
+  Copyright 2021-present NAVER WEBTOON
+  MIT License
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PSD Benchmark Runner - @webtoon/psd</title>
+    
+    <script type="module" crossorigin src="./assets/index.f4bbbf8c.js"></script>
+    <link rel="stylesheet" href="./index.css">
+  </head>
+  <body>
+    <noscript>You need JavaScript to run benchmarks</noscript>
+    <main id="app" class="app">
+      <header class="app__section app-header">
+        <h1>
+          Benchmark runner for
+          <span class="webtoon-psd-name">@webtoon/psd</span> and other parsers
+        </h1>
+        <p>
+          Compare the performance of
+          <span class="webtoon-psd-name">@webtoon/psd</span> and other
+          JavaScript PSD parsers (<a
+            target="_blank"
+            href="https://github.com/meltingice/psd.js"
+            rel="noopener"
+            >PSD.js</a
+          >,
+          <a
+            target="_blank"
+            href="https://github.com/Agamnentzar/ag-psd"
+            rel="noopener"
+            >ag-psd</a
+          >) by selecting a PSD file on your device.
+        </p>
+        <p>
+          (Note: Some features from the PSD file spec are not supported by all
+          parsers. As such, this page should be treated as a rough indicator of
+          performance.)
+        </p>
+      </header>
+      <div class="app__section control-panel">
+        <div>Run benchmark with PSD file:</div>
+        <div class="control-panel__psd-source-grid">
+          <div>
+            <input
+              type="radio"
+              name="choose-file-source"
+              id="use-sample-psd-checkbox"
+              checked
+            />
+          </div>
+          <div>
+            <label for="use-sample-psd-checkbox">
+              Use <a id="sample-psd-download-link">sample PSD file</a>
+            </label>
+            <button type="button" id="use-sample-psd-button">
+              Run benchmark
+            </button>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="choose-file-source"
+              id="use-uploaded-psd-checkbox"
+            />
+          </div>
+          <div>
+            <label for="use-uploaded-psd-checkbox">Open PSD:</label>
+            <input id="file-input" type="file" accept=".psd,.psb" disabled />
+          </div>
+        </div>
+        <div>
+          <label for="repeat-count-input"># of times to parse the file:</label>
+        </div>
+        <div>
+          <input
+            id="repeat-count-input"
+            type="number"
+            min="1"
+            max="1000"
+            value="3"
+          />
+        </div>
+        <div>
+          <label for="apply-opacity-checkbox">
+            Apply opacity when decoding<br />
+            <small>
+              (only supported by
+              <span class="webtoon-psd-name">@webtoon/psd</span>)
+            </small>
+          </label>
+        </div>
+        <div><input id="apply-opacity-checkbox" type="checkbox" /></div>
+      </div>
+      <div class="app__section progress-panel">
+        <label class="progress-panel__description" for="progressbar"
+          >Select a file</label
+        >
+        <progress
+          class="progress-panel__progressbar"
+          id="progressbar"
+        ></progress>
+      </div>
+      <div class="app__section result-panel" style="display: none">
+        <div class="result-panel__spinner-container">
+          <div class="progress-spinner" data-state="spinning"></div>
+        </div>
+        <div class="result-panel__table-container"></div>
+        <canvas id="result-chart-canvas" width="400" height="100">
+          Cannot display chart because your browser does not support canvas
+        </canvas>
+      </div>
+      <div class="app__section error-panel" style="display: none">
+        <div class="error-panel__message"></div>
+      </div>
+    </main>
+    <!-- 
+      The browser bundle of PSD.js is available only through Bower and GitHub.
+      Since I don't want to use Bower, let's hotlink directly to the latest
+      version of the bundle on GitHub instead.
+     -->
+    <script src="https://cdn.jsdelivr.net/gh/meltingice/psd.js@master/dist/psd.js"></script>
+  </body>
+</html>
