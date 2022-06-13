@@ -13,7 +13,7 @@ use wasm_bindgen_test::*;
 fn decode_rle_literal() {
     let mut output = [0; 20];
 
-    webtoon_psd::decode_rle(&[0, 42, 3, 100, 150, 200, 250], 0, &mut output);
+    webtoon_psd_decoder::decode_rle(&[0, 42, 3, 100, 150, 200, 250], 0, &mut output);
 
     assert_eq!(
         output,
@@ -31,7 +31,7 @@ fn decode_rle_literal() {
 fn decode_rle_repeat() {
     let mut output = [0; 36];
 
-    webtoon_psd::decode_rle(&[-1i8 as u8, 5, -6i8 as u8, 242], 0, &mut output);
+    webtoon_psd_decoder::decode_rle(&[-1i8 as u8, 5, -6i8 as u8, 242], 0, &mut output);
 
     assert_eq!(
         output,
@@ -53,7 +53,7 @@ fn decode_rle_repeat() {
 fn decode_rle_repeat_overflow() {
     let mut output = vec![0; 512];
 
-    webtoon_psd::decode_rle(&[-127i8 as u8, 130], 0, &mut output);
+    webtoon_psd_decoder::decode_rle(&[-127i8 as u8, 130], 0, &mut output);
 
     assert_eq!(
         output,
@@ -68,7 +68,7 @@ fn decode_rle_repeat_overflow() {
 fn decode_rle_noop() {
     let mut output = [0; 20];
 
-    webtoon_psd::decode_rle(&[-128i8 as u8, -128i8 as u8], 0, &mut output);
+    webtoon_psd_decoder::decode_rle(&[-128i8 as u8, -128i8 as u8], 0, &mut output);
 
     assert_eq!(output, [0; 20]);
 }
@@ -77,7 +77,7 @@ fn decode_rle_noop() {
 fn decode_rle_channel_offset() {
     let mut output = [0; 24];
 
-    webtoon_psd::decode_rle(&[1, 7, 240, -128i8 as u8, -3i8 as u8, 4], 2, &mut output);
+    webtoon_psd_decoder::decode_rle(&[1, 7, 240, -128i8 as u8, -3i8 as u8, 4], 2, &mut output);
 
     assert_eq!(
         output,

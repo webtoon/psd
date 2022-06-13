@@ -4,16 +4,16 @@
     "packages/*/"
   ],
   "scripts": {
-    "build": "npm -w @webtoon/psd run build",
-    "clear": "rimraf packages/psd/dist/ dist-web/",
+    "build": "npm -w @webtoon/psd-decoder -w @webtoon/psd run build",
+    "clear": "rimraf packages/psd-decoder/dist/ packages/psd/dist/ dist-web/",
     "deploy": "npm -w @webtoon/psd -w @webtoon/psd-example-browser -w @webtoon/psd-benchmark run build && gh-pages -d dist-web/",
     "fix": "eslint --fix . && prettier --write .",
     "lint": "eslint . && prettier --check .",
     "prepare": "husky install",
     "release": "env-cmd npm -w @webtoon/psd run release",
-    "start:benchmark": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-benchmark start",
-    "start:browser": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-browser start",
-    "start:node": "npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start"
+    "start:benchmark": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-benchmark start",
+    "start:browser": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-browser start",
+    "start:node": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start"
   },
   "browserslist": [
     "chrome >= 57",

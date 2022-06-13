@@ -37,7 +37,7 @@ export function benchmarkPsdJs(arrayBuffer: ArrayBuffer) {
   });
 }
 
-export function benchmarkPsdTs(
+export async function benchmarkPsdTs(
   arrayBuffer: ArrayBuffer,
   options: {applyOpacity: boolean}
 ) {
@@ -46,11 +46,13 @@ export function benchmarkPsdTs(
   const parseEnd = performance.now();
 
   const imageRenderBegin = performance.now();
-  psd.composite(options.applyOpacity);
+  await psd.composite(options.applyOpacity);
   const imageRenderEnd = performance.now();
 
   const layerRenderBegin = performance.now();
-  psd.layers.forEach((layer) => layer.composite(options.applyOpacity));
+  for (const layer of psd.layers) {
+    await layer.composite(options.applyOpacity);
+  }
   const layerRenderEnd = performance.now();
 
   return new BenchmarkMeasurements({
