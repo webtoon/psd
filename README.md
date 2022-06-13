@@ -56,7 +56,7 @@ You can run [benchmarks for @webtoon/psd in your browser](https://webtoon.github
 
 ### Web Browsers
 
-Check out the [live demo](https://webtoon.github.io/psd) and the the [source](https://github.com/webtoon/psd/tree/main/examples/browser) for web browser.
+Check out the [live demo](https://webtoon.github.io/psd) ([source code](https://github.com/webtoon/psd/tree/main/packages/example-browser)) for web browser.
 
 `@webtoon/psd` must be bundled with a bundler such as Webpack or Rollup.
 
@@ -91,6 +91,8 @@ inputEl.addEventListener("change", async () => {
 For performance, we recommend parsing PSD files in a [Web Worker](https://developer.mozilla.org/docs/Web/API/Web_Workers_API) rather than the main thread.
 
 ### NodeJS
+
+Check out the [source code for the Node.js example](https://github.com/webtoon/psd/tree/main/packages/example-node) for web browser.
 
 `@webtoon/psd` does not support the Node.js `Buffer`. You must explicitly supply the underlying `ArrayBuffer`.
 
