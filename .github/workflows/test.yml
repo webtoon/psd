@@ -1,0 +1,31 @@
+name: Test & Lint
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      # This is needed since we use Node.js v14 in testing, which comes with NPM v6 by default
+      # TODO: Remove this when we ditch Node.js v14
+      - run: npm install -g npm@>=7
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run lint
+      - run: npm test
