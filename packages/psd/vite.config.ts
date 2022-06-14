@@ -32,7 +32,6 @@ export default defineConfig((env) => ({
   // If our code imports another package (@webtoon/psd-decoder in this case),
   // Vite disables build.minify when build.lib.formats includes 'es'.
   // Since we do not want this behavior, force esbuild to minify our code.
-  esbuild: {
-    minify: true,
-  },
+  // This must be disabled when testing; otherwise, it causes Vitest to fail.
+  esbuild: env.mode === "test" ? undefined : {minify: true},
 }));
