@@ -1,0 +1,17 @@
+{
+  "name": "@webtoon/psd-decoder-js",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./index.ts",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "watch": "vite build --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.3",
+    "vite": "^2.9.11",
+    "vitest": "^0.14.2"
+  }
+}
