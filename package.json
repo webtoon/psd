@@ -13,7 +13,8 @@
     "release": "npm run build && env-cmd npm -w @webtoon/psd run release",
     "start:benchmark": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-benchmark start",
     "start:browser": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-browser start",
-    "start:node": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start"
+    "start:node": "npm -w @webtoon/psd-decoder run watch & sleep 1 && npm -w @webtoon/psd run watch & sleep 2 && npm -w @webtoon/psd-example-node start",
+    "test": "npm -w @webtoon/psd-decoder -w @webtoon/psd test"
   },
   "browserslist": [
     "chrome >= 57",
