@@ -44,8 +44,6 @@ web-sys = {version = "0.3.57", features = ["console"]}
 wasm-bindgen-test = "0.3.30"
 
 [profile.release]
-# Tell `rustc` to optimize for small code size.
-opt-level = "s"
 # This makes the compiled code faster and smaller, but it makes compiling slower,
 # so it's only enabled in release mode.
 lto = true
