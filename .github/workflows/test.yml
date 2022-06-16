@@ -12,7 +12,9 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        # Test for 14.x is disabled because vite-plugin-wasm doesn't support Node v14
+        # TODO: Add 14.x to matrix when https://github.com/Menci/vite-plugin-wasm/pull/3 is merged
+        node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
