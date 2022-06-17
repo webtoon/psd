@@ -4,18 +4,26 @@
 
 import {ImageData} from "../interfaces";
 import {LayerFrame} from "../sections";
-import {Node} from "./Node";
+import {NodeParent} from "./Node";
+import {NodeBase} from "./NodeBase";
 import {Synthesizable} from "./Synthesizable";
 
 /**
  * A layer in a PSD file.
  * @alpha
  */
-export class Layer extends Synthesizable implements Node {
+export class Layer
+  extends Synthesizable
+  implements NodeBase<NodeParent, never>
+{
   readonly type = "Layer";
+  readonly children?: undefined;
 
   /** @internal */
-  constructor(private layerFrame: LayerFrame, public readonly parent: Node) {
+  constructor(
+    private layerFrame: LayerFrame,
+    public readonly parent: NodeParent
+  ) {
     super();
   }
 

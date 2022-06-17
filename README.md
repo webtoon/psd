@@ -128,27 +128,28 @@ const psdFile = Psd.parse(myBuffer);
 A `Psd` object contains a tree of `Layer` and `Group` (i.e. layer group) objects.
 
 - The `Psd` object provides a `children` property, which is an array of top-level `Layer`s and `Group`s.
-- Each `Group` object provides a `children` property, which is an array of `Layers` and `Group`s that belong immediately under the current layer group .
+- Each `Group` object provides a `children` property, which is an array of `Layers` and `Group`s that belong immediately under the current layer group.
+- `Psd`, `Group`, and `Layer` objects provide a `type` field, which can be used to discriminate each type:
 
 ```ts
-import Psd, {Group, Layer, Node} from "@webtoon/psd";
+import Psd, {Node} from "@webtoon/psd";
 
 // Recursively traverse layers and layer groups
 function traverseNode(node: Node) {
-  if (node instanceof Group) {
-    for (const child of node.children) {
-      traverseNode(child);
-    }
-  } else if (node instanceof Layer) {
-    // Do something with layer
+  if (node.type === "Layer") {
+    // Do something with Layer
+  } else if (node.type === "Group") {
+    // Do something with Group
+  } else if (node.type === "Psd") {
+    // Do something with Psd
   } else {
     throw new Error("Invalid node type");
   }
+
+  node.children?.forEach((child) => traverseNode(child));
 }
 
-for (const node of psdFile.children) {
-  traverseNode(node);
-}
+traverseNode(psd);
 ```
 
 The `Psd` object also provides the `layers` property, which is an array of all `Layer`s in the image (including nested).

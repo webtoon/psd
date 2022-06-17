@@ -5,28 +5,30 @@
 import {
   ColorMode,
   Depth,
-  ParsingResult,
-  ImageData,
   Guide,
+  ImageData,
+  ParsingResult,
   ResourceType,
 } from "../interfaces";
 import {parse} from "../methods";
-import {loadSlicesFromResourceBlock, Slice} from "./Slice";
 import {Group} from "./Group";
 import {Layer} from "./Layer";
-import {Node} from "./Node";
+import {assertIsNodeParent, Node, NodeChild} from "./Node";
+import {NodeBase} from "./NodeBase";
+import {loadSlicesFromResourceBlock, Slice} from "./Slice";
 import {Synthesizable} from "./Synthesizable";
 
 /**
  * A parsed PSD file.
  * @alpha
  */
-export class Psd extends Synthesizable implements Node {
+export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
   public readonly name = "ROOT";
   public readonly type = "Psd";
   public readonly opacity = 255;
   public readonly composedOpacity = 1;
-  public readonly children: Node[] = [];
+  public readonly parent?: undefined;
+  public readonly children: NodeChild[] = [];
   public readonly layers: Layer[] = [];
   public readonly guides: Guide[] = [];
   public readonly slices: Slice[] = [];
@@ -94,20 +96,22 @@ export class Psd extends Synthesizable implements Node {
       switch (e) {
         case "G": {
           const layerFrame = groups[groupIndex];
+          assertIsNodeParent(parent);
           const group = new Group(layerFrame, parent);
 
           stack.push(group);
-          parent.children?.push(group);
+          parent.children.push(group);
           groupIndex += 1;
 
           break;
         }
         case "L": {
           const layerFrame = layers[layerIndex];
+          assertIsNodeParent(parent);
           const layer = new Layer(layerFrame, parent);
 
           this.layers.push(layer);
-          parent.children?.push(layer);
+          parent.children.push(layer);
           layerIndex += 1;
 
           break;
@@ -122,7 +126,7 @@ export class Psd extends Synthesizable implements Node {
     stack.length = 0;
 
     // Freeze children
-    this.children.forEach((node) => node.freeze && node.freeze());
+    this.children.forEach((node) => (node as NodeBase).freeze?.());
     Object.freeze(this.children);
   }
 }

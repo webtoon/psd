@@ -3,18 +3,22 @@
 // MIT License
 
 import {GroupFrame} from "../sections";
-import {Node} from "./Node";
+import {NodeChild, NodeParent} from "./Node";
+import {NodeBase} from "./NodeBase";
 
 /**
  * A layer group, which may contain layers and other layer groups.
  * @alpha
  */
-export class Group implements Node {
+export class Group implements NodeBase<NodeParent, NodeChild> {
   readonly type = "Group";
-  readonly children: Node[] = [];
+  readonly children: NodeChild[] = [];
 
   /** @internal */
-  constructor(private layerFrame: GroupFrame, public readonly parent: Node) {}
+  constructor(
+    private layerFrame: GroupFrame,
+    public readonly parent: NodeParent
+  ) {}
 
   get name(): string {
     return this.layerFrame.layerProperties.name;
@@ -26,7 +30,7 @@ export class Group implements Node {
     return this.parent.composedOpacity * (this.opacity / 255);
   }
 
-  addChild(node: Node): void {
+  addChild(node: NodeChild): void {
     this.children.push(node);
   }
   hasChildren(): boolean {
@@ -34,7 +38,7 @@ export class Group implements Node {
   }
 
   freeze(): void {
-    this.children.forEach((node) => node.freeze && node.freeze());
+    this.children.forEach((node) => (node as NodeBase).freeze?.());
     Object.freeze(this.children);
   }
 }
