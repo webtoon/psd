@@ -5,10 +5,10 @@
 import {
   AdditionalLayerInfo,
   BlendMode,
+  ChannelBytes,
   ChannelKind,
   Clipping,
   GroupDivider,
-  ChannelBytes,
 } from "../../interfaces";
 
 export interface LayerRecord {
@@ -18,7 +18,8 @@ export interface LayerRecord {
   left: number;
   bottom: number;
   right: number;
-  visible: boolean;
+  hidden: boolean;
+  transparencyLocked: boolean;
   opacity: number;
   clipping: Clipping;
   blendMode: BlendMode;
@@ -46,7 +47,8 @@ export interface LayerProperties {
   left: number;
   bottom: number;
   right: number;
-  visible: boolean;
+  hidden: boolean;
+  transparencyLocked: boolean;
   opacity: number;
   clippingMask: Clipping;
   blendMode: BlendMode;
@@ -67,7 +69,8 @@ export const createLayerProperties = (
     right,
     opacity,
     clipping: clippingMask,
-    visible,
+    hidden,
+    transparencyLocked,
     blendMode,
     layerText,
   } = layerRecord;
@@ -80,7 +83,8 @@ export const createLayerProperties = (
     right,
     opacity,
     clippingMask,
-    visible,
+    hidden,
+    transparencyLocked,
     blendMode,
     groupId,
     text: layerText,
