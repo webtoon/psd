@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.0](https://github.com/webtoon/psd/compare/0.1.2...0.2.0) (2022-06-20)
+
+### ⚠ BREAKING CHANGES
+
+- parse layer hidden, transparency lock flags
+- remove named export 'parse()'
+- export Group, Layer, Slice as types only
+- init WASM during decode, no top-level init
+- implement Rust/WebAssembly-based decoder
+
+### Features
+
+- export Group, Layer, Slice as types only ([564b5a5](https://github.com/webtoon/psd/commit/564b5a5a7a87c40458e837c70902164d3e283660))
+- implement Rust/WebAssembly-based decoder ([020f7a0](https://github.com/webtoon/psd/commit/020f7a00e9244a8b5c7cc30d8c68b62b2574a969))
+- init WASM during decode, no top-level init ([0b0bb68](https://github.com/webtoon/psd/commit/0b0bb6822859c034ab8fb6345a7f301c249b0b44))
+- parse layer hidden, transparency lock flags ([1caf69b](https://github.com/webtoon/psd/commit/1caf69b927cde01609e8b26a68c40eae80d58606))
+
+### Code Refactoring
+
+- remove named export 'parse()' ([86af282](https://github.com/webtoon/psd/commit/86af282efa6b4bef05f8ea6148461230bf01ab28))
+
 ## [0.1.2](https://github.com/webtoon/psd/compare/0.1.1...0.1.2) (2022-06-03)
 
 - fix: update main and types in package.json (403670a)
