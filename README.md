@@ -160,23 +160,23 @@ for (const layer of psdFile.layers) {
 }
 ```
 
-### Retrieving image data
+### Decoding image data
 
-Use `Psd.prototype.composite()` and `Layer.prototype.composite()` to retrieve the pixel information for the entire image or an individual layer.
+Use `Psd.prototype.composite()` and `Layer.prototype.composite()` to decode the pixel information for the entire image or an individual layer.
 
 ```ts
-// Extract the pixel data of the entire image
-pixelData = psd.composite();
+// Decode the pixel data of the entire image
+pixelData = await psd.composite();
 
 // Extract the pixel data of a layer, with all layer and layer group effects applied
 // (currently, only the opacity is supported)
-layerPixelData = layer.composite();
+layerPixelData = await layer.composite();
 
 // Extract the pixel data of a layer, with only the layer's own effects applied
-layerPixelData = layer.composite(true, false);
+layerPixelData = await layer.composite(true, false);
 
 // Extract the pixel data of a layer, without any effects
-layerPixelData = layer.composite(false);
+layerPixelData = await layer.composite(false);
 ```
 
 ## License
