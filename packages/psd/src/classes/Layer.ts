@@ -49,6 +49,14 @@ export class Layer
     return this.parent.composedOpacity * (this.opacity / 255);
   }
 
+  get isHidden(): boolean {
+    return this.layerFrame.layerProperties.hidden;
+  }
+
+  get isTransparencyLocked(): boolean {
+    return this.layerFrame.layerProperties.transparencyLocked;
+  }
+
   /**
    * If this layer is a text layer, this property retrieves its text content.
    * Otherwise, this property is `undefined`.

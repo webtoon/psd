@@ -4,21 +4,21 @@
 
 import {
   AdditionalLayerInfo,
+  AliKey,
   BlendMode,
-  ChannelKind,
   ChannelBytes,
-  Clipping,
   ChannelCompression,
+  ChannelKind,
+  Clipping,
+  DescriptorValueType,
   FileVersionSpec,
   matchBlendMode,
-  matchClipping,
   matchChannelCompression,
-  AliKey,
-  DescriptorValueType,
+  matchClipping,
 } from "../../interfaces";
 import {Cursor, InvalidBlendingModeSignature} from "../../utils";
-import {LayerRecord, LayerChannels} from "./interfaces";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
+import {LayerChannels, LayerRecord} from "./interfaces";
 
 const EXPECTED_BLENDING_MODE_SIGNATURE = "8BIM";
 
@@ -99,7 +99,7 @@ function readLayerRecord(
   const blendMode: BlendMode = matchBlendMode(cursor.readString(4));
   const opacity = cursor.read("u8");
   const clipping: Clipping = matchClipping(cursor.read("u8"));
-  const visible = readLayerFlag(cursor);
+  const {hidden, transparencyLocked} = readLayerFlags(cursor);
 
   // Skip parsing filter information
   cursor.pass(1);
@@ -166,7 +166,8 @@ function readLayerRecord(
     left,
     bottom,
     right,
-    visible,
+    hidden,
+    transparencyLocked,
     opacity,
     clipping,
     blendMode,
@@ -199,13 +200,16 @@ function readLayerRectangle(cursor: Cursor): [number, number, number, number] {
   return [top, left, bottom, right];
 }
 
-function readLayerFlag(cursor: Cursor): boolean {
-  // There are better ways of parsing a bitfield...
-  // TODO: Rewrite this
-  const flags = cursor.read("u8").toString(2).padStart(8, "0");
-  const visible = flags[7];
-
-  return visible === "0";
+function readLayerFlags(cursor: Cursor): {
+  hidden: boolean;
+  transparencyLocked: boolean;
+} {
+  const flags = cursor.read("u8");
+  return {
+    transparencyLocked: Boolean(flags & 0x1),
+    // Adobe's docs say this means "visible", but this actually marks "hidden" layers
+    hidden: Boolean(flags & 0x2),
+  };
 }
 
 function calcLayerHeight(layerRecord: LayerRecord): number {

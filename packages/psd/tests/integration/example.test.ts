@@ -265,4 +265,36 @@ describe.each([
     expect(psd.layers[12].text).toBeUndefined();
     expect(psd.layers[13].text).toBeUndefined();
   });
+
+  it("should correctly parse layer 'hidden' status", () => {
+    expect(psd.layers[0].isHidden).toBe(false);
+    expect(psd.layers[1].isHidden).toBe(false);
+    expect(psd.layers[2].isHidden).toBe(false);
+    expect(psd.layers[3].isHidden).toBe(false);
+    expect(psd.layers[4].isHidden).toBe(false);
+    expect(psd.layers[5].isHidden).toBe(false);
+    expect(psd.layers[6].isHidden).toBe(false);
+    expect(psd.layers[7].isHidden).toBe(false);
+    expect(psd.layers[8].isHidden).toBe(false);
+    expect(psd.layers[9].isHidden).toBe(true);
+    expect(psd.layers[10].isHidden).toBe(false);
+    expect(psd.layers[11].isHidden).toBe(false);
+    expect(psd.layers[12].isHidden).toBe(false);
+  });
+
+  it("should correctly parse layer transparency lock status", () => {
+    expect(psd.layers[0].isTransparencyLocked).toBe(false);
+    expect(psd.layers[1].isTransparencyLocked).toBe(false);
+    expect(psd.layers[2].isTransparencyLocked).toBe(false);
+    expect(psd.layers[3].isTransparencyLocked).toBe(false);
+    expect(psd.layers[4].isTransparencyLocked).toBe(false);
+    expect(psd.layers[5].isTransparencyLocked).toBe(false);
+    expect(psd.layers[6].isTransparencyLocked).toBe(false);
+    expect(psd.layers[7].isTransparencyLocked).toBe(true);
+    expect(psd.layers[8].isTransparencyLocked).toBe(false);
+    expect(psd.layers[9].isTransparencyLocked).toBe(false);
+    expect(psd.layers[10].isTransparencyLocked).toBe(false);
+    expect(psd.layers[11].isTransparencyLocked).toBe(false);
+    expect(psd.layers[12].isTransparencyLocked).toBe(false);
+  });
 });
