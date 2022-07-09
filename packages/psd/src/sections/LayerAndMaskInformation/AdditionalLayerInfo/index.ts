@@ -40,10 +40,6 @@ export function readAdditionalLayerInfo(
   const remainingBytes = size - (cursor.position - prevPosition);
   cursor.pass(remainingBytes);
 
-  // AdditionalLayerInfo blocks are aligned to a multiple of 4 bytes
-  // (Undocumented in Adobe's docs)
-  cursor.padding(size, 4);
-
   return aliBlock;
 }
 
