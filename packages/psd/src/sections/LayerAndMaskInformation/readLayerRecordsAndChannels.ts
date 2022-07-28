@@ -247,7 +247,10 @@ function readLayerChannels(
         // Compressed bytes per scanline are encoded at the beginning as 2 bytes per scanline
 
         const bytesPerScanline = fileVersionSpec.rleScanlineLengthFieldSize;
-        const skip = scanLines * bytesPerScanline;
+        // Do not attempt to skip more than the length of the channel data.
+        // This is needed because some layers (e.g. gradient fill layers) may
+        // have empty channel data (channelDataLength === 0).
+        const skip = Math.min(channelDataLength, scanLines * bytesPerScanline);
         const data = new Uint8Array(
           channelData.buffer,
           channelData.byteOffset + skip,
