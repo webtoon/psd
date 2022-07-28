@@ -15,7 +15,9 @@ import {
   matchBlendMode,
   matchChannelCompression,
   matchClipping,
+  RawDataDescriptorValue,
 } from "../../interfaces";
+import {parseEngineData} from "../../methods";
 import {Cursor, InvalidBlendingModeSignature} from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
 import {LayerChannels, LayerRecord} from "./interfaces";
@@ -137,6 +139,7 @@ function readLayerRecord(
   // properties on the LayerRecord object
   let dividerType: LayerRecord["dividerType"];
   let layerText: LayerRecord["layerText"];
+  let engineData: LayerRecord["engineData"];
 
   for (const ali of additionalLayerInfos) {
     if (ali._isUnknown) continue;
@@ -149,6 +152,13 @@ function readLayerRecord(
         const textValue = ali.textData.descriptor.items.get("Txt ");
         if (textValue && textValue.type === DescriptorValueType.String) {
           layerText = textValue.value;
+        }
+        const rawEngineData = ali.textData.descriptor.items.get("EngineData");
+        if (
+          rawEngineData &&
+          rawEngineData.type === DescriptorValueType.RawData
+        ) {
+          engineData = parseEngineData(rawEngineData.data);
         }
         break;
       }
@@ -174,6 +184,7 @@ function readLayerRecord(
     additionalLayerInfos,
     dividerType,
     layerText,
+    engineData,
   };
 }
 

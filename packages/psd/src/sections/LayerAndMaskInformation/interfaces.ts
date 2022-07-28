@@ -8,6 +8,7 @@ import {
   ChannelBytes,
   ChannelKind,
   Clipping,
+  EngineData,
   GroupDivider,
 } from "../../interfaces";
 
@@ -30,6 +31,8 @@ export interface LayerRecord {
   dividerType?: GroupDivider;
   /** If defined, contains the text of a Text Layer. */
   layerText?: string;
+  /** If defined, containts extra text properties */
+  engineData?: EngineData;
 }
 
 export type LayerChannels = Map<ChannelKind, ChannelBytes>;
@@ -55,6 +58,8 @@ export interface LayerProperties {
   groupId?: number;
   /** Text content of text layers */
   text?: string;
+  /** Text properties */
+  textProperties?: EngineData;
 }
 
 export const createLayerProperties = (
@@ -73,6 +78,7 @@ export const createLayerProperties = (
     transparencyLocked,
     blendMode,
     layerText,
+    engineData,
   } = layerRecord;
 
   return {
@@ -88,5 +94,6 @@ export const createLayerProperties = (
     blendMode,
     groupId,
     text: layerText,
+    textProperties: engineData,
   };
 };

@@ -77,3 +77,15 @@ export class MissingDescriptorKey extends PsdError {}
 export class UnexpectedDescriptorValueType extends PsdError {}
 export class InvalidReferenceType extends PsdError {}
 export class InvalidUnitFloatType extends PsdError {}
+
+// EngineData errors
+/** Thrown when lexer fails to parse respective type */
+export class InvalidEngineDataBoolean extends PsdError {}
+export class InvalidEngineDataNumber extends PsdError {}
+/** Thrown when top-level value is not a dict */
+export class InvalidTopLevelEngineDataValue extends PsdError {}
+export class UnexpectedEndOfEngineData extends PsdError {}
+export class UnexpectedEngineDataToken extends PsdError {}
+export class InvalidEngineDataDictKey extends PsdError {}
+export class InvalidEngineDataTextBOM extends PsdError {}
+export class MissingEngineDataProperties extends PsdError {}
