@@ -1,0 +1,533 @@
+{
+  "DocumentResources": {
+    "FontSet": [
+      {
+        "FontType": 0,
+        "Name": "TrajanColor-Concept",
+        "Script": 0,
+        "Synthetic": 0
+      },
+      {
+        "FontType": 0,
+        "Name": "AdobeInvisFont",
+        "Script": 0,
+        "Synthetic": 0
+      },
+      {
+        "FontType": 0,
+        "Name": "MyriadPro-Regular",
+        "Script": 0,
+        "Synthetic": 0
+      }
+    ],
+    "KinsokuSet": [
+      {
+        "Hanging": "、。.,",
+        "Keep": "―‥",
+        "Name": "PhotoshopKinsokuHard",
+        "NoEnd": "‘“（〔［｛〈《「『【([{￥＄£＠§〒＃",
+        "NoStart": "、。，．・：；？！ー―’”）〕］｝〉》」』】ヽヾゝゞ々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ゛゜?!)]},.:;℃℉¢％‰"
+      },
+      {
+        "Hanging": "、。.,",
+        "Keep": "―‥",
+        "Name": "PhotoshopKinsokuSoft",
+        "NoEnd": "‘“（〔［｛〈《「『【",
+        "NoStart": "、。，．・：；？！’”）〕］｝〉》」』】ヽヾゝゞ々"
+      }
+    ],
+    "MojiKumiSet": [
+      {
+        "InternalName": "Photoshop6MojiKumiSet1"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet2"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet3"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet4"
+      }
+    ],
+    "ParagraphSheetSet": [
+      {
+        "DefaultStyleSheet": 0,
+        "Name": "Normal RGB",
+        "Properties": {
+          "AutoHyphenate": true,
+          "AutoLeading": 1.2,
+          "Burasagari": false,
+          "ConsecutiveHyphens": 8,
+          "EndIndent": 0.0,
+          "EveryLineComposer": false,
+          "FirstLineIndent": 0.0,
+          "GlyphSpacing": [1.0, 1.0, 1.0],
+          "Hanging": false,
+          "HyphenatedWordSize": 6,
+          "Justification": 0,
+          "KinsokuOrder": 0,
+          "LeadingType": 0,
+          "LetterSpacing": [0.0, 0.0, 0.0],
+          "PostHyphen": 2,
+          "PreHyphen": 2,
+          "SpaceAfter": 0.0,
+          "SpaceBefore": 0.0,
+          "StartIndent": 0.0,
+          "WordSpacing": [0.8, 1.0, 1.33],
+          "Zone": 36.0
+        }
+      }
+    ],
+    "SmallCapSize": 0.7,
+    "StyleSheetSet": [
+      {
+        "Name": "Normal RGB",
+        "StyleSheetData": {
+          "AutoKerning": true,
+          "AutoLeading": true,
+          "BaselineDirection": 2,
+          "BaselineShift": 0.0,
+          "CharacterDirection": 0,
+          "DLigatures": false,
+          "DiacriticPos": 2,
+          "FauxBold": false,
+          "FauxItalic": false,
+          "FillColor": {
+            "Type": 1,
+            "Values": [1.0, 0.0, 0.0, 0.0]
+          },
+          "FillFirst": true,
+          "FillFlag": true,
+          "Font": 2,
+          "FontBaseline": 0,
+          "FontCaps": 0,
+          "FontSize": 12.0,
+          "HindiNumbers": false,
+          "HorizontalScale": 1.0,
+          "Kashida": 1,
+          "Kerning": 0,
+          "Language": 0,
+          "Leading": 0.0,
+          "Ligatures": true,
+          "NoBreak": false,
+          "OutlineWidth": 1.0,
+          "Strikethrough": false,
+          "StrokeColor": {
+            "Type": 1,
+            "Values": [1.0, 0.0, 0.0, 0.0]
+          },
+          "StrokeFlag": false,
+          "StyleRunAlignment": 2,
+          "Tracking": 0,
+          "Tsume": 0.0,
+          "Underline": false,
+          "VerticalScale": 1.0,
+          "YUnderline": 1
+        }
+      }
+    ],
+    "SubscriptPosition": 0.333,
+    "SubscriptSize": 0.583,
+    "SuperscriptPosition": 0.333,
+    "SuperscriptSize": 0.583,
+    "TheNormalParagraphSheet": 0,
+    "TheNormalStyleSheet": 0
+  },
+  "EngineDict": {
+    "AntiAlias": 1,
+    "Editor": {
+      "Text": "Morbi vitae diam bibendum, ultricies nulla ut, tempor tellus. Praesent nec maximus nunc. Morbi varius a elit a egestas. Morbi efficitur metus purus. Etiam consectetur non tortor sit amet feugiat. Quisque vel varius mi, vel consequat leo. Suspendisse placerat mauris auctor nulla porta lobortis. Praesent egestas justo nisi, ac pellentesque mauris vulputate vitae. Morbi ac lorem ornare, venenatis tortor facilisis, gravida ipsum. Nunc a dictum felis. Aliquam imperdiet eget erat quis malesuada. Phasellus nisl ipsum, aliquam bibendum viverra nec, bibendum sit amet diam. Cras nunc ligula, vulputate a erat et, fringilla egestas diam.\r"
+    },
+    "GridInfo": {
+      "AlignLineHeightToGridFlags": false,
+      "GridColor": {
+        "Type": 1,
+        "Values": [0.0, 0.0, 0.0, 1.0]
+      },
+      "GridIsOn": false,
+      "GridLeading": 22.0,
+      "GridLeadingFillColor": {
+        "Type": 1,
+        "Values": [0.0, 0.0, 0.0, 1.0]
+      },
+      "GridSize": 18.0,
+      "ShowGrid": false
+    },
+    "ParagraphRun": {
+      "DefaultRunData": {
+        "Adjustments": {
+          "Axis": [1.0, 0.0, 1.0],
+          "XY": [0.0, 0.0]
+        },
+        "ParagraphSheet": {
+          "DefaultStyleSheet": 0,
+          "Properties": {}
+        }
+      },
+      "IsJoinable": 1,
+      "RunArray": [
+        {
+          "Adjustments": {
+            "Axis": [1.0, 0.0, 1.0],
+            "XY": [0.0, 0.0]
+          },
+          "ParagraphSheet": {
+            "DefaultStyleSheet": 0,
+            "Properties": {
+              "AutoHyphenate": false,
+              "AutoLeading": 1.2,
+              "Burasagari": false,
+              "ConsecutiveHyphens": 8,
+              "EndIndent": 0.0,
+              "EveryLineComposer": false,
+              "FirstLineIndent": 0.0,
+              "GlyphSpacing": [1.0, 1.0, 1.0],
+              "Hanging": false,
+              "HyphenatedWordSize": 6,
+              "Justification": 0,
+              "KinsokuOrder": 0,
+              "LeadingType": 0,
+              "LetterSpacing": [0.0, 0.0, 0.0],
+              "PostHyphen": 2,
+              "PreHyphen": 2,
+              "SpaceAfter": 0.0,
+              "SpaceBefore": 0.0,
+              "StartIndent": 0.0,
+              "WordSpacing": [0.8, 1.0, 1.33],
+              "Zone": 36.0
+            }
+          }
+        }
+      ],
+      "RunLengthArray": [634]
+    },
+    "Rendered": {
+      "Shapes": {
+        "Children": [
+          {
+            "Cookie": {
+              "Photoshop": {
+                "Base": {
+                  "ShapeType": 1,
+                  "TransformPoint0": [1.0, 0.0],
+                  "TransformPoint1": [0.0, 1.0],
+                  "TransformPoint2": [0.0, 0.0]
+                },
+                "BoxBounds": [0.0, 0.0, 1512.0, 2668.93262],
+                "ShapeType": 1
+              }
+            },
+            "Lines": {
+              "Children": [],
+              "WritingDirection": 0
+            },
+            "Procession": 0,
+            "ShapeType": 1
+          }
+        ],
+        "WritingDirection": 0
+      },
+      "Version": 1
+    },
+    "StyleRun": {
+      "DefaultRunData": {
+        "StyleSheet": {
+          "StyleSheetData": {}
+        }
+      },
+      "IsJoinable": 2,
+      "RunArray": [
+        {
+          "StyleSheet": {
+            "StyleSheetData": {
+              "AutoKerning": true,
+              "AutoLeading": false,
+              "BaselineDirection": 1,
+              "BaselineShift": 0.0,
+              "DLigatures": false,
+              "DiacriticPos": 2,
+              "FauxBold": false,
+              "FauxItalic": false,
+              "FillColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Font": 0,
+              "FontBaseline": 0,
+              "FontCaps": 0,
+              "FontSize": 124.99998,
+              "HindiNumbers": false,
+              "HorizontalScale": 1.0,
+              "Kashida": 1,
+              "Kerning": 0,
+              "Language": 2,
+              "Leading": 50.0,
+              "Ligatures": true,
+              "Strikethrough": false,
+              "StrokeColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Tracking": 0,
+              "Underline": false,
+              "VerticalScale": 1.0,
+              "YUnderline": 1
+            }
+          }
+        },
+        {
+          "StyleSheet": {
+            "StyleSheetData": {
+              "AutoKerning": true,
+              "AutoLeading": false,
+              "BaselineDirection": 1,
+              "BaselineShift": 0.0,
+              "DLigatures": false,
+              "DiacriticPos": 2,
+              "FauxBold": false,
+              "FauxItalic": false,
+              "FillColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Font": 2,
+              "FontBaseline": 0,
+              "FontCaps": 0,
+              "FontSize": 32.0,
+              "HindiNumbers": false,
+              "HorizontalScale": 1.0,
+              "Kashida": 1,
+              "Kerning": 0,
+              "Language": 2,
+              "Leading": 50.0,
+              "Ligatures": true,
+              "Strikethrough": false,
+              "StrokeColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Tracking": 0,
+              "Underline": false,
+              "VerticalScale": 1.0,
+              "YUnderline": 1
+            }
+          }
+        },
+        {
+          "StyleSheet": {
+            "StyleSheetData": {
+              "AutoKerning": true,
+              "AutoLeading": false,
+              "BaselineDirection": 1,
+              "BaselineShift": 0.0,
+              "DLigatures": false,
+              "DiacriticPos": 2,
+              "FauxBold": false,
+              "FauxItalic": false,
+              "FillColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Font": 2,
+              "FontBaseline": 0,
+              "FontCaps": 0,
+              "FontSize": 45.83333,
+              "HindiNumbers": false,
+              "HorizontalScale": 1.0,
+              "Kashida": 1,
+              "Kerning": 0,
+              "Language": 2,
+              "Leading": 50.0,
+              "Ligatures": true,
+              "Strikethrough": false,
+              "StrokeColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Tracking": 0,
+              "Underline": false,
+              "VerticalScale": 1.0,
+              "YUnderline": 1
+            }
+          }
+        },
+        {
+          "StyleSheet": {
+            "StyleSheetData": {
+              "AutoKerning": true,
+              "AutoLeading": false,
+              "BaselineDirection": 1,
+              "BaselineShift": 0.0,
+              "DLigatures": false,
+              "DiacriticPos": 2,
+              "FauxBold": false,
+              "FauxItalic": false,
+              "FillColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Font": 2,
+              "FontBaseline": 0,
+              "FontCaps": 0,
+              "FontSize": 32.0,
+              "HindiNumbers": false,
+              "HorizontalScale": 1.0,
+              "Kashida": 1,
+              "Kerning": 0,
+              "Language": 2,
+              "Leading": 50.0,
+              "Ligatures": true,
+              "Strikethrough": false,
+              "StrokeColor": {
+                "Type": 1,
+                "Values": [1.0, 0.0, 0.0, 0.0]
+              },
+              "Tracking": 0,
+              "Underline": false,
+              "VerticalScale": 1.0,
+              "YUnderline": 1
+            }
+          }
+        }
+      ],
+      "RunLengthArray": [1, 450, 43, 140]
+    },
+    "UseFractionalGlyphWidths": true
+  },
+  "ResourceDict": {
+    "FontSet": [
+      {
+        "FontType": 0,
+        "Name": "TrajanColor-Concept",
+        "Script": 0,
+        "Synthetic": 0
+      },
+      {
+        "FontType": 0,
+        "Name": "AdobeInvisFont",
+        "Script": 0,
+        "Synthetic": 0
+      },
+      {
+        "FontType": 0,
+        "Name": "MyriadPro-Regular",
+        "Script": 0,
+        "Synthetic": 0
+      }
+    ],
+    "KinsokuSet": [
+      {
+        "Hanging": "、。.,",
+        "Keep": "―‥",
+        "Name": "PhotoshopKinsokuHard",
+        "NoEnd": "‘“（〔［｛〈《「『【([{￥＄£＠§〒＃",
+        "NoStart": "、。，．・：；？！ー―’”）〕］｝〉》」』】ヽヾゝゞ々ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ゛゜?!)]},.:;℃℉¢％‰"
+      },
+      {
+        "Hanging": "、。.,",
+        "Keep": "―‥",
+        "Name": "PhotoshopKinsokuSoft",
+        "NoEnd": "‘“（〔［｛〈《「『【",
+        "NoStart": "、。，．・：；？！’”）〕］｝〉》」』】ヽヾゝゞ々"
+      }
+    ],
+    "MojiKumiSet": [
+      {
+        "InternalName": "Photoshop6MojiKumiSet1"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet2"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet3"
+      },
+      {
+        "InternalName": "Photoshop6MojiKumiSet4"
+      }
+    ],
+    "ParagraphSheetSet": [
+      {
+        "DefaultStyleSheet": 0,
+        "Name": "Normal RGB",
+        "Properties": {
+          "AutoHyphenate": true,
+          "AutoLeading": 1.2,
+          "Burasagari": false,
+          "ConsecutiveHyphens": 8,
+          "EndIndent": 0.0,
+          "EveryLineComposer": false,
+          "FirstLineIndent": 0.0,
+          "GlyphSpacing": [1.0, 1.0, 1.0],
+          "Hanging": false,
+          "HyphenatedWordSize": 6,
+          "Justification": 0,
+          "KinsokuOrder": 0,
+          "LeadingType": 0,
+          "LetterSpacing": [0.0, 0.0, 0.0],
+          "PostHyphen": 2,
+          "PreHyphen": 2,
+          "SpaceAfter": 0.0,
+          "SpaceBefore": 0.0,
+          "StartIndent": 0.0,
+          "WordSpacing": [0.8, 1.0, 1.33],
+          "Zone": 36.0
+        }
+      }
+    ],
+    "SmallCapSize": 0.7,
+    "StyleSheetSet": [
+      {
+        "Name": "Normal RGB",
+        "StyleSheetData": {
+          "AutoKerning": true,
+          "AutoLeading": true,
+          "BaselineDirection": 2,
+          "BaselineShift": 0.0,
+          "CharacterDirection": 0,
+          "DLigatures": false,
+          "DiacriticPos": 2,
+          "FauxBold": false,
+          "FauxItalic": false,
+          "FillColor": {
+            "Type": 1,
+            "Values": [1.0, 0.0, 0.0, 0.0]
+          },
+          "FillFirst": true,
+          "FillFlag": true,
+          "Font": 2,
+          "FontBaseline": 0,
+          "FontCaps": 0,
+          "FontSize": 12.0,
+          "HindiNumbers": false,
+          "HorizontalScale": 1.0,
+          "Kashida": 1,
+          "Kerning": 0,
+          "Language": 0,
+          "Leading": 0.0,
+          "Ligatures": true,
+          "NoBreak": false,
+          "OutlineWidth": 1.0,
+          "Strikethrough": false,
+          "StrokeColor": {
+            "Type": 1,
+            "Values": [1.0, 0.0, 0.0, 0.0]
+          },
+          "StrokeFlag": false,
+          "StyleRunAlignment": 2,
+          "Tracking": 0,
+          "Tsume": 0.0,
+          "Underline": false,
+          "VerticalScale": 1.0,
+          "YUnderline": 1
+        }
+      }
+    ],
+    "SubscriptPosition": 0.333,
+    "SubscriptSize": 0.583,
+    "SuperscriptPosition": 0.333,
+    "SuperscriptSize": 0.583,
+    "TheNormalParagraphSheet": 0,
+    "TheNormalStyleSheet": 0
+  }
+}

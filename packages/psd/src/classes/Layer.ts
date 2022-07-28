@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {ImageData} from "../interfaces";
+import {EngineData, ImageData} from "../interfaces";
 import {LayerFrame} from "../sections";
 import {NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
@@ -63,6 +63,14 @@ export class Layer
    */
   get text(): string | undefined {
     return this.layerFrame.layerProperties.text;
+  }
+
+  /**
+   * If this layer is a text layer, this property retrieves its text properties.
+   * Otherwise, this property is `undefined`.
+   */
+  get textProperties(): EngineData | undefined {
+    return this.layerFrame.layerProperties.textProperties;
   }
 
   protected get imageData(): ImageData {
