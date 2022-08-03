@@ -8,7 +8,9 @@ import {Cursor, MissingEngineDataProperties} from "../utils";
 
 export function parseEngineData(raw: Uint8Array): EngineData {
   const value = new Parser(
-    new Lexer(new Cursor(new DataView(raw.buffer, raw.byteOffset))).tokens()
+    new Lexer(
+      new Cursor(new DataView(raw.buffer, raw.byteOffset, raw.length))
+    ).tokens()
   ).parse();
   if (validateEngineData(value)) {
     return value;
