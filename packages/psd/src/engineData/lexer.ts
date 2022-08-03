@@ -145,7 +145,7 @@ export class Lexer {
       if (readAhead.peek() === Delimiters["\\"]) {
         const length = readAhead.position - this.cursor.position;
         let raw = this.cursor.take(length);
-        if (raw.at(-1) === 0x00) {
+        if (raw[length -1] === 0x00) {
           // Sometimes there's extra padding before - we need to remove it
           raw = raw.subarray(0, -1);
         }
