@@ -144,15 +144,12 @@ export class Lexer {
       readAhead.pass(1);
       if (readAhead.peek() === Delimiters["\\"]) {
         const length = readAhead.position - this.cursor.position;
-        let raw = this.cursor.take(length);
-        if (raw[length -1] === 0x00) {
-          // Sometimes there's extra padding before - we need to remove it
-          raw = raw.subarray(0, -1);
-        }
-        textParts.push(decoder.decode(raw));
-        readAhead.pass(1); // skip over \\
-        textParts.push(String.fromCharCode(readAhead.take(1)[0])); // un-escape character
-        this.cursor.pass(2); // skip over escaped character to avoid decoding it in subsequent part
+        textParts.push(
+          decoder.decode(this.cursor.take(length), {stream: true})
+        );
+        readAhead.pass(2); // skip over \\
+        this.cursor.pass(1); // skip over escaped character to avoid decoding it in subsequent part
+        textParts.push(decoder.decode(this.cursor.take(1), {stream: true})); // push un-escaped character
       }
     }
     const length = readAhead.position - this.cursor.position;

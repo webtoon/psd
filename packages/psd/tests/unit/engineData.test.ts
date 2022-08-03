@@ -161,13 +161,14 @@ describe("Lexer", () => {
       0xff, // BOM - 2nd marker
       0x00, // padding
       0x61, // a
+      0x00, // padding
       0x5c, // \
       0x29, // ) - escaped so should be ignored
       0x00, // padding
       0x62, // b
       0x00, // padding
       0x63, // c
-      0x00, // padding - erronous - should be ignored
+      0x00, // padding
       0x5c, // \
       0x29, // ) - escaped so should be ignored
       0x00, // padding
@@ -179,5 +180,24 @@ describe("Lexer", () => {
     ).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([{type: TokenType.String, value: "a)bc)d"}]);
+  });
+
+  it("should parse CJK text properly", () => {
+    const data = [
+      0x28, // (
+      0xfe, // BOM - first marker
+      0xff, // BOM - 2nd marker
+      0xd4,
+      0x5c,
+      0x5c,
+      0xc9,
+      0x00,
+      0x29, // )
+    ];
+    const result = new Lexer(
+      new Cursor(new DataView(new Uint8Array(data).buffer))
+    ).tokens();
+    const tokens = Array.from(result);
+    expect(tokens).toStrictEqual([{type: TokenType.String, value: "표준"}]);
   });
 });
