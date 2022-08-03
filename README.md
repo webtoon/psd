@@ -164,7 +164,7 @@ for (const layer of psdFile.layers) {
 
 Use `Psd.prototype.composite()` and `Layer.prototype.composite()` to decode the pixel information for the entire image or an individual layer.
 
-Note that for `Psd.prototype.composite()` to work, PSD/PSB files need to be saved in "Maximize Compatibility" mode. Otherwise, it will return no data. You can enable it in `Preferences > File Handling > File Compatibility > Maximizize PSD and PSB File Compatibility`
+Note that for `Psd.prototype.composite()` to work, PSD/PSB files need to be saved in "Maximize Compatibility" mode. Otherwise, it will return no data. You can enable it in `Preferences > File Handling > File Compatibility > Maximize PSD and PSB File Compatibility`
 
 ```ts
 // Decode the pixel data of the entire image
