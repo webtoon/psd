@@ -6,7 +6,6 @@ import {
   InvalidEngineDataDictKey,
   InvalidTopLevelEngineDataValue,
   UnexpectedEndOfEngineData,
-  UnexpectedEngineDataToken,
 } from "../utils";
 import {Token, TokenType} from "./lexer";
 
@@ -20,14 +19,20 @@ export type RawEngineValue =
   | RawEngineValue[]
   | RawEngineData;
 
+const ARR_BOUNDARY = Symbol(TokenType[TokenType.ArrBeg]);
+const DICT_BOUNDARY = Symbol(TokenType[TokenType.DictBeg]);
+
 export class Parser {
-  // private done: boolean = false
+  private stack: (
+    | RawEngineValue
+    | typeof ARR_BOUNDARY
+    | typeof DICT_BOUNDARY
+  )[] = [];
   constructor(private tokens: Generator<Token>) {}
 
   parse(): RawEngineData {
-    const value = this.value();
-    // TODO: for this to be true we'd need to force lexer somehow into reaching end-of-file
-    // console.assert(this.done, "not all tokens from engine data were consumed")
+    this.runParser();
+    const [value] = this.stack;
     if (typeof value === "object" && !Array.isArray(value)) {
       return value;
     }
@@ -36,71 +41,70 @@ export class Parser {
     );
   }
 
-  private value(it?: Token): RawEngineValue {
-    /**
-     * NOTE: this is recursive descent parser - simplest solution in terms of code complexity
-     * In case we ever start to run into stack-depth issues
-     * ("RangeError: Maximum call stack size exceeded" )
-     * due to parsing data that's too big, this can be re-written into stack-based one.
-     * That's because EngineData can be thought about as reverse-polish notation:
-     * ] - end of array requires popping values from stack until you hit [
-     *  (and pushing new value - an array - onto stack)
-     * same for << and >>.
-     */
-    if (!it) {
-      it = this.advance();
+  private runParser() {
+    for (const it of this.tokens) {
+      switch (it.type) {
+        case TokenType.Name:
+        case TokenType.Number:
+        case TokenType.Boolean:
+        case TokenType.String:
+          this.stack.push(it.value);
+          continue;
+        case TokenType.DictBeg:
+          this.stack.push(DICT_BOUNDARY);
+          continue;
+        case TokenType.ArrBeg:
+          this.stack.push(ARR_BOUNDARY);
+          continue;
+        case TokenType.DictEnd:
+          this.stack.push(this.dict());
+          continue;
+        case TokenType.ArrEnd:
+          this.stack.push(this.array().reverse());
+          continue;
+      }
     }
-    switch (it.type) {
-      case TokenType.Name:
-      case TokenType.Number:
-      case TokenType.Boolean:
-      case TokenType.String:
-        return it.value;
-      case TokenType.DictBeg:
-        return this.dict();
-      case TokenType.ArrBeg:
-        return this.arr();
-    }
-    throw new UnexpectedEngineDataToken(
-      `Unexpected token: ${TokenType[it.type]}`
-    );
-  }
-
-  private advance(): Token {
-    const it = this.tokens.next();
-    // this.done = Boolean(it.done);
-    if (!it.value) {
-      throw new UnexpectedEndOfEngineData("End of stream");
-    }
-    return it.value;
   }
 
   private dict(): RawEngineData {
     const val = {} as RawEngineData;
     for (;;) {
-      const it = this.advance();
-      if (it.type === TokenType.DictEnd) {
+      const value = this.stack.pop();
+      // TODO: new error types?
+      if (value === undefined) {
+        throw new UnexpectedEndOfEngineData("Stack empty when parsing dict");
+      }
+      if (value === DICT_BOUNDARY) {
         return val;
       }
-      if (it.type !== TokenType.Name) {
+      if (value === ARR_BOUNDARY) {
+        throw new InvalidEngineDataDictKey("Got ArrBeg while parsing a dict");
+      }
+      const it = this.stack.pop();
+      if (typeof it !== "string") {
         throw new InvalidEngineDataDictKey(
-          `Dict key is not Name; is ${TokenType[it.type]}`
+          `Dict key is not Name; is ${typeof it}`
         );
       }
-      const value = this.value();
-      val[it.value] = value;
+      val[it] = value;
     }
   }
 
-  private arr(): RawEngineValue[] {
+  private array(): RawEngineValue[] {
     const val = [] as RawEngineValue[];
     for (;;) {
-      const it = this.advance();
-      if (it.type === TokenType.ArrEnd) {
+      const it = this.stack.pop();
+      // TODO: new error types?
+      if (it === undefined) {
+        throw new UnexpectedEndOfEngineData("Stack empty when parsing array");
+      }
+      if (it === DICT_BOUNDARY) {
+        throw new InvalidEngineDataDictKey("Got DictBeg while parsing array");
+      }
+      if (it === ARR_BOUNDARY) {
         return val;
       }
-      const value = this.value(it);
-      val.push(value);
+      val.push(it);
     }
   }
 }
