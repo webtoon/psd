@@ -30,8 +30,11 @@ export function validateEngineData(
   for (const key of REQUIRED_KEYS) {
     if (hasOwnProperty(engineData, key)) {
       const value = engineData[key];
-      ok &&=
-        typeof value === "object" && !Array.isArray(value) && Boolean(value);
+      ok =
+        ok &&
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        Boolean(value);
     } else {
       return false;
     }
