@@ -4,20 +4,22 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import {beforeAll, describe, it} from "vitest";
+import {describe, it} from "vitest";
 
 import PSD from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
 describe(`@webtoon/psd reads EngineData`, () => {
-  let data: ArrayBuffer;
-
-  beforeAll(() => {
-    data = fs.readFileSync(path.resolve(FIXTURE_DIR, "engineData.psd")).buffer;
+  it(`should parse the file successfully`, () => {
+    const data = fs.readFileSync(
+      path.resolve(FIXTURE_DIR, "engineData.psd")
+    ).buffer;
+    PSD.parse(data);
   });
 
-  it(`should parse the file successfully`, () => {
+  it(`should parse CJK text successfully`, () => {
+    const data = fs.readFileSync(path.resolve(FIXTURE_DIR, "CJK.psd")).buffer;
     PSD.parse(data);
   });
 });
