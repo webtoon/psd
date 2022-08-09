@@ -89,6 +89,12 @@ const INCREASE: {[type in ReadType]: number} = {
  * being parsed.
  */
 export class Cursor {
+  static from(bytes: Uint8Array) {
+    return new Cursor(
+      new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+    );
+  }
+
   constructor(private dataView: DataView, public position = 0) {}
 
   /**
@@ -145,6 +151,13 @@ export class Cursor {
     );
   }
 
+  iter(): Uint8Array {
+    return new Uint8Array(
+      this.dataView.buffer,
+      this.dataView.byteOffset + this.position
+    );
+  }
+
   /**
    * Creates a `Uint8Array` that covers the underlying `ArrayBuffer` of this
    * cursor, starting at the current cursor position and spanning a
@@ -164,6 +177,16 @@ export class Cursor {
   peek(): number {
     // dataView throws RangeError if position is outside bounds
     return this.dataView.getUint8(this.position);
+  }
+
+  /**
+   * Returns subsequent byte
+   */
+  one(): number {
+    // dataView throws RangeError if position is outside bounds
+    const val = this.dataView.getUint8(this.position);
+    this.position += 1;
+    return val;
   }
 
   /**
