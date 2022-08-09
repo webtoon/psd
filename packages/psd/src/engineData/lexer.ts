@@ -6,7 +6,6 @@
 // Section 7.2 - Lexical Conventions
 
 import {
-  Cursor,
   InvalidEngineDataBoolean,
   InvalidEngineDataNumber,
   InvalidEngineDataTextBOM,
@@ -64,12 +63,73 @@ const Delimiters = {
 
 const DelimiterCharacters = new Set(Object.values(Delimiters));
 
-export class Lexer {
-  constructor(private cursor: Cursor) {}
+class CursorProxy {
+  public position = 0;
+  constructor(private cursor: Uint8Array) {}
 
-  *tokens(): Generator<Token> {
+  peek() {
+    return this.cursor[this.position];
+  }
+  pass(n: number) {
+    this.position += n;
+  }
+  one() {
+    const val = this.peek();
+    this.position += 1;
+    return val;
+  }
+  unpass() {
+    this.pass(-1);
+  }
+  get length() {
+    return this.cursor.length;
+  }
+  clone() {
+    const val = new CursorProxy(this.cursor);
+    val.position = this.position;
+    return val;
+  }
+  take(n: number) {
+    const val = this.cursor.subarray(this.position, this.position + n);
+    this.position += n;
+    return val;
+  }
+  iter() {
+    return this.cursor.subarray(this.position);
+  }
+}
+
+const STRING_TOKEN_JT = [] as boolean[];
+for (let i = 0; i < 256; i += 1) {
+  STRING_TOKEN_JT[i] =
+    WhitespaceCharacters.has(i) || DelimiterCharacters.has(i);
+}
+
+const STRING_DECODER = new TextDecoder("utf-8");
+function stringToken(cursor: CursorProxy): string {
+  const startsAt = cursor.position;
+  let endsAt = cursor.position;
+  for (const i of cursor.iter()) {
+    if (STRING_TOKEN_JT[i]) {
+      break;
+    }
+    endsAt += 1;
+  }
+  const text = STRING_DECODER.decode(cursor.take(endsAt - startsAt));
+  return text;
+}
+
+export class Lexer {
+  cursor: CursorProxy;
+
+  constructor(cursor: Uint8Array) {
+    this.cursor = new CursorProxy(cursor);
+  }
+
+  tokens(): Token[] {
+    const value = [] as Token[];
     while (!this.done()) {
-      const val = this.cursor.read("u8");
+      const val = this.cursor.one();
 
       if (WhitespaceCharacters.has(val)) {
         while (!this.done() && WhitespaceCharacters.has(this.cursor.peek()))
@@ -78,31 +138,31 @@ export class Lexer {
       }
       if (DelimiterCharacters.has(val)) {
         if (val === Delimiters["("]) {
-          yield {type: TokenType.String, value: this.text()};
+          value.push({type: TokenType.String, value: this.text()});
           continue;
         }
         if (val === Delimiters["["]) {
-          yield {type: TokenType.ArrBeg};
+          value.push({type: TokenType.ArrBeg});
           continue;
         }
         if (val === Delimiters["]"]) {
-          yield {type: TokenType.ArrEnd};
+          value.push({type: TokenType.ArrEnd});
           continue;
         }
         if (val === Delimiters["<"]) {
           // NOTE: assert that it is < indeed?
           this.cursor.pass(1);
-          yield {type: TokenType.DictBeg};
+          value.push({type: TokenType.DictBeg});
           continue;
         }
         if (val === Delimiters[">"]) {
           // NOTE: assert that it is > indeed?
           this.cursor.pass(1);
-          yield {type: TokenType.DictEnd};
+          value.push({type: TokenType.DictEnd});
           continue;
         }
         if (val === Delimiters["/"]) {
-          yield {type: TokenType.Name, value: this.string()};
+          value.push({type: TokenType.Name, value: this.string()});
           continue;
         }
         console.assert(
@@ -114,13 +174,14 @@ export class Lexer {
       }
       // only two types left: number or boolean
       // we need to return val first since it starts value
-      this.cursor.unpass(1);
+      this.cursor.unpass();
       if (BooleanStartCharacters.has(val)) {
-        yield {type: TokenType.Boolean, value: this.boolean()};
+        value.push({type: TokenType.Boolean, value: this.boolean()});
       } else {
-        yield {type: TokenType.Number, value: this.number()};
+        value.push({type: TokenType.Number, value: this.number()});
       }
     }
+    return value;
   }
 
   private done(): boolean {
@@ -160,8 +221,8 @@ export class Lexer {
   }
 
   private textDecoderFromBOM(): TextDecoder {
-    const firstBomPart = this.cursor.read("u8");
-    const sndBomPart = this.cursor.read("u8");
+    const firstBomPart = this.cursor.one();
+    const sndBomPart = this.cursor.one();
     // https://en.wikipedia.org/wiki/Byte_order_mark#UTF-16
     // LE is FF FE
     if (firstBomPart === 0xff && sndBomPart === 0xfe)
@@ -175,19 +236,7 @@ export class Lexer {
   }
 
   private string(): string {
-    const decoder = new TextDecoder("ascii");
-    const readAhead = this.cursor.clone();
-    while (
-      !this.done() &&
-      !WhitespaceCharacters.has(this.cursor.peek()) &&
-      !DelimiterCharacters.has(this.cursor.peek())
-    ) {
-      this.cursor.pass(1);
-    }
-    const text = decoder.decode(
-      readAhead.take(this.cursor.position - readAhead.position)
-    );
-    return text;
+    return stringToken(this.cursor);
   }
 
   private number(): number {

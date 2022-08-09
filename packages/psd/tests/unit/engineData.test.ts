@@ -47,7 +47,7 @@ describe("parseEngineData", () => {
 
 describe("Lexer", () => {
   it("should decode text", () => {
-    const data = [
+    const data = new Uint8Array([
       0x28, // (
       0xfe, // BOM - first marker
       0xff, // BOM - 2nd marker
@@ -58,26 +58,22 @@ describe("Lexer", () => {
       0x00, // padding
       0x63, // c
       0x29, // )
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([{type: TokenType.String, value: "abc"}]);
   });
 
   it("should recognize opening and closing of structures", () => {
-    const data = [
+    const data = new Uint8Array([
       0x3c, // <
       0x3c, // <
       0x3e, // >
       0x3e, // >
       0x5b, // [
       0x5d, // ]
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([
       {type: TokenType.DictBeg},
@@ -88,7 +84,7 @@ describe("Lexer", () => {
   });
 
   it("should recognize names", () => {
-    const data = [
+    const data = new Uint8Array([
       0x2f, // /
       0x61, // a
       0x62, // b
@@ -98,10 +94,8 @@ describe("Lexer", () => {
       0x61, // a
       0x62, // b
       0x63, // c
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([
       {type: TokenType.Name, value: "abc"},
@@ -110,7 +104,7 @@ describe("Lexer", () => {
   });
 
   it("should recognize numbers", () => {
-    const data = [
+    const data = new Uint8Array([
       0x2e, // .
       0x38, // 8
       0x20, // ' '
@@ -119,10 +113,8 @@ describe("Lexer", () => {
       0x32, // 2
       0x20, // ' '
       0x33, // 3
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([
       {type: TokenType.Number, value: 0.8},
@@ -132,7 +124,7 @@ describe("Lexer", () => {
   });
 
   it("should recognize booleans", () => {
-    const data = [
+    const data = new Uint8Array([
       0x66,
       0x61,
       0x6c,
@@ -143,10 +135,8 @@ describe("Lexer", () => {
       0x72,
       0x75,
       0x65, // true
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([
       {type: TokenType.Boolean, value: false},
@@ -155,7 +145,7 @@ describe("Lexer", () => {
   });
 
   it("should treat delimiters within text properly", () => {
-    const data = [
+    const data = new Uint8Array([
       0x28, // (
       0xfe, // BOM - first marker
       0xff, // BOM - 2nd marker
@@ -174,16 +164,14 @@ describe("Lexer", () => {
       0x00, // padding
       0x64, // d
       0x29, // )
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([{type: TokenType.String, value: "a)bc)d"}]);
   });
 
   it("should parse CJK text properly", () => {
-    const data = [
+    const data = new Uint8Array([
       0x28, // (
       0xfe, // BOM - first marker
       0xff, // BOM - 2nd marker
@@ -193,10 +181,8 @@ describe("Lexer", () => {
       0xc9,
       0x00,
       0x29, // )
-    ];
-    const result = new Lexer(
-      new Cursor(new DataView(new Uint8Array(data).buffer))
-    ).tokens();
+    ]);
+    const result = new Lexer(data).tokens();
     const tokens = Array.from(result);
     expect(tokens).toStrictEqual([{type: TokenType.String, value: "표준"}]);
   });
