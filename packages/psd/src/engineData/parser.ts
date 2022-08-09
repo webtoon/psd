@@ -28,7 +28,7 @@ export class Parser {
     | typeof ARR_BOUNDARY
     | typeof DICT_BOUNDARY
   )[] = [];
-  constructor(private tokens: Generator<Token>) {}
+  constructor(private tokens: Iterable<Token>) {}
 
   parse(): RawEngineData {
     this.runParser();

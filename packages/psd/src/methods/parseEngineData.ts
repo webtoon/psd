@@ -4,14 +4,10 @@
 
 import {Lexer, Parser, validateEngineData} from "../engineData";
 import {EngineData} from "../interfaces";
-import {Cursor, MissingEngineDataProperties} from "../utils";
+import {MissingEngineDataProperties} from "../utils";
 
 export function parseEngineData(raw: Uint8Array): EngineData {
-  const value = new Parser(
-    new Lexer(
-      new Cursor(new DataView(raw.buffer, raw.byteOffset, raw.length))
-    ).tokens()
-  ).parse();
+  const value = new Parser(new Lexer(raw).tokens()).parse();
   if (validateEngineData(value)) {
     return value;
   }
