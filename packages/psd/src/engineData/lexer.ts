@@ -6,6 +6,7 @@
 // Section 7.2 - Lexical Conventions
 
 import {
+  Cursor,
   InvalidEngineDataBoolean,
   InvalidEngineDataNumber,
   InvalidEngineDataTextBOM,
@@ -63,42 +64,6 @@ const Delimiters = {
 
 const DelimiterCharacters = new Set(Object.values(Delimiters));
 
-class CursorProxy {
-  public position = 0;
-  constructor(private cursor: Uint8Array) {}
-
-  peek() {
-    return this.cursor[this.position];
-  }
-  pass(n: number) {
-    this.position += n;
-  }
-  one() {
-    const val = this.peek();
-    this.position += 1;
-    return val;
-  }
-  unpass() {
-    this.pass(-1);
-  }
-  get length() {
-    return this.cursor.length;
-  }
-  clone() {
-    const val = new CursorProxy(this.cursor);
-    val.position = this.position;
-    return val;
-  }
-  take(n: number) {
-    const val = this.cursor.subarray(this.position, this.position + n);
-    this.position += n;
-    return val;
-  }
-  iter() {
-    return this.cursor.subarray(this.position);
-  }
-}
-
 const STRING_TOKEN_JT = [] as boolean[];
 for (let i = 0; i < 256; i += 1) {
   STRING_TOKEN_JT[i] =
@@ -106,7 +71,7 @@ for (let i = 0; i < 256; i += 1) {
 }
 
 const STRING_DECODER = new TextDecoder("utf-8");
-function stringToken(cursor: CursorProxy): string {
+function stringToken(cursor: Cursor): string {
   const startsAt = cursor.position;
   let endsAt = cursor.position;
   for (const i of cursor.iter()) {
@@ -120,10 +85,10 @@ function stringToken(cursor: CursorProxy): string {
 }
 
 export class Lexer {
-  cursor: CursorProxy;
+  cursor: Cursor;
 
   constructor(cursor: Uint8Array) {
-    this.cursor = new CursorProxy(cursor);
+    this.cursor = Cursor.from(cursor);
   }
 
   tokens(): Token[] {
@@ -174,7 +139,7 @@ export class Lexer {
       }
       // only two types left: number or boolean
       // we need to return val first since it starts value
-      this.cursor.unpass();
+      this.cursor.unpass(1);
       if (BooleanStartCharacters.has(val)) {
         value.push({type: TokenType.Boolean, value: this.boolean()});
       } else {
