@@ -6,4 +6,5 @@
 export enum ResourceType {
   GridAndGuides = 1032,
   Slices = 1050,
+  ICCProfile = 1039,
 }
