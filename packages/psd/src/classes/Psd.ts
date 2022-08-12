@@ -50,14 +50,15 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
         switch (resource.id) {
           case ResourceType.GridAndGuides:
             this.guides = resource.resource.guides;
-            continue;
+            break;
           case ResourceType.Slices:
             this.slices = loadSlicesFromResourceBlock(resource);
-            continue;
+            break;
           case ResourceType.ICCProfile:
             // We don't want to do try parsing it ourselves since it'd cost us a lot
             // see https://github.com/webtoon/psd/issues/46#issuecomment-1210726858
             this.icc_profile = resource.resource;
+            break;
         }
       }
     }
