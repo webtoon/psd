@@ -74,8 +74,9 @@ inputEl.addEventListener("change", async () => {
 
   const canvasElement = document.createElement("canvas");
   const context = canvasElement.getContext("2d");
+  const compositeBuffer = await psdFile.composite();
   const imageData = new ImageData(
-    psdFile.composite(),
+    compositeBuffer,
     psdFile.width,
     psdFile.height
   );
