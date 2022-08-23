@@ -32,6 +32,7 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
   public readonly layers: Layer[] = [];
   public readonly guides: Guide[] = [];
   public readonly slices: Slice[] = [];
+  public readonly icc_profile?: Uint8Array = undefined;
 
   static parse(buffer: ArrayBuffer): Psd {
     const parsingResult = parse(buffer);
@@ -52,6 +53,12 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
             break;
           case ResourceType.Slices:
             this.slices = loadSlicesFromResourceBlock(resource);
+            break;
+          case ResourceType.ICCProfile:
+            // We don't want to do try parsing it ourselves since it'd cost us a lot
+            // see https://github.com/webtoon/psd/issues/46#issuecomment-1210726858
+            this.icc_profile = resource.resource;
+            break;
         }
       }
     }
