@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {benchmarkAgPsd, benchmarkPsdJs, benchmarkPsdTs} from "./bench";
+import {benchmarkPsdTs} from "./bench";
 import {BenchmarkTaskSetup, initialAppState} from "./model";
 import "./style.css";
 import {initialize, render} from "./views";
@@ -14,14 +14,6 @@ const benchmarkSetup: BenchmarkTaskSetup[] = [
       benchmarkPsdTs(psdFileData, {
         applyOpacity: appState.options.shouldApplyOpacity,
       }),
-  },
-  {
-    libraryName: "PSD.js",
-    benchmarkCallback: benchmarkPsdJs,
-  },
-  {
-    libraryName: "ag-psd",
-    benchmarkCallback: benchmarkAgPsd,
   },
 ];
 

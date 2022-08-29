@@ -2,9 +2,9 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import * as wasmDecoder from "@webtoon/psd-decoder";
-import {ChannelBytes, ChannelCompression} from "../interfaces";
-import {UnsupportedCompression} from "../utils";
+// import * as wasmDecoder from "@webtoon/psd-decoder";
+import {decodeGrayscale, decodeRgb} from "@webtoon/psd-decoder-js";
+import {ChannelBytes} from "../interfaces";
 
 /**
  * Decodes one or more encoded channels and combines them into an image.
@@ -47,81 +47,4 @@ export async function generateRgba(
     result.byteOffset,
     result.byteLength
   );
-}
-
-function validateSupportedCompression(
-  compression: ChannelCompression
-): asserts compression is
-  | ChannelCompression.RawData
-  | ChannelCompression.RleCompressed {
-  switch (compression) {
-    case ChannelCompression.RawData:
-    case ChannelCompression.RleCompressed:
-      return;
-  }
-  throw new UnsupportedCompression(
-    `Unsupported compression method: ${compression}`
-  );
-}
-
-export async function decodeRgb(
-  pixels: number,
-  red: ChannelBytes,
-  green: ChannelBytes,
-  blue: ChannelBytes,
-  alpha?: ChannelBytes
-) {
-  await wasmDecoder.init;
-
-  validateSupportedCompression(red.compression);
-  validateSupportedCompression(blue.compression);
-  validateSupportedCompression(red.compression);
-  if (alpha) {
-    validateSupportedCompression(alpha.compression);
-  }
-
-  return alpha
-    ? wasmDecoder.decode_rgba(
-        pixels,
-        red.data,
-        red.compression,
-        green.data,
-        green.compression,
-        blue.data,
-        blue.compression,
-        alpha.data,
-        alpha.compression
-      )
-    : wasmDecoder.decode_rgb(
-        pixels,
-        red.data,
-        red.compression,
-        green.data,
-        green.compression,
-        blue.data,
-        blue.compression
-      );
-}
-
-export async function decodeGrayscale(
-  pixels: number,
-  color: ChannelBytes,
-  alpha?: ChannelBytes
-) {
-  await wasmDecoder.init;
-
-  validateSupportedCompression(color.compression);
-  if (alpha) {
-    validateSupportedCompression(alpha.compression);
-  }
-
-  return alpha
-    ? wasmDecoder.decode_grayscale_a(
-        pixels,
-        color.data,
-        color.compression,
-        alpha.data,
-        alpha.compression
-      )
-    : wasmDecoder.decode_grayscale(pixels, color.data, color.compression);
 }
