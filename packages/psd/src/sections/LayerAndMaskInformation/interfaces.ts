@@ -62,6 +62,7 @@ export interface LayerProperties {
   /** Text properties */
   textProperties?: EngineData;
   maskData: MaskData;
+  additionalLayerInfos: AdditionalLayerInfo[];
 }
 
 export const createLayerProperties = (
@@ -82,6 +83,7 @@ export const createLayerProperties = (
     layerText,
     engineData,
     maskData,
+    additionalLayerInfos,
   } = layerRecord;
 
   return {
@@ -99,6 +101,7 @@ export const createLayerProperties = (
     text: layerText,
     textProperties: engineData,
     maskData,
+    additionalLayerInfos,
   };
 };
 

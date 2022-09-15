@@ -23,7 +23,7 @@ export class Layer
 
   /** @internal */
   constructor(
-    private layerFrame: LayerFrame,
+    public readonly layerFrame: LayerFrame,
     public readonly parent: NodeParent
   ) {
     super();
