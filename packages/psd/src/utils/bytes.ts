@@ -267,6 +267,16 @@ export class Cursor {
   }
 
   /**
+   * Reads unsigned 4-byte fixed-point number.
+   */
+  // TODO: test me.
+  readFixedPoint32bit(): number {
+    const low = this.read("u16");
+    const high = this.read("u16");
+    return low + high / (2 ** 16 - 1);
+  }
+
+  /**
    * Decodes an "ID string", which is a compact string format used in
    * Descriptors.
    *

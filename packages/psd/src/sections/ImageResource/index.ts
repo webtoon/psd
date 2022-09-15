@@ -6,6 +6,7 @@ import {ImageResourceBlock, ResourceType} from "../../interfaces";
 import {Cursor, equals, InvalidResourceSignature} from "../../utils";
 import {readGridAndGuides} from "./readGridAndGuides";
 import {readICCProfile} from "./readICCProfile";
+import {readResolutionInfo} from "./readResolutionInfo";
 import {readSlices} from "./readSlices";
 
 const EXPECTED_RESOURCE_BLOCK_SIGNATURE = [56, 66, 73, 77];
@@ -55,6 +56,15 @@ function readResourceBlock(cursor: Cursor): ImageResourceBlock {
       break;
     case ResourceType.ICCProfile:
       resource = readICCProfile(cursor, expectedDataEnd);
+      break;
+    case ResourceType.ResolutionInfo:
+      resource = readResolutionInfo(cursor);
+      break;
+    case ResourceType.GlobalLightAltitude:
+      resource = cursor.read("i32");
+      break;
+    case ResourceType.GlobalLightAngle:
+      resource = cursor.read("i32");
       break;
     default:
     // For now, ignore resource types that we don't support;
