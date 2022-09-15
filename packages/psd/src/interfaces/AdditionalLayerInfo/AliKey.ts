@@ -10,4 +10,18 @@ export enum AliKey {
   SectionDividerSetting = "lsct",
   TypeToolObjectSetting = "TySh",
   UnicodeLayerName = "luni",
+
+  VectorStrokeData = "vstk",
+  ObjectBasedEffects = "lfx2",
+  GradientFillSetting = "GdFl",
+  SolidColorSheetSetting = "SoCo",
+  PatternFillSetting = "PtFl",
+  VectorStrokeContentData = "vscg",
+  BlendOptionsCapacity = "iOpa",
+  VectorMaskSetting1 = "vmsk",
+  VectorMaskSetting2 = "vsms",
+  HueSaturation = "hue2",
+  NestedSectionDividerSetting = "lsdk",
+  LayerID = "lyid",
+  ArtboardData = "artb",
 }

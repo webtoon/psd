@@ -8,9 +8,21 @@ import {
   FileVersionSpec,
 } from "../../../interfaces";
 import {Cursor, InvalidAdditionalLayerInfoSignature} from "../../../utils";
+import {readArtboardDataAliBlock} from "./readArtboardDataAliBlock";
+import {readBlendOptionsCapacityAliBlock} from "./readBlendOptionsCapacityAliBlock";
+import {readGradientFillSettingAliBlock} from "./readGradientFillSettingAliBlock";
+import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
+import {readLayerIDAliBlock} from "./readLayerIDAliBlock";
+import {readNestedSectionDividerSettingAliBlock} from "./readNestedSectionDividerSettingAliBlock";
+import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
+import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
 import {readSectionDividerSettingAliBlock} from "./readSectionDividerSettingAliBlock";
+import {readSolidColorSheetSettingAliBlock} from "./readSolidColorSheetSettingAliBlock";
 import {readTypeToolObjectSettingAliBlock} from "./readTypeToolObjectSettingAliBlock";
 import {readUnicodeLayerNameAliBlock} from "./readUnicodeLayerNameAliBlock";
+import {readVectorMaskSettingAliBlock} from "./readVectorMaskSettingAliBlock";
+import {readVectorStrokeContentDataAliBlock} from "./readVectorStrokeContentDataAliBlock";
+import {readVectorStrokeDataAliBlock} from "./readVectorStrokeDataAliBlock";
 
 /**
  * Reads a single Additional Layer Information block from the current
@@ -56,6 +68,12 @@ function readAliBlockBody(
   size: number
 ): AdditionalLayerInfo {
   switch (key) {
+    case AliKey.NestedSectionDividerSetting:
+      return {
+        signature,
+        key,
+        ...readNestedSectionDividerSettingAliBlock(cursor, size),
+      };
     case AliKey.SectionDividerSetting:
       return {
         signature,
@@ -66,6 +84,29 @@ function readAliBlockBody(
       return {signature, key, ...readTypeToolObjectSettingAliBlock(cursor)};
     case AliKey.UnicodeLayerName:
       return {signature, key, ...readUnicodeLayerNameAliBlock(cursor)};
+    case AliKey.VectorStrokeData:
+      return {signature, key, ...readVectorStrokeDataAliBlock(cursor)};
+    case AliKey.ObjectBasedEffects:
+      return {signature, key, ...readObjectBasedEffectsAliBlock(cursor)};
+    case AliKey.GradientFillSetting:
+      return {signature, key, ...readGradientFillSettingAliBlock(cursor)};
+    case AliKey.SolidColorSheetSetting:
+      return {signature, key, ...readSolidColorSheetSettingAliBlock(cursor)};
+    case AliKey.PatternFillSetting:
+      return {signature, key, ...readPatternFillSettingAliBlock(cursor)};
+    case AliKey.VectorStrokeContentData:
+      return {signature, key, ...readVectorStrokeContentDataAliBlock(cursor)};
+    case AliKey.BlendOptionsCapacity:
+      return {signature, key, ...readBlendOptionsCapacityAliBlock(cursor)};
+    case AliKey.VectorMaskSetting1:
+    case AliKey.VectorMaskSetting2:
+      return {signature, key, ...readVectorMaskSettingAliBlock(cursor, size)};
+    case AliKey.HueSaturation:
+      return {signature, key, ...readHueSaturationAliBlock(cursor)};
+    case AliKey.LayerID:
+      return {signature, key, ...readLayerIDAliBlock(cursor)};
+    case AliKey.ArtboardData:
+      return {signature, key, ...readArtboardDataAliBlock(cursor)};
     default: {
       const data = cursor.take(size);
       return {signature, key, _isUnknown: true, data};

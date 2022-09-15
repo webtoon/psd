@@ -13,6 +13,7 @@ export type ReadType =
   | "i16"
   | "i32"
   | "i64"
+  | "f32"
   | "f64";
 
 // The following two functions are used to safely decode a subset of 64-bit
@@ -79,6 +80,7 @@ const INCREASE: {[type in ReadType]: number} = {
   i16: 2,
   u32: 4,
   i32: 4,
+  f32: 4,
   u64: 8,
   i64: 8,
   f64: 8,
@@ -215,6 +217,8 @@ export class Cursor {
         return dataView.getInt32(position);
       case "i64":
         return getInt64FromDataView(dataView, position);
+      case "f32":
+        return dataView.getFloat32(position);
       case "f64":
         return dataView.getFloat64(position);
       default:
