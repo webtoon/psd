@@ -150,7 +150,7 @@ function traverseNode(node: Node) {
   node.children?.forEach((child) => traverseNode(child));
 }
 
-traverseNode(psd);
+traverseNode(psdFile);
 ```
 
 The `Psd` object also provides the `layers` property, which is an array of all `Layer`s in the image (including nested).
