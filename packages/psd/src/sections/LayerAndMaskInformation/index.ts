@@ -6,7 +6,10 @@ import {FileVersionSpec, GroupDivider} from "../../interfaces";
 import {Cursor, PanicFrameStackUnmatched} from "../../utils";
 import {GroupFrame, LayerFrame} from "./classes";
 import {Frame} from "./interfaces";
-import {readLayerRecordsAndChannels} from "./readLayerRecordsAndChannels";
+import {
+  readExtraData,
+  readLayerRecordsAndChannels,
+} from "./readLayerRecordsAndChannels";
 
 export * from "./classes";
 export * from "./interfaces";
@@ -15,6 +18,8 @@ export type LayerAndMaskInformationSection = {
   layers: LayerFrame[];
   groups: GroupFrame[];
   orders: ("G" | "L" | "D")[];
+  // FIXME: type!
+  extraData: Record<string, unknown>;
 };
 
 export function parseLayerAndMaskInformation(
@@ -48,6 +53,10 @@ export function parseLayerAndMaskInformation(
     absLayerCount,
     fileVersionSpec
   );
+
+  cursor.padding(cursor.position, 4);
+
+  const extraData = readExtraData(cursor, fileVersionSpec);
 
   // Construct a list of layers and folders based on the parsed layer records.
   // We defer construction of the layer grouping hierarchy (tree) to the
@@ -121,5 +130,5 @@ export function parseLayerAndMaskInformation(
   // Group must be sorted by ID
   groups.sort((a, b) => a.id - b.id);
 
-  return {layers, groups, orders};
+  return {layers, groups, orders, extraData};
 }

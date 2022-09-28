@@ -197,6 +197,29 @@ function readLayerRecord(
   };
 }
 
+export function readExtraData(
+  cursor: Cursor,
+  fileVersionSpec: FileVersionSpec
+): Record<string, unknown> {
+  const start = cursor.position;
+  const globalMaskInfo = readGlobalMaskInfo(cursor);
+  const additionalLayerInfos: AdditionalLayerInfo[] = [];
+  while (cursor.position < cursor.length) {
+    additionalLayerInfos.push(readAdditionalLayerInfo(cursor, fileVersionSpec));
+  }
+  return {globalMaskInfo, additionalLayerInfos};
+}
+
+function readGlobalMaskInfo(cursor: Cursor): Record<string, unknown> {
+  const length = cursor.read("u32");
+  if (length === 0) {
+    return {};
+  }
+  // TODO: implement me
+  cursor.pass(length);
+  return {};
+}
+
 function readLayerRectangle(cursor: Cursor): [number, number, number, number] {
   const top = cursor.read("i32");
   const left = cursor.read("i32");

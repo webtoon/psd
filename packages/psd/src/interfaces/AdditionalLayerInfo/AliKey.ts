@@ -26,4 +26,8 @@ export enum AliKey {
   ArtboardData = "artb",
   SmartObjectPlacedLayerData = "SoLE",
   PlacedLayerData = "SoLd",
+
+  LinkedLayer = "lnkD",
+  LinkedLayer2 = "lnk2",
+  LinkedLayer3 = "lnk3",
 }

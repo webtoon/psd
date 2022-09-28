@@ -13,6 +13,7 @@ import {readBlendOptionsCapacityAliBlock} from "./readBlendOptionsCapacityAliBlo
 import {readGradientFillSettingAliBlock} from "./readGradientFillSettingAliBlock";
 import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
 import {readLayerIDAliBlock} from "./readLayerIDAliBlock";
+import {readLinkedLayerAliBlock} from "./readLinkedLayerAliBlock";
 import {readNestedSectionDividerSettingAliBlock} from "./readNestedSectionDividerSettingAliBlock";
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
@@ -52,6 +53,7 @@ export function readAdditionalLayerInfo(
   // Position the cursor at the end of the ALI block
   const remainingBytes = size - (cursor.position - prevPosition);
   cursor.pass(remainingBytes);
+  cursor.padding(size, 4);
 
   return aliBlock;
 }
@@ -114,6 +116,14 @@ function readAliBlockBody(
         signature,
         key,
         ...readSmartObjectPlacedLayerDataAliBlock(cursor),
+      };
+    case AliKey.LinkedLayer:
+    case AliKey.LinkedLayer2:
+    case AliKey.LinkedLayer3:
+      return {
+        signature,
+        key,
+        ...readLinkedLayerAliBlock(cursor, size),
       };
     default: {
       const data = cursor.take(size);

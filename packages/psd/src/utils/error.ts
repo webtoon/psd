@@ -66,6 +66,7 @@ export class NumberTooLarge extends PsdError {}
 export class InvalidAdditionalLayerInfoSignature extends PsdError {}
 export class InvalidSectionDividerSetting extends PsdError {}
 export class InvalidTypeToolObjectSetting extends PsdError {}
+export class InvalidLinkedLayerType extends PsdError {}
 
 // Descriptor and Reference errors
 export class InvalidDescriptorType extends PsdError {}

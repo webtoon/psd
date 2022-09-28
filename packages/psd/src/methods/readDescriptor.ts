@@ -149,7 +149,7 @@ function readDescriptorValue(cursor: Cursor): DescriptorValue {
       const name = cursor.readUnicodeString(0);
       const classID = cursor.readIdString();
       const itemsCount = cursor.read("u32");
-      const items = [...Array(itemsCount).keys()].map(() => {
+      const items = Array.from(Array(itemsCount), () => {
         const key = cursor.readIdString();
         const value = readDescriptorValue(cursor);
         return {key, value};
@@ -159,7 +159,7 @@ function readDescriptorValue(cursor: Cursor): DescriptorValue {
     case DescriptorValueType.UnitFloats: {
       const unitType = matchUnitFloatType(cursor.readString(4));
       const valuesCount = cursor.read("u32");
-      const values = [...Array(valuesCount).keys()].map(() =>
+      const values = Array.from(Array(valuesCount), () =>
         cursor.read("f64")
       );
       return {type, unitType, values};

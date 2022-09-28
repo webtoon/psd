@@ -34,6 +34,7 @@ export interface LayerRecord {
   /** If defined, containts extra text properties */
   engineData?: EngineData;
   maskData: MaskData;
+  extraData?: Record<string, unknown>;
 }
 
 export type LayerChannels = Map<ChannelKind, ChannelBytes>;

@@ -8,6 +8,7 @@ import {BlendOptionsCapacityAliBlock} from "./BlendOptionsCapacityAliBlock";
 import {GradientFillSettingAliBlock} from "./GradientFillSettingAliBlock";
 import {HueSaturationAliBlock} from "./HueSaturationAliBlock";
 import {LayerIDAliBlock} from "./LayerIDAliBlock";
+import {LinkedLayerAliBlock} from "./LinkedLayerAliBlock";
 import {NestedSectionDividerSettingAliBlock} from "./NestedSectionDividerSettingAliBlock";
 import {ObjectBasedEffectsAliBlock} from "./ObjectBasedEffectsAliBlock";
 import {PatternFillSettingAliBlock} from "./PatternFillSettingAliBlock";
@@ -37,6 +38,7 @@ export * from "./VectorStrokeContentDataAliBlock";
 export * from "./VectorStrokeDataAliBlock";
 export * from "./ArtboardDataAliBlock";
 export * from "./SmartObjectPlacedLayerDataAliBlock";
+export * from "./LinkedLayerAliBlock";
 
 /**
  * Represents a single Additional Layer Info block ("ALI block").
@@ -58,4 +60,5 @@ export type AdditionalLayerInfo =
   | LayerIDAliBlock
   | ArtboardDataAliBlock
   | SmartObjectPlacedLayerDataAliBlock
+  | LinkedLayerAliBlock
   | UnknownAliBlock;
