@@ -24,4 +24,6 @@ export enum AliKey {
   NestedSectionDividerSetting = "lsdk",
   LayerID = "lyid",
   ArtboardData = "artb",
+  SmartObjectPlacedLayerData = "SoLE",
+  PlacedLayerData = "SoLd",
 }

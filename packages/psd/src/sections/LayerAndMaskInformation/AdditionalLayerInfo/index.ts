@@ -17,6 +17,7 @@ import {readNestedSectionDividerSettingAliBlock} from "./readNestedSectionDivide
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
 import {readSectionDividerSettingAliBlock} from "./readSectionDividerSettingAliBlock";
+import {readSmartObjectPlacedLayerDataAliBlock} from "./readSmartObjectPlacedLayerDataAliBlock";
 import {readSolidColorSheetSettingAliBlock} from "./readSolidColorSheetSettingAliBlock";
 import {readTypeToolObjectSettingAliBlock} from "./readTypeToolObjectSettingAliBlock";
 import {readUnicodeLayerNameAliBlock} from "./readUnicodeLayerNameAliBlock";
@@ -107,6 +108,13 @@ function readAliBlockBody(
       return {signature, key, ...readLayerIDAliBlock(cursor)};
     case AliKey.ArtboardData:
       return {signature, key, ...readArtboardDataAliBlock(cursor)};
+    case AliKey.PlacedLayerData:
+    case AliKey.SmartObjectPlacedLayerData:
+      return {
+        signature,
+        key,
+        ...readSmartObjectPlacedLayerDataAliBlock(cursor),
+      };
     default: {
       const data = cursor.take(size);
       return {signature, key, _isUnknown: true, data};

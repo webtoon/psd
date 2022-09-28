@@ -12,6 +12,7 @@ import {NestedSectionDividerSettingAliBlock} from "./NestedSectionDividerSetting
 import {ObjectBasedEffectsAliBlock} from "./ObjectBasedEffectsAliBlock";
 import {PatternFillSettingAliBlock} from "./PatternFillSettingAliBlock";
 import {SectionDividerSettingAliBlock} from "./SectionDividerSettingAliBlock";
+import {SmartObjectPlacedLayerDataAliBlock} from "./SmartObjectPlacedLayerDataAliBlock";
 import {SolidColorSheetSettingAliBlock} from "./SolidColorSheetSettingAliBlock";
 import {TypeToolObjectSettingAliBlock} from "./TypeToolObjectSettingAliBlock";
 import {UnicodeLayerNameAliBlock} from "./UnicodeLayerNameAliBlock";
@@ -35,6 +36,7 @@ export * from "./VectorMaskSettingAliBlock";
 export * from "./VectorStrokeContentDataAliBlock";
 export * from "./VectorStrokeDataAliBlock";
 export * from "./ArtboardDataAliBlock";
+export * from "./SmartObjectPlacedLayerDataAliBlock";
 
 /**
  * Represents a single Additional Layer Info block ("ALI block").
@@ -55,4 +57,5 @@ export type AdditionalLayerInfo =
   | NestedSectionDividerSettingAliBlock
   | LayerIDAliBlock
   | ArtboardDataAliBlock
+  | SmartObjectPlacedLayerDataAliBlock
   | UnknownAliBlock;
