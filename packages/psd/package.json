@@ -16,11 +16,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "build": "wireit",
     "prepublishOnly": "npm run build",
-    "release": "release-it",
-    "test": "vitest",
-    "watch": "vite build --mode=watch --logLevel=warn"
+    "release": "wireit",
+    "test": "wireit"
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^5.0.0",
@@ -29,9 +28,46 @@
     "release-it": "^15.1.1",
     "typescript": "^4.7.3",
     "vite": "^2.9.14",
-    "vitest": "^0.18.0"
+    "vitest": "^0.18.0",
+    "wireit": "^0.7.2"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "wireit": {
+    "build": {
+      "command": "vite build",
+      "clean": false,
+      "dependencies": [
+        "../decoder:build"
+      ],
+      "files": [
+        "src",
+        "tsconfig.json",
+        "vite.config.ts"
+      ],
+      "output": [
+        "dist"
+      ]
+    },
+    "release": {
+      "command": "release-it",
+      "dependencies": [
+        "build"
+      ]
+    },
+    "test": {
+      "command": "vitest run",
+      "clean": false,
+      "dependencies": [
+        "../decoder:build"
+      ],
+      "files": [
+        "src",
+        "tests",
+        "tsconfig.json",
+        "vite.config.ts"
+      ]
+    }
   }
 }

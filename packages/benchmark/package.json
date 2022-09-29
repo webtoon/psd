@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "start": "vite"
+    "build": "wireit",
+    "build:psd": "wireit",
+    "start": "wireit",
+    "start:vite": "vite"
   },
   "dependencies": {
     "@webtoon/psd": "*",
@@ -12,7 +14,28 @@
     "chart.js": "^3.8.0"
   },
   "devDependencies": {
+    "npm-run-all2": "^6.0.2",
     "typescript": "^4.7.3",
-    "vite": "^2.9.14"
+    "vite": "^2.9.14",
+    "wireit": "^0.7.2"
+  },
+  "wireit": {
+    "build": {
+      "command": "vite build",
+      "dependencies": [
+        "build:psd"
+      ]
+    },
+    "build:psd": {
+      "dependencies": [
+        "../psd:build"
+      ]
+    },
+    "start": {
+      "command": "run-p 'build:psd --watch' start:vite",
+      "dependencies": [
+        "build:psd"
+      ]
+    }
   }
 }

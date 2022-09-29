@@ -10,9 +10,6 @@ export default defineConfig({
   publicDir: "statics",
   server: {
     port: 4200,
-    watch: {
-      interval: 1000,
-    },
   },
   build: {
     outDir: "../../dist-web",
