@@ -3,12 +3,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node-dev --respawn --debounce 1000 --trace-uncaught -- ./script.js"
+    "start": "wireit"
   },
   "dependencies": {
     "@webtoon/psd": "*"
   },
   "devDependencies": {
-    "node-dev": "^7.4.3"
+    "wireit": "^0.7.2"
+  },
+  "wireit": {
+    "start": {
+      "command": "node ./script.js",
+      "dependencies": [
+        "../psd:build"
+      ],
+      "files": [
+        "script.js"
+      ]
+    }
   }
 }

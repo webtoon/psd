@@ -8,6 +8,9 @@ import {fileURLToPath} from "url";
 
 import Psd from "@webtoon/psd";
 
+// Pretend we run in a TTY to enable colors, even when we are called by wireit
+process.stdout.isTTY = true;
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const file_path = path.resolve(__dirname, "./example.psd");

@@ -10,9 +10,6 @@ export default defineConfig({
   assetsInclude: ["**/*.psd"],
   server: {
     port: 4300,
-    watch: {
-      interval: 1000,
-    },
   },
   build: {
     outDir: "../../dist-web/benchmark/",

@@ -26,8 +26,6 @@ export default defineConfig((env) => ({
         }),
       ],
     },
-    // Prevent rebuilding multiple times while wasm-pack is rebuilding
-    watch: env.mode === "watch" ? {buildDelay: 1000} : undefined,
   },
   // If our code imports another package (@webtoon/psd-decoder in this case),
   // Vite disables build.minify when build.lib.formats includes 'es'.
