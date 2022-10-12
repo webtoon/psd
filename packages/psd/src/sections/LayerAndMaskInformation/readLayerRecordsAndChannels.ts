@@ -20,7 +20,14 @@ import {
 import {parseEngineData} from "../../methods";
 import {Cursor, InvalidBlendingModeSignature} from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
-import {LayerChannels, LayerRecord} from "./interfaces";
+import {
+  LayerChannels,
+  LayerRecord,
+  MaskData,
+  MaskFlags,
+  MaskParameters,
+  RealMaskData,
+} from "./interfaces";
 
 const EXPECTED_BLENDING_MODE_SIGNATURE = "8BIM";
 
@@ -113,7 +120,7 @@ function readLayerRecord(
 
   // Skip the Layer Mask info segment, which we don't need for now
   // Read the length of the segment and skip it
-  cursor.pass(cursor.read("u32"));
+  const maskData = readMaskData(cursor);
 
   // Skip the Blending Range segment, which we don't need for now
   // Read the length of the segment and skip it
@@ -185,6 +192,7 @@ function readLayerRecord(
     dividerType,
     layerText,
     engineData,
+    maskData,
   };
 }
 
@@ -275,4 +283,115 @@ function readLayerChannels(
   }
 
   return channels;
+}
+
+function readMaskData(cursor: Cursor): MaskData {
+  const length = cursor.read("u32");
+  const startsAt = cursor.position;
+  const [top, left, bottom, right] = readBounds(cursor);
+  const backgroundColor = cursor.read("u8");
+  const flags = readFlags(cursor);
+  const realData = length >= 20 ? readRealData(cursor) : undefined;
+  const parameters = flags.masksHaveParametersApplied
+    ? readParameters(cursor)
+    : undefined;
+
+  const remainingBytes = length - (cursor.position - startsAt);
+  cursor.pass(remainingBytes);
+
+  return {
+    top,
+    left,
+    bottom,
+    right,
+    backgroundColor,
+    flags,
+    parameters,
+    realData,
+  };
+}
+
+function readBounds(cursor: Cursor): [number, number, number, number] {
+  return Array.from(Array(4), () => cursor.read("i32")) as [
+    number,
+    number,
+    number,
+    number
+  ];
+}
+
+enum MaskFlagsBitmask {
+  PositionRelativeToLayer = 1 << 0,
+  LayerMaskDisabled = 1 << 1,
+  InvertMaskWhenBlending = 1 << 2,
+  UserMaskFromRenderingOtherData = 1 << 3,
+  MasksHaveParametersApplied = 1 << 4,
+}
+
+function readFlags(cursor: Cursor): MaskFlags {
+  const flags = cursor.read("u8");
+  return {
+    // bit 0 = position relative to layer
+    positionRelativeToLayer: Boolean(
+      flags & MaskFlagsBitmask.PositionRelativeToLayer
+    ),
+    // bit 1 = layer mask disabled
+    layerMaskDisabled: Boolean(flags & MaskFlagsBitmask.LayerMaskDisabled),
+    // bit 2 = invert layer mask when blending (Obsolete)
+    invertMaskWhenBlending: Boolean(
+      flags & MaskFlagsBitmask.InvertMaskWhenBlending
+    ),
+    // bit 3 = indicates that the user mask actually came from rendering other data
+    userMaskFromRenderingOtherData: Boolean(
+      flags & MaskFlagsBitmask.UserMaskFromRenderingOtherData
+    ),
+    // bit 4 = indicates that the user and/or vector masks have parameters applied to them
+    masksHaveParametersApplied: Boolean(
+      flags & MaskFlagsBitmask.MasksHaveParametersApplied
+    ),
+  };
+}
+
+enum MaskParameterBitmask {
+  // bit 0 = user mask density
+  UserMaskDensity = 1 << 0,
+  // bit 1 = user mask feather
+  UserMaskFeather = 1 << 1,
+  // bit 2 = vector mask density
+  VectorMaskDensity = 1 << 2,
+  // bit 3 = vector mask feather
+  VectorMaskFeather = 1 << 3,
+}
+
+function readParameters(cursor: Cursor): MaskParameters {
+  const parameters = cursor.read("u8");
+  return {
+    // bit 0 = user mask density, 1 byte
+    userMaskDensity:
+      parameters & MaskParameterBitmask.UserMaskDensity
+        ? cursor.read("u8")
+        : undefined,
+    // bit 1 = user mask feather, 8 byte, double
+    userMaskFeather:
+      parameters & MaskParameterBitmask.UserMaskFeather
+        ? cursor.read("f64")
+        : undefined,
+    // bit 2 = vector mask density, 1 byte
+    vectorMaskDensity:
+      parameters & MaskParameterBitmask.VectorMaskDensity
+        ? cursor.read("u8")
+        : undefined,
+    // bit 3 = vector mask feather, 8 bytes, double
+    vectorMaskFeather:
+      parameters & MaskParameterBitmask.VectorMaskFeather
+        ? cursor.read("f64")
+        : undefined,
+  };
+}
+
+function readRealData(cursor: Cursor): RealMaskData {
+  const flags = readFlags(cursor);
+  const backgroundColor = cursor.read("u8");
+  const [top, left, bottom, right] = readBounds(cursor);
+  return {top, left, bottom, right, flags, backgroundColor};
 }

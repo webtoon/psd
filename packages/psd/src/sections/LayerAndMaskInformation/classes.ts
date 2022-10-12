@@ -48,6 +48,12 @@ export class LayerFrame {
   get alpha(): ChannelBytes | undefined {
     return this.channels.get(ChannelKind.TransparencyMask);
   }
+  get userMask(): ChannelBytes | undefined {
+    return this.channels.get(ChannelKind.UserSuppliedLayerMask);
+  }
+  get realUserMask(): ChannelBytes | undefined {
+    return this.channels.get(ChannelKind.RealUserSuppliedLayerMask);
+  }
 
   get width(): number {
     const {right, left} = this.layerProperties;
