@@ -8,16 +8,22 @@ interface BoundingBox {
   bottom: number;
   right: number;
 }
+
+export function height(boundingBox: BoundingBox): number {
+  return boundingBox.bottom - boundingBox.top;
+}
+
+export function width(boundingBox: BoundingBox): number {
+  return boundingBox.right - boundingBox.left;
+}
+
 export function dimensions(boundingBox: BoundingBox): {
   height: number;
   width: number;
 } {
-  const height = boundingBox.bottom - boundingBox.top;
-  const width = boundingBox.right - boundingBox.left;
-  return {width, height};
+  return {width: width(boundingBox), height: height(boundingBox)};
 }
 
 export function area(boundingBox: BoundingBox): number {
-  const {width, height} = dimensions(boundingBox);
-  return width * height;
+  return width(boundingBox) * height(boundingBox);
 }

@@ -15,10 +15,9 @@ import {
   matchBlendMode,
   matchChannelCompression,
   matchClipping,
-  RawDataDescriptorValue,
 } from "../../interfaces";
 import {parseEngineData} from "../../methods";
-import {Cursor, InvalidBlendingModeSignature} from "../../utils";
+import {Cursor, height, InvalidBlendingModeSignature} from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
 import {
   LayerChannels,
@@ -46,12 +45,11 @@ export function readLayerRecordsAndChannels(
   // Read layer channels
   const result = layerRecords
     .map((layerRecord): [LayerRecord, LayerChannels] => {
-      const layerHeight = calcLayerHeight(layerRecord);
       // The channels for each layer are stored in the same order as the layers
       const channels = readLayerChannels(
         cursor,
         layerRecord.channelInformation,
-        layerHeight,
+        layerRecord,
         fileVersionSpec
       );
 
@@ -231,14 +229,32 @@ function readLayerFlags(cursor: Cursor): {
   };
 }
 
-function calcLayerHeight(layerRecord: LayerRecord): number {
-  return layerRecord.bottom - layerRecord.top + 1;
+function realMask(layerRecord: LayerRecord): MaskData {
+  const maskData = layerRecord.maskData.realData;
+  if (!maskData) {
+    throw new Error("missing real mask data");
+  }
+  return maskData;
+}
+
+function calcLayerHeight(
+  layerRecord: LayerRecord,
+  channelId: ChannelKind
+): number {
+  switch (channelId) {
+    case ChannelKind.UserSuppliedLayerMask:
+      return height(layerRecord.maskData);
+    case ChannelKind.RealUserSuppliedLayerMask:
+      return height(realMask(layerRecord));
+    default:
+      return layerRecord.bottom - layerRecord.top + 1;
+  }
 }
 
 function readLayerChannels(
   cursor: Cursor,
   channelInformation: [ChannelKind, number][],
-  scanLines: number,
+  layerRecord: LayerRecord,
   fileVersionSpec: FileVersionSpec
 ): LayerChannels {
   const channels = new Map<ChannelKind, ChannelBytes>();
@@ -246,36 +262,27 @@ function readLayerChannels(
   const {length} = channelInformation;
   for (let i = 0; i < length; i++) {
     const [channelKind, channelDataLength] = channelInformation[i];
+    const scanLines = calcLayerHeight(layerRecord, channelKind);
 
     // Each channel has its own compression method; a layer may contain multiple
     // channels with different compression methods.
     // This is different from the PSD Image Data section, which uses a single
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
-    const channelData = cursor.take(channelDataLength);
 
     switch (compression) {
       case ChannelCompression.RawData: {
-        channels.set(channelKind, {compression, data: channelData});
+        const data = cursor.take(channelDataLength);
+        channels.set(channelKind, {compression, data});
         break;
       }
       case ChannelCompression.RleCompressed: {
-        // We're skipping over the bytes that describe the length of each scanline since
-        // we don't currently use them. We might re-think this in the future when we implement
-        // serialization of a Psd back into bytes.. But not a concern at the moment.
-        // Compressed bytes per scanline are encoded at the beginning as 2 bytes per scanline
-
-        const bytesPerScanline = fileVersionSpec.rleScanlineLengthFieldSize;
-        // Do not attempt to skip more than the length of the channel data.
-        // This is needed because some layers (e.g. gradient fill layers) may
-        // have empty channel data (channelDataLength === 0).
-        const skip = Math.min(channelDataLength, scanLines * bytesPerScanline);
-        const data = new Uint8Array(
-          channelData.buffer,
-          channelData.byteOffset + skip,
-          channelData.byteLength - skip
+        const sizes = Array.from(Array(scanLines), () =>
+          cursor.read(fileVersionSpec.rleScanlineLengthFieldReadType)
         );
+        const size = sizes.reduce((a, b) => a + b);
 
+        const data = cursor.take(size);
         channels.set(channelKind, {compression, data});
         break;
       }
@@ -291,7 +298,7 @@ function readMaskData(cursor: Cursor): MaskData {
   const [top, left, bottom, right] = readBounds(cursor);
   const backgroundColor = cursor.read("u8");
   const flags = readFlags(cursor);
-  const realData = length >= 20 ? readRealData(cursor) : undefined;
+  const realData = length >= 36 ? readRealData(cursor) : undefined;
   const parameters = flags.masksHaveParametersApplied
     ? readParameters(cursor)
     : undefined;
