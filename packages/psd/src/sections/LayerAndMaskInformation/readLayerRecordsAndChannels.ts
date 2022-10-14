@@ -17,7 +17,12 @@ import {
   matchClipping,
 } from "../../interfaces";
 import {parseEngineData} from "../../methods";
-import {Cursor, height, InvalidBlendingModeSignature} from "../../utils";
+import {
+  Cursor,
+  height,
+  InvalidBlendingModeSignature,
+  ReadType,
+} from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
 import {
   LayerChannels,
@@ -262,14 +267,12 @@ function readLayerChannels(
   const {length} = channelInformation;
   for (let i = 0; i < length; i++) {
     const [channelKind, channelDataLength] = channelInformation[i];
-    const scanLines = calcLayerHeight(layerRecord, channelKind);
 
     // Each channel has its own compression method; a layer may contain multiple
     // channels with different compression methods.
     // This is different from the PSD Image Data section, which uses a single
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
-
     switch (compression) {
       case ChannelCompression.RawData: {
         const data = cursor.take(channelDataLength);
@@ -277,12 +280,18 @@ function readLayerChannels(
         break;
       }
       case ChannelCompression.RleCompressed: {
-        const sizes = Array.from(Array(scanLines), () =>
-          cursor.read(fileVersionSpec.rleScanlineLengthFieldReadType)
+        const data = cursor.take(
+          // Do not attempt to take more than the length of the channel data.
+          // This is needed because some layers (e.g. gradient fill layers) may
+          // have empty channel data (channelDataLength === 0).
+          channelDataLength > 0
+            ? rleCompressedSize(
+                cursor,
+                calcLayerHeight(layerRecord, channelKind),
+                fileVersionSpec.rleScanlineLengthFieldReadType
+              )
+            : channelDataLength
         );
-        const size = sizes.reduce((a, b) => a + b);
-
-        const data = cursor.take(size);
         channels.set(channelKind, {compression, data});
         break;
       }
@@ -290,6 +299,15 @@ function readLayerChannels(
   }
 
   return channels;
+}
+
+function rleCompressedSize(
+  cursor: Cursor,
+  scanLines: number,
+  readType: ReadType
+): number {
+  const sizes = Array.from(Array(scanLines), () => cursor.read(readType));
+  return sizes.reduce((a, b) => a + b);
 }
 
 function readMaskData(cursor: Cursor): MaskData {
