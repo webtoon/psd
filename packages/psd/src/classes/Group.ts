@@ -16,15 +16,15 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
 
   /** @internal */
   constructor(
-    private layerFrame: GroupFrame,
+    private layerFrame: GroupFrame | undefined,
     public readonly parent: NodeParent
   ) {}
 
   get name(): string {
-    return this.layerFrame.layerProperties.name;
+    return this.layerFrame?.layerProperties.name ?? "";
   }
   get opacity(): number {
-    return this.layerFrame.layerProperties.opacity;
+    return this.layerFrame?.layerProperties.opacity ?? 0;
   }
   get composedOpacity(): number {
     return this.parent.composedOpacity * (this.opacity / 255);
