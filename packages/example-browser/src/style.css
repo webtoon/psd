@@ -82,6 +82,7 @@ aside {
   height: 100%;
   align-items: flex-end;
   background-color: #fff;
+  max-width: 400px;
 }
 .aside-content {
   padding: 20px;
