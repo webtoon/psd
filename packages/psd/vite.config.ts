@@ -26,6 +26,7 @@ export default defineConfig((env) => ({
         }),
       ],
     },
+    sourcemap: true,
   },
   // If our code imports another package (@webtoon/psd-decoder in this case),
   // Vite disables build.minify when build.lib.formats includes 'es'.
