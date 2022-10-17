@@ -14,6 +14,10 @@ export default defineConfig({
       fileName: () => "index.js",
       formats: ["es"],
     },
+    // Enabling source maps for @webtoon/psd-decoder appears to do nothing.
+    // This may be because we use vite-plugin-top-level-await to transform code,
+    // and the plugin does not support source maps.
+    // sourcemap: true,
   },
   plugins: [
     wasm(),
