@@ -11,8 +11,8 @@ export default defineConfig((env) => ({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       // Use arrow function instead of plain string to avoid emitting "index.es.js"
-      fileName: () => "index.js",
-      formats: ["es"],
+      fileName: (format) => (format === "cjs" ? "index.cjs" : "index.js"),
+      formats: ["cjs", "es"],
     },
     rollupOptions: {
       plugins: [
