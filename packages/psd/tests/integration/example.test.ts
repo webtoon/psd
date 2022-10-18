@@ -7,8 +7,13 @@ import * as path from "path";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
-import PSD, {ColorMode, GuideDirection, SliceOrigin} from "../../src/index";
-import {DimensionUnit, ResolutionUnit} from "../../src/interfaces";
+import PSD, {
+  ColorMode,
+  GuideDirection,
+  SliceOrigin,
+  DimensionUnit,
+  ResolutionUnit,
+} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures/example");
 
