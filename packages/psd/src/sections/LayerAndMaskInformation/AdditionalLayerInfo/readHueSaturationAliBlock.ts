@@ -48,6 +48,6 @@ export function readHueSaturationAliBlock(
     colorize,
     colorization,
     master,
-    adjustment: colorize ? readAdjustment(cursor) : undefined,
+    adjustment: colorize ? undefined : readAdjustment(cursor),
   };
 }
