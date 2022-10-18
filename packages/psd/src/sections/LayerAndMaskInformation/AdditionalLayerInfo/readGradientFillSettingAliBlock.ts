@@ -7,11 +7,6 @@ import {readVersionedDescriptor} from "../../../methods";
 import {Cursor} from "../../../utils";
 import {AliBlockBody} from "./AliBlockBody";
 
-/**
- * Parses a partial {@link UnicodeLayerNameAliBlock} from the current
- * {@link cursor} position.
- * @param cursor
- */
 export function readGradientFillSettingAliBlock(
   cursor: Cursor
 ): AliBlockBody<GradientFillSettingAliBlock> {
