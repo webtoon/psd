@@ -250,7 +250,7 @@ function calcLayerHeight(
     case ChannelKind.RealUserSuppliedLayerMask:
       return height(realMask(layerRecord));
     default:
-      return layerRecord.bottom - layerRecord.top + 1;
+      return height(layerRecord) + 1;
   }
 }
 
