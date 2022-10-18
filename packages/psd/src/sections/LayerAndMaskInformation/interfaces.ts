@@ -4,6 +4,7 @@
 
 import {
   AdditionalLayerInfo,
+  AliKey,
   BlendMode,
   ChannelBytes,
   ChannelKind,
@@ -46,6 +47,8 @@ export interface Frame {
   layerRecord?: LayerRecord;
 }
 
+export type AdditionalLayerProperties = AdditionalLayerInfo[];
+
 export interface LayerProperties {
   name: string;
   top: number;
@@ -63,7 +66,7 @@ export interface LayerProperties {
   /** Text properties */
   textProperties?: EngineData;
   maskData: MaskData;
-  additionalLayerInfos: AdditionalLayerInfo[];
+  additionalLayerProperties: AdditionalLayerProperties;
 }
 
 export const createLayerProperties = (
@@ -102,7 +105,7 @@ export const createLayerProperties = (
     text: layerText,
     textProperties: engineData,
     maskData,
-    additionalLayerInfos,
+    additionalLayerProperties: additionalLayerInfos,
   };
 };
 

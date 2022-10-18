@@ -25,12 +25,13 @@ import {
 } from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
 import {
-  LayerChannels,
-  LayerRecord,
   MaskData,
   MaskFlags,
   MaskParameters,
   RealMaskData,
+  AdditionalLayerProperties,
+  LayerChannels,
+  LayerRecord,
 } from "./interfaces";
 
 const EXPECTED_BLENDING_MODE_SIGNATURE = "8BIM";
@@ -197,27 +198,16 @@ function readLayerRecord(
   };
 }
 
-export function readExtraData(
+export function readGlobalAdditionalLayerInformation(
   cursor: Cursor,
   fileVersionSpec: FileVersionSpec
-): Record<string, unknown> {
-  const start = cursor.position;
-  const globalMaskInfo = readGlobalMaskInfo(cursor);
-  const additionalLayerInfos: AdditionalLayerInfo[] = [];
+): AdditionalLayerProperties {
+  const additionalLayerInfos = [];
   while (cursor.position < cursor.length) {
     additionalLayerInfos.push(readAdditionalLayerInfo(cursor, fileVersionSpec));
   }
-  return {globalMaskInfo, additionalLayerInfos};
-}
 
-function readGlobalMaskInfo(cursor: Cursor): Record<string, unknown> {
-  const length = cursor.read("u32");
-  if (length === 0) {
-    return {};
-  }
-  // TODO: implement me
-  cursor.pass(length);
-  return {};
+  return additionalLayerInfos;
 }
 
 function readLayerRectangle(cursor: Cursor): [number, number, number, number] {
