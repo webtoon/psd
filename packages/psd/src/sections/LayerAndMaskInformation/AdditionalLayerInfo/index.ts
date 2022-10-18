@@ -14,7 +14,6 @@ import {readGradientFillSettingAliBlock} from "./readGradientFillSettingAliBlock
 import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
 import {readLayerIDAliBlock} from "./readLayerIDAliBlock";
 import {readLinkedLayerAliBlock} from "./readLinkedLayerAliBlock";
-import {readNestedSectionDividerSettingAliBlock} from "./readNestedSectionDividerSettingAliBlock";
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
 import {readSectionDividerSettingAliBlock} from "./readSectionDividerSettingAliBlock";
@@ -72,11 +71,6 @@ function readAliBlockBody(
 ): AdditionalLayerInfo {
   switch (key) {
     case AliKey.NestedSectionDividerSetting:
-      return {
-        signature,
-        key,
-        ...readNestedSectionDividerSettingAliBlock(cursor, size),
-      };
     case AliKey.SectionDividerSetting:
       return {
         signature,
