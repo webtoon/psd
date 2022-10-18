@@ -121,8 +121,6 @@ function readLayerRecord(
   const layerExtraDataSize = cursor.read("u32");
   const layerExtraDataBegin = cursor.position;
 
-  // Skip the Layer Mask info segment, which we don't need for now
-  // Read the length of the segment and skip it
   const maskData = readMaskData(cursor);
 
   // Skip the Blending Range segment, which we don't need for now
