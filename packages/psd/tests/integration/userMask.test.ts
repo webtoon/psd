@@ -4,6 +4,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import * as crypto from "crypto";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
@@ -44,10 +45,19 @@ describe(`@webtoon/psd reads user masks`, () => {
     });
 
     it(`should extract mask pixels`, async () => {
+      const mask = await maskedLayer.userMask();
       // NOTE: maybe we should introduce decoding into some grayscale format instead?
       // 21 (width) * 20 (height) * 4 (since we decompress into RGBA format)
-      expect(await maskedLayer.userMask()).toHaveLength(1680);
+      expect(mask).toHaveLength(1680);
       expect(await maskedLayer.realUserMask()).toBeUndefined();
+
+      const hash = crypto.createHash("sha256").update(mask).digest("hex");
+      // NOTE: when changing the hash, please make sure the result is coherent :)
+      // Either using https://www.npmjs.com/package/canvas or browser build (see README)
+      // This is a fat arrow pointing right
+      expect(hash).toEqual(
+        "b2a77f8a194fcacbad5e5918b34086b1dc518c6d1294a4acdc411c3394ea22cc"
+      );
     });
   });
 
@@ -92,6 +102,14 @@ describe(`@webtoon/psd reads user masks`, () => {
     it(`should extract real mask pixels`, async () => {
       const mask = await maskedLayer.realUserMask();
       expect(mask).toHaveLength(14_336_000);
+
+      const hash = crypto.createHash("sha256").update(mask).digest("hex");
+      // NOTE: when changing the hash, please make sure the result is coherent :)
+      // Either using https://www.npmjs.com/package/canvas or browser build (see README)
+      // This is a vertical black bar with diffusion on top
+      expect(hash).toEqual(
+        "2901bf3b6e114c440ecc7d371a592e028bc8538f6c3cb8b823a7a7c74b7c80cd"
+      );
     });
   });
 });
