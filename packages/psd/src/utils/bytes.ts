@@ -291,9 +291,6 @@ export class Cursor {
    */
   readIdString(): string {
     const length = this.read("u32");
-    if (length > 1000) {
-      throw new Error("ooops!");
-    }
     return this.readString(length || 4);
   }
 
