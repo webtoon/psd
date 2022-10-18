@@ -28,7 +28,6 @@ import {AliBlockBody} from "./AliBlockBody";
  *  represents the top-left corner of the image; [ 1,1 ] ([ 0x01000000,0x01000000 ])
  *  represents the bottom-right.
  */
-// TODO: test me.
 function readFixedPoint32bit(cursor: Cursor): number {
   const [beforeValue, ...afterPoint] = cursor.take(4);
   const afterValue =
