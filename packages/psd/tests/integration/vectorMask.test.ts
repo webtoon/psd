@@ -12,14 +12,14 @@ import {AliKey, PathRecordType} from "../../src/interfaces";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
-describe("placed layer data parsing", () => {
+describe("vector mask parsing", () => {
   let psd: Psd;
   beforeAll(() => {
     const data = fs.readFileSync(path.resolve(FIXTURE_DIR, "vectorMask.psd"));
     psd = PSD.parse(data.buffer);
   });
 
-  it("should contain links to placed files inside layers", () => {
+  it("should return pathRecords to build vector mask", () => {
     const vmsk = psd.layers[0].additionalProperties.find(
       ({key}) => key === AliKey.VectorMaskSetting1
     );
