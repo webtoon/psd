@@ -159,9 +159,7 @@ function readDescriptorValue(cursor: Cursor): DescriptorValue {
     case DescriptorValueType.UnitFloats: {
       const unitType = matchUnitFloatType(cursor.readString(4));
       const valuesCount = cursor.read("u32");
-      const values = Array.from(Array(valuesCount), () =>
-        cursor.read("f64")
-      );
+      const values = Array.from(Array(valuesCount), () => cursor.read("f64"));
       return {type, unitType, values};
     }
     default:

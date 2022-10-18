@@ -22,7 +22,7 @@ describe("placed layer data parsing", () => {
       }) => additionalLayerInfos.map(({key}) => key)
     );
     // XXX: TS, why?!
-    const flatKeys = ([] as string[]).concat(...blockKeys)
+    const flatKeys = ([] as string[]).concat(...blockKeys);
     expect(flatKeys).toStrictEqual([
       "luni",
       "lyid",
