@@ -19,7 +19,7 @@ describe(`@webtoon/psd reads user masks`, () => {
     psd = PSD.parse(data);
   });
 
-  describe(`layer without user mask`, () => {
+  describe(`layer without real user mask`, () => {
     let maskedLayer: Layer;
     beforeAll(() => {
       maskedLayer = psd.layers[0];
