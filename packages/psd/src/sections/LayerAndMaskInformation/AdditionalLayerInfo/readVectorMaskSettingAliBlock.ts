@@ -42,49 +42,65 @@ function readPoint(cursor: Cursor): Point {
   return {vert, horiz};
 }
 
+function readSubpath(cursor: Cursor, type: number): PathRecord {
+  const length = cursor.read("i16");
+  const operation = cursor.read("i16");
+  const subpathType = cursor.read("i16");
+  cursor.pass(6);
+  const index = cursor.read("i16");
+  cursor.pass(10);
+  return {
+    type,
+    length,
+    operation,
+    subpathType,
+    index,
+  };
+}
+
+function readClipboard(cursor: Cursor, type: number): PathRecord {
+  const bounds = Array(4).map(() => cursor.read("f32")) as [
+    number,
+    number,
+    number,
+    number
+  ];
+  const resolution = cursor.read("f32");
+  cursor.pass(6);
+  return {type, bounds, resolution};
+}
+
+function readFillRule(cursor: Cursor, type: number): PathRecord {
+  const fill = Boolean(cursor.read("i16") & 1);
+  cursor.pass(22);
+  return {type, fill};
+}
+
+function readBezierKnot(cursor: Cursor, type: number): PathRecord {
+  const preceding = readPoint(cursor);
+  const anchor = readPoint(cursor);
+  const leaving = readPoint(cursor);
+  return {type, preceding, anchor, leaving};
+}
+
 function readPathRecord(cursor: Cursor): PathRecord {
   const type = cursor.read("u16");
   switch (type) {
     case PathRecordType.OpenSubpathLength:
     case PathRecordType.ClosedSubpathLength:
-      const length = cursor.read("i16");
-      const operation = cursor.read("i16");
-      const subpathType = cursor.read("i16");
-      cursor.pass(6);
-      const index = cursor.read("i16");
-      cursor.pass(10);
-      return {
-        type,
-        length,
-        operation,
-        subpathType,
-        index,
-      };
+      return readSubpath(cursor, type);
     case PathRecordType.PathFillRule:
       cursor.pass(24);
       return {type};
     case PathRecordType.Clipboard:
-      const bounds = Array(4).map(() => cursor.read("f32")) as [
-        number,
-        number,
-        number,
-        number
-      ];
-      const resolution = cursor.read("f32");
-      cursor.pass(6);
-      return {type, bounds, resolution};
+      return readClipboard(cursor, type);
     case PathRecordType.InitialFillRule:
-      const fill = Boolean(cursor.read("i16") & 1);
-      cursor.pass(22);
-      return {type, fill};
+      return readFillRule(cursor, type);
     case PathRecordType.ClosedSubpathBezierKnotLinked:
     case PathRecordType.ClosedSubpathBezierKnotUnlinked:
     case PathRecordType.OpenSubpathBezierKnotLinked:
     case PathRecordType.OpenSubpathBezierKnotUnlinked:
-      const preceding = readPoint(cursor);
-      const anchor = readPoint(cursor);
-      const leaving = readPoint(cursor);
-      return {type, preceding, anchor, leaving};
+      return readBezierKnot(cursor, type);
     default:
       throw new Error(`Unknown PathRecordType: ${type} (bug in offsets?)`);
   }
@@ -92,7 +108,7 @@ function readPathRecord(cursor: Cursor): PathRecord {
 
 function readPathRecords(cursor: Cursor, size: number): PathRecord[] {
   const count = Math.floor(size / 26);
-  return Array.from(Array(4), () => readPathRecord(cursor));
+  return Array.from(Array(count), () => readPathRecord(cursor));
 }
 
 export function readVectorMaskSettingAliBlock(
