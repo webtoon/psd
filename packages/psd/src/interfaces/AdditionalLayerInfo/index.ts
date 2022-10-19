@@ -7,7 +7,7 @@ import {ArtboardDataAliBlock} from "./ArtboardDataAliBlock";
 import {BlendOptionsCapacityAliBlock} from "./BlendOptionsCapacityAliBlock";
 import {GradientFillSettingAliBlock} from "./GradientFillSettingAliBlock";
 import {HueSaturationAliBlock} from "./HueSaturationAliBlock";
-import {LayerIDAliBlock} from "./LayerIDAliBlock";
+import {LayerIdAliBlock} from "./LayerIdAliBlock";
 import {LinkedLayerAliBlock} from "./LinkedLayerAliBlock";
 import {NestedSectionDividerSettingAliBlock} from "./NestedSectionDividerSettingAliBlock";
 import {ObjectBasedEffectsAliBlock} from "./ObjectBasedEffectsAliBlock";
@@ -28,7 +28,7 @@ export * from "./TypeToolObjectSettingAliBlock";
 export * from "./BlendOptionsCapacityAliBlock";
 export * from "./GradientFillSettingAliBlock";
 export * from "./HueSaturationAliBlock";
-export * from "./LayerIDAliBlock";
+export * from "./LayerIdAliBlock";
 export * from "./NestedSectionDividerSettingAliBlock";
 export * from "./ObjectBasedEffectsAliBlock";
 export * from "./PatternFillSettingAliBlock";
@@ -57,7 +57,7 @@ export type AdditionalLayerInfo =
   | VectorMaskSettingAliBlock
   | HueSaturationAliBlock
   | NestedSectionDividerSettingAliBlock
-  | LayerIDAliBlock
+  | LayerIdAliBlock
   | ArtboardDataAliBlock
   | SmartObjectPlacedLayerDataAliBlock
   | LinkedLayerAliBlock

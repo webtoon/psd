@@ -12,7 +12,7 @@ import {readArtboardDataAliBlock} from "./readArtboardDataAliBlock";
 import {readBlendOptionsCapacityAliBlock} from "./readBlendOptionsCapacityAliBlock";
 import {readGradientFillSettingAliBlock} from "./readGradientFillSettingAliBlock";
 import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
-import {readLayerIDAliBlock} from "./readLayerIDAliBlock";
+import {readLayerIdAliBlock} from "./readLayerIdAliBlock";
 import {readLinkedLayerAliBlock} from "./readLinkedLayerAliBlock";
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
@@ -100,8 +100,8 @@ function readAliBlockBody(
       return {signature, key, ...readVectorMaskSettingAliBlock(cursor, size)};
     case AliKey.HueSaturation:
       return {signature, key, ...readHueSaturationAliBlock(cursor)};
-    case AliKey.LayerID:
-      return {signature, key, ...readLayerIDAliBlock(cursor)};
+    case AliKey.LayerId:
+      return {signature, key, ...readLayerIdAliBlock(cursor)};
     case AliKey.ArtboardData:
       return {signature, key, ...readArtboardDataAliBlock(cursor)};
     case AliKey.PlacedLayerData:

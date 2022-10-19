@@ -2,13 +2,13 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {LayerIDAliBlock} from "../../../interfaces";
+import {LayerIdAliBlock} from "../../../interfaces";
 import {Cursor} from "../../../utils";
 import {AliBlockBody} from "./AliBlockBody";
 
-export function readLayerIDAliBlock(
+export function readLayerIdAliBlock(
   cursor: Cursor
-): AliBlockBody<LayerIDAliBlock> {
+): AliBlockBody<LayerIdAliBlock> {
   const value = cursor.read("u32");
   return {value};
 }

@@ -22,7 +22,7 @@ export enum AliKey {
   VectorMaskSetting2 = "vsms",
   HueSaturation = "hue2",
   NestedSectionDividerSetting = "lsdk",
-  LayerID = "lyid",
+  LayerId = "lyid",
   ArtboardData = "artb",
   SmartObjectPlacedLayerData = "SoLE",
   PlacedLayerData = "SoLd",
