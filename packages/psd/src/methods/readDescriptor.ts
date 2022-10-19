@@ -147,14 +147,14 @@ function readDescriptorValue(cursor: Cursor): DescriptorValue {
       // const itemsPerObjectCount
       cursor.read("u32");
       const name = cursor.readUnicodeString(0);
-      const classID = cursor.readIdString();
+      const classId = cursor.readIdString();
       const itemsCount = cursor.read("u32");
       const items = Array.from(Array(itemsCount), () => {
         const key = cursor.readIdString();
         const value = readDescriptorValue(cursor);
         return {key, value};
       });
-      return {type, classObj: {name, classID}, items};
+      return {type, classObj: {name, classId}, items};
     }
     case DescriptorValueType.UnitFloats: {
       const unitType = matchUnitFloatType(cursor.readString(4));

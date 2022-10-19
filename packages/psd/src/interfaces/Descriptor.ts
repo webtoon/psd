@@ -155,7 +155,7 @@ export interface UnitFloatDescriptorValue
 
 export interface ObjectArrayDescriptorValue
   extends DescriptorValueBase<DescriptorValueType.ObjectArray> {
-  classObj: {name: string; classID: string};
+  classObj: {name: string; classId: string};
   items: {key: string; value: DescriptorValue}[];
 }
 
