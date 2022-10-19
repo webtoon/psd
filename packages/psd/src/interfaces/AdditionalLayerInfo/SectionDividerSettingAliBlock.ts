@@ -19,7 +19,9 @@ export type SectionDividerSettingAliBlock =
  * Minimal Section Divider block.
  */
 interface SectionDividerSettingAliBlockBase
-  extends KnownAliBlock<AliKey.SectionDividerSetting> {
+  extends KnownAliBlock<
+    AliKey.SectionDividerSetting | AliKey.NestedSectionDividerSetting
+  > {
   dividerType: GroupDivider;
 }
 

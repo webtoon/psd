@@ -12,6 +12,7 @@ import {
   ResourceType,
 } from "../interfaces";
 import {parse} from "../methods";
+import {AdditionalLayerProperties} from "../sections";
 import {Group} from "./Group";
 import {Layer} from "./Layer";
 import {assertIsNodeParent, Node, NodeChild} from "./Node";
@@ -37,6 +38,7 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
   public readonly globalLightAngle?: number = undefined;
   public readonly globalLightAltitude?: number = undefined;
   public readonly resolutionInfo?: ResolutionInfo = undefined;
+  public readonly additionalLayerProperties: AdditionalLayerProperties = [];
 
   static parse(buffer: ArrayBuffer): Psd {
     const parsingResult = parse(buffer);
@@ -48,6 +50,9 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
     super();
 
     this.buildTreeStructure();
+
+    this.additionalLayerProperties =
+      parsingResult.layerAndMaskInfo.globalAdditionalLayerInformation;
 
     for (const resource of parsingResult.imageResources.resources) {
       if (resource.resource !== null) {

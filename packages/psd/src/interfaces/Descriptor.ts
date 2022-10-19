@@ -38,7 +38,9 @@ export type DescriptorValue =
   | RawDataDescriptorValue
   | ReferenceDescriptorValue
   | StringDescriptorValue
-  | UnitFloatDescriptorValue;
+  | UnitFloatDescriptorValue
+  | ObjectArrayDescriptorValue
+  | UnitFloatsDescriptorValue;
 
 interface DescriptorValueBase<Type extends DescriptorValueType> {
   type: Type;
@@ -63,6 +65,8 @@ export enum DescriptorValueType {
   Reference = "obj ",
   String = "TEXT",
   UnitFloat = "UntF",
+  UnitFloats = "UnFl",
+  ObjectArray = "ObAr",
 }
 
 export interface AliasDescriptorValue
@@ -147,6 +151,19 @@ export interface UnitFloatDescriptorValue
   unitType: UnitFloatType;
   /** 64-bit floating-point number */
   value: number;
+}
+
+export interface ObjectArrayDescriptorValue
+  extends DescriptorValueBase<DescriptorValueType.ObjectArray> {
+  classObj: {name: string; classId: string};
+  items: {key: string; value: DescriptorValue}[];
+}
+
+export interface UnitFloatsDescriptorValue
+  extends DescriptorValueBase<DescriptorValueType.UnitFloats> {
+  unitType: UnitFloatType;
+  /** 64-bit floating-point number */
+  values: number[];
 }
 
 /** Valid measurement unit types used by `UnitFloatDescriptorValue` */

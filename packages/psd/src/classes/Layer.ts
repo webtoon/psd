@@ -4,7 +4,7 @@
 
 import {EngineData, ImageData} from "../interfaces";
 import {decodeGrayscale} from "../methods";
-import {LayerFrame, MaskData} from "../sections";
+import {LayerFrame, MaskData, LayerProperties} from "../sections";
 import {area} from "../utils";
 import {NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
@@ -77,6 +77,10 @@ export class Layer
 
   get isTransparencyLocked(): boolean {
     return this.layerFrame.layerProperties.transparencyLocked;
+  }
+
+  get additionalProperties(): LayerProperties["additionalLayerProperties"] {
+    return this.layerFrame.layerProperties.additionalLayerProperties;
   }
 
   /**

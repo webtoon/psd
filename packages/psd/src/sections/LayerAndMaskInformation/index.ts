@@ -5,8 +5,11 @@
 import {FileVersionSpec, GroupDivider} from "../../interfaces";
 import {Cursor, PanicFrameStackUnmatched} from "../../utils";
 import {GroupFrame, LayerFrame} from "./classes";
-import {Frame} from "./interfaces";
-import {readLayerRecordsAndChannels} from "./readLayerRecordsAndChannels";
+import {AdditionalLayerProperties, Frame} from "./interfaces";
+import {
+  readGlobalAdditionalLayerInformation,
+  readLayerRecordsAndChannels,
+} from "./readLayerRecordsAndChannels";
 
 export * from "./classes";
 export * from "./interfaces";
@@ -15,6 +18,7 @@ export type LayerAndMaskInformationSection = {
   layers: LayerFrame[];
   groups: GroupFrame[];
   orders: ("G" | "L" | "D")[];
+  globalAdditionalLayerInformation: AdditionalLayerProperties;
 };
 
 export function parseLayerAndMaskInformation(
@@ -46,6 +50,17 @@ export function parseLayerAndMaskInformation(
   const layerRecordsAndChannels = readLayerRecordsAndChannels(
     cursor,
     absLayerCount,
+    fileVersionSpec
+  );
+
+  cursor.padding(cursor.position, 4);
+
+  // Skip over Global layer mask info
+  // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
+  cursor.pass(cursor.read("u32"));
+
+  const globalAdditionalLayerInformation = readGlobalAdditionalLayerInformation(
+    cursor,
     fileVersionSpec
   );
 
@@ -121,5 +136,5 @@ export function parseLayerAndMaskInformation(
   // Group must be sorted by ID
   groups.sort((a, b) => a.id - b.id);
 
-  return {layers, groups, orders};
+  return {layers, groups, orders, globalAdditionalLayerInformation};
 }

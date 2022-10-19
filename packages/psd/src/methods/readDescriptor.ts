@@ -143,6 +143,25 @@ function readDescriptorValue(cursor: Cursor): DescriptorValue {
       const value = cursor.read("f64");
       return {type, unitType, value};
     }
+    case DescriptorValueType.ObjectArray: {
+      // const itemsPerObjectCount
+      cursor.read("u32");
+      const name = cursor.readUnicodeString(0);
+      const classId = cursor.readIdString();
+      const itemsCount = cursor.read("u32");
+      const items = Array.from(Array(itemsCount), () => {
+        const key = cursor.readIdString();
+        const value = readDescriptorValue(cursor);
+        return {key, value};
+      });
+      return {type, classObj: {name, classId}, items};
+    }
+    case DescriptorValueType.UnitFloats: {
+      const unitType = matchUnitFloatType(cursor.readString(4));
+      const valuesCount = cursor.read("u32");
+      const values = Array.from(Array(valuesCount), () => cursor.read("f64"));
+      return {type, unitType, values};
+    }
     default:
       throw new InvalidDescriptorType(`Unexpected descriptor type: ${type}`);
   }

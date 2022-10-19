@@ -45,6 +45,8 @@ export interface Frame {
   layerRecord?: LayerRecord;
 }
 
+export type AdditionalLayerProperties = AdditionalLayerInfo[];
+
 export interface LayerProperties {
   name: string;
   top: number;
@@ -62,6 +64,7 @@ export interface LayerProperties {
   /** Text properties */
   textProperties?: EngineData;
   maskData: MaskData;
+  additionalLayerProperties: AdditionalLayerProperties;
 }
 
 export const createLayerProperties = (
@@ -82,6 +85,7 @@ export const createLayerProperties = (
     layerText,
     engineData,
     maskData,
+    additionalLayerInfos,
   } = layerRecord;
 
   return {
@@ -99,6 +103,7 @@ export const createLayerProperties = (
     text: layerText,
     textProperties: engineData,
     maskData,
+    additionalLayerProperties: additionalLayerInfos,
   };
 };
 
