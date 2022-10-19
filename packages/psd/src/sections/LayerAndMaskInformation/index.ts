@@ -2,12 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {
-  AdditionalLayerInfo,
-  AliKey,
-  FileVersionSpec,
-  GroupDivider,
-} from "../../interfaces";
+import {FileVersionSpec, GroupDivider} from "../../interfaces";
 import {Cursor, PanicFrameStackUnmatched} from "../../utils";
 import {GroupFrame, LayerFrame} from "./classes";
 import {AdditionalLayerProperties, Frame} from "./interfaces";
