@@ -7,7 +7,13 @@ import * as path from "path";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
-import PSD, {ColorMode, GuideDirection, SliceOrigin} from "../../src/index";
+import PSD, {
+  ColorMode,
+  GuideDirection,
+  SliceOrigin,
+  DimensionUnit,
+  ResolutionUnit,
+} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures/example");
 
@@ -39,6 +45,16 @@ describe.each([
     expect(psd.channelCount).toBe(3); // RGB image has three channels
     expect(psd.colorMode).toBe(ColorMode.Rgb);
     expect(psd.opacity).toBe(255);
+    expect(psd.globalLightAngle).toBe(90);
+    expect(psd.globalLightAltitude).toBe(30);
+    expect(psd.resolutionInfo).toStrictEqual({
+      heightUnit: DimensionUnit.CM,
+      horizontal: 300,
+      horizontalUnit: ResolutionUnit.PixelsPerInch,
+      vertical: 300,
+      verticalUnit: ResolutionUnit.PixelsPerInch,
+      widthUnit: DimensionUnit.CM,
+    });
   });
 
   it("should parse all layers and layer groups", () => {

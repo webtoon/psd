@@ -267,6 +267,16 @@ export class Cursor {
   }
 
   /**
+   * Reads unsigned 4-byte fixed-point number.
+   * 32 bits in 16.16 setup
+   * https://github.com/meltingice/psd.js/blob/333dd1467452a3353018c2856e3e4fb0e07d0025/lib/psd/resources/resolution_info.coffee#L10
+   */
+  readFixedPoint32bit(): number {
+    const int = this.read("u32");
+    return int / (1 << 16);
+  }
+
+  /**
    * Decodes an "ID string", which is a compact string format used in
    * Descriptors.
    *
