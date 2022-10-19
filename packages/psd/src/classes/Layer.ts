@@ -3,7 +3,9 @@
 // MIT License
 
 import {EngineData, ImageData} from "../interfaces";
-import {LayerFrame} from "../sections";
+import {decodeGrayscale} from "../methods";
+import {LayerFrame, MaskData} from "../sections";
+import {area} from "../utils";
 import {NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
 import {Synthesizable} from "./Synthesizable";
@@ -47,6 +49,26 @@ export class Layer
   }
   get composedOpacity(): number {
     return this.parent.composedOpacity * (this.opacity / 255);
+  }
+  get maskData(): MaskData {
+    return this.layerFrame.layerProperties.maskData;
+  }
+
+  async userMask(): Promise<Uint8Array | undefined> {
+    const userMask = this.layerFrame.userMask;
+    if (!userMask) {
+      return undefined;
+    }
+    return decodeGrayscale(area(this.maskData), userMask);
+  }
+
+  async realUserMask(): Promise<Uint8Array | undefined> {
+    const maskData = this.maskData.realData;
+    const userMask = this.layerFrame.realUserMask;
+    if (!maskData || !userMask) {
+      return undefined;
+    }
+    return decodeGrayscale(area(maskData), userMask);
   }
 
   get isHidden(): boolean {

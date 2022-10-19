@@ -15,12 +15,23 @@ import {
   matchBlendMode,
   matchChannelCompression,
   matchClipping,
-  RawDataDescriptorValue,
 } from "../../interfaces";
 import {parseEngineData} from "../../methods";
-import {Cursor, InvalidBlendingModeSignature} from "../../utils";
+import {
+  Cursor,
+  height,
+  InvalidBlendingModeSignature,
+  ReadType,
+} from "../../utils";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
-import {LayerChannels, LayerRecord} from "./interfaces";
+import {
+  LayerChannels,
+  LayerRecord,
+  MaskData,
+  MaskFlags,
+  MaskParameters,
+  RealMaskData,
+} from "./interfaces";
 
 const EXPECTED_BLENDING_MODE_SIGNATURE = "8BIM";
 
@@ -39,12 +50,11 @@ export function readLayerRecordsAndChannels(
   // Read layer channels
   const result = layerRecords
     .map((layerRecord): [LayerRecord, LayerChannels] => {
-      const layerHeight = calcLayerHeight(layerRecord);
       // The channels for each layer are stored in the same order as the layers
       const channels = readLayerChannels(
         cursor,
         layerRecord.channelInformation,
-        layerHeight,
+        layerRecord,
         fileVersionSpec
       );
 
@@ -111,9 +121,7 @@ function readLayerRecord(
   const layerExtraDataSize = cursor.read("u32");
   const layerExtraDataBegin = cursor.position;
 
-  // Skip the Layer Mask info segment, which we don't need for now
-  // Read the length of the segment and skip it
-  cursor.pass(cursor.read("u32"));
+  const maskData = readMaskData(cursor);
 
   // Skip the Blending Range segment, which we don't need for now
   // Read the length of the segment and skip it
@@ -185,6 +193,7 @@ function readLayerRecord(
     dividerType,
     layerText,
     engineData,
+    maskData,
   };
 }
 
@@ -223,14 +232,32 @@ function readLayerFlags(cursor: Cursor): {
   };
 }
 
-function calcLayerHeight(layerRecord: LayerRecord): number {
-  return layerRecord.bottom - layerRecord.top + 1;
+function realMask(layerRecord: LayerRecord): MaskData {
+  const maskData = layerRecord.maskData.realData;
+  if (!maskData) {
+    throw new Error("missing real mask data");
+  }
+  return maskData;
+}
+
+function calcLayerHeight(
+  layerRecord: LayerRecord,
+  channelId: ChannelKind
+): number {
+  switch (channelId) {
+    case ChannelKind.UserSuppliedLayerMask:
+      return height(layerRecord.maskData);
+    case ChannelKind.RealUserSuppliedLayerMask:
+      return height(realMask(layerRecord));
+    default:
+      return height(layerRecord) + 1;
+  }
 }
 
 function readLayerChannels(
   cursor: Cursor,
   channelInformation: [ChannelKind, number][],
-  scanLines: number,
+  layerRecord: LayerRecord,
   fileVersionSpec: FileVersionSpec
 ): LayerChannels {
   const channels = new Map<ChannelKind, ChannelBytes>();
@@ -244,30 +271,25 @@ function readLayerChannels(
     // This is different from the PSD Image Data section, which uses a single
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
-    const channelData = cursor.take(channelDataLength);
-
     switch (compression) {
       case ChannelCompression.RawData: {
-        channels.set(channelKind, {compression, data: channelData});
+        const data = cursor.take(channelDataLength);
+        channels.set(channelKind, {compression, data});
         break;
       }
       case ChannelCompression.RleCompressed: {
-        // We're skipping over the bytes that describe the length of each scanline since
-        // we don't currently use them. We might re-think this in the future when we implement
-        // serialization of a Psd back into bytes.. But not a concern at the moment.
-        // Compressed bytes per scanline are encoded at the beginning as 2 bytes per scanline
-
-        const bytesPerScanline = fileVersionSpec.rleScanlineLengthFieldSize;
-        // Do not attempt to skip more than the length of the channel data.
-        // This is needed because some layers (e.g. gradient fill layers) may
-        // have empty channel data (channelDataLength === 0).
-        const skip = Math.min(channelDataLength, scanLines * bytesPerScanline);
-        const data = new Uint8Array(
-          channelData.buffer,
-          channelData.byteOffset + skip,
-          channelData.byteLength - skip
+        const data = cursor.take(
+          // Do not attempt to take more than the length of the channel data.
+          // This is needed because some layers (e.g. gradient fill layers) may
+          // have empty channel data (channelDataLength === 0).
+          channelDataLength > 0
+            ? rleCompressedSize(
+                cursor,
+                calcLayerHeight(layerRecord, channelKind),
+                fileVersionSpec.rleScanlineLengthFieldReadType
+              )
+            : channelDataLength
         );
-
         channels.set(channelKind, {compression, data});
         break;
       }
@@ -275,4 +297,124 @@ function readLayerChannels(
   }
 
   return channels;
+}
+
+function rleCompressedSize(
+  cursor: Cursor,
+  scanLines: number,
+  readType: ReadType
+): number {
+  const sizes = Array.from(Array(scanLines), () => cursor.read(readType));
+  return sizes.reduce((a, b) => a + b);
+}
+
+function readMaskData(cursor: Cursor): MaskData {
+  const length = cursor.read("u32");
+  const startsAt = cursor.position;
+  const [top, left, bottom, right] = readBounds(cursor);
+  const backgroundColor = cursor.read("u8");
+  const flags = readFlags(cursor);
+  const realData = length >= 36 ? readRealData(cursor) : undefined;
+  const parameters = flags.masksHaveParametersApplied
+    ? readParameters(cursor)
+    : undefined;
+
+  const remainingBytes = length - (cursor.position - startsAt);
+  cursor.pass(remainingBytes);
+
+  return {
+    top,
+    left,
+    bottom,
+    right,
+    backgroundColor,
+    flags,
+    parameters,
+    realData,
+  };
+}
+
+function readBounds(cursor: Cursor): [number, number, number, number] {
+  return Array.from(Array(4), () => cursor.read("i32")) as [
+    number,
+    number,
+    number,
+    number
+  ];
+}
+
+enum MaskFlagsBitmask {
+  PositionRelativeToLayer = 1 << 0,
+  LayerMaskDisabled = 1 << 1,
+  InvertMaskWhenBlending = 1 << 2,
+  UserMaskFromRenderingOtherData = 1 << 3,
+  MasksHaveParametersApplied = 1 << 4,
+}
+
+function readFlags(cursor: Cursor): MaskFlags {
+  const flags = cursor.read("u8");
+  return {
+    // bit 0 = position relative to layer
+    positionRelativeToLayer: Boolean(
+      flags & MaskFlagsBitmask.PositionRelativeToLayer
+    ),
+    // bit 1 = layer mask disabled
+    layerMaskDisabled: Boolean(flags & MaskFlagsBitmask.LayerMaskDisabled),
+    // bit 2 = invert layer mask when blending (Obsolete)
+    invertMaskWhenBlending: Boolean(
+      flags & MaskFlagsBitmask.InvertMaskWhenBlending
+    ),
+    // bit 3 = indicates that the user mask actually came from rendering other data
+    userMaskFromRenderingOtherData: Boolean(
+      flags & MaskFlagsBitmask.UserMaskFromRenderingOtherData
+    ),
+    // bit 4 = indicates that the user and/or vector masks have parameters applied to them
+    masksHaveParametersApplied: Boolean(
+      flags & MaskFlagsBitmask.MasksHaveParametersApplied
+    ),
+  };
+}
+
+enum MaskParameterBitmask {
+  // bit 0 = user mask density
+  UserMaskDensity = 1 << 0,
+  // bit 1 = user mask feather
+  UserMaskFeather = 1 << 1,
+  // bit 2 = vector mask density
+  VectorMaskDensity = 1 << 2,
+  // bit 3 = vector mask feather
+  VectorMaskFeather = 1 << 3,
+}
+
+function readParameters(cursor: Cursor): MaskParameters {
+  const parameters = cursor.read("u8");
+  return {
+    // bit 0 = user mask density, 1 byte
+    userMaskDensity:
+      parameters & MaskParameterBitmask.UserMaskDensity
+        ? cursor.read("u8")
+        : undefined,
+    // bit 1 = user mask feather, 8 byte, double
+    userMaskFeather:
+      parameters & MaskParameterBitmask.UserMaskFeather
+        ? cursor.read("f64")
+        : undefined,
+    // bit 2 = vector mask density, 1 byte
+    vectorMaskDensity:
+      parameters & MaskParameterBitmask.VectorMaskDensity
+        ? cursor.read("u8")
+        : undefined,
+    // bit 3 = vector mask feather, 8 bytes, double
+    vectorMaskFeather:
+      parameters & MaskParameterBitmask.VectorMaskFeather
+        ? cursor.read("f64")
+        : undefined,
+  };
+}
+
+function readRealData(cursor: Cursor): RealMaskData {
+  const flags = readFlags(cursor);
+  const backgroundColor = cursor.read("u8");
+  const [top, left, bottom, right] = readBounds(cursor);
+  return {top, left, bottom, right, flags, backgroundColor};
 }
