@@ -18,7 +18,7 @@
   "scripts": {
     "build": "wireit",
     "prepublishOnly": "npm run build",
-    "release": "wireit",
+    "release": "release-it",
     "test": "wireit"
   },
   "devDependencies": {
@@ -48,12 +48,6 @@
       ],
       "output": [
         "dist"
-      ]
-    },
-    "release": {
-      "command": "release-it",
-      "dependencies": [
-        "build"
       ]
     },
     "test": {
