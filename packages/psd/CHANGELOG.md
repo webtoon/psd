@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.0](https://github.com/webtoon/psd/compare/0.2.0...0.3.0) (2022-10-20)
+
+### Features
+
+- AdditionalLayerInfos; LinkedLayers ([#54](https://github.com/webtoon/psd/issues/54)) ([bf9540b](https://github.com/webtoon/psd/commit/bf9540b784e23dcfe49b30fdba2931177d500ae2))
+- expose ICC profile ([aa7679e](https://github.com/webtoon/psd/commit/aa7679e6e79e22b8ea8ff8a8d4414cc90d6d7bf7))
+- Implement additional ImageResources ([#55](https://github.com/webtoon/psd/issues/55)) ([1d1e702](https://github.com/webtoon/psd/commit/1d1e70234282e09da2404132368d5bbbb4d31aa5))
+- implement EngineData parsing ([8c5f09c](https://github.com/webtoon/psd/commit/8c5f09cf5b0338cda1344b56dd1aa9b1979da195))
+- Implement reading mask data ([#56](https://github.com/webtoon/psd/issues/56)) ([0f99674](https://github.com/webtoon/psd/commit/0f9967493297a139d4773b1bb63991a6d8ae6b72))
+
+### Bug Fixes
+
+- ALI block 'cinf' has diffent size for PSB ([70ffd71](https://github.com/webtoon/psd/commit/70ffd7107490400a6d4d5f9a595e8e0b95e60c91))
+- Don't align ALI block size to 4 byte boundary ([f4fc949](https://github.com/webtoon/psd/commit/f4fc9497d2826aeaed17910194dc9e8f7130ebe9))
+- handle empty channel data ([9cd2d8f](https://github.com/webtoon/psd/commit/9cd2d8f1caeeed778a9c902892f524d2d96b3f1b))
+- left sidebar width in wider screen ([702eeed](https://github.com/webtoon/psd/commit/702eeed01ae1da5338cf7aeb2b45002cb33c45ef))
+- readme update. need to fileVariable name instead of module name ([1b6d1ca](https://github.com/webtoon/psd/commit/1b6d1ca25d295bf2956191f466d358bc4a823a59))
+
 ## [0.2.0](https://github.com/webtoon/psd/compare/0.1.2...0.2.0) (2022-06-20)
 
 ### ⚠ BREAKING CHANGES
