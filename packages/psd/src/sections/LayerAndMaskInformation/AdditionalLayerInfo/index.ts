@@ -29,10 +29,13 @@ import {readVectorStrokeDataAliBlock} from "./readVectorStrokeDataAliBlock";
  * Reads a single Additional Layer Information block from the current
  * {@link cursor} position.
  * @param cursor
+ * @param fileVersionSpec
+ * @param padding - dictates padding of the blocks. See f4fc9497d2826aeaed17910194dc9e8f7130ebe9
  */
 export function readAdditionalLayerInfo(
   cursor: Cursor,
-  fileVersionSpec: FileVersionSpec
+  fileVersionSpec: FileVersionSpec,
+  padding = 0
 ): AdditionalLayerInfo {
   const signature = cursor.readString(4);
 
@@ -52,7 +55,7 @@ export function readAdditionalLayerInfo(
   // Position the cursor at the end of the ALI block
   const remainingBytes = size - (cursor.position - prevPosition);
   cursor.pass(remainingBytes);
-  cursor.padding(size, 4);
+  cursor.padding(size, padding);
 
   return aliBlock;
 }
