@@ -204,7 +204,9 @@ export function readGlobalAdditionalLayerInformation(
 ): AdditionalLayerProperties {
   const additionalLayerInfos = [];
   while (cursor.position < cursor.length) {
-    additionalLayerInfos.push(readAdditionalLayerInfo(cursor, fileVersionSpec));
+    additionalLayerInfos.push(
+      readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
+    );
   }
 
   return additionalLayerInfos;
