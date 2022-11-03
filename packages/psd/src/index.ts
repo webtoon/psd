@@ -12,6 +12,8 @@ export {
   SliceOrigin,
   DimensionUnit,
   ResolutionUnit,
+  AliKey,
+  PathRecordType,
 } from "./interfaces";
 export type {Guide} from "./interfaces";
 

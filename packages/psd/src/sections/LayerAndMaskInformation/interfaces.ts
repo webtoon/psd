@@ -45,7 +45,9 @@ export interface Frame {
   layerRecord?: LayerRecord;
 }
 
-export type AdditionalLayerProperties = AdditionalLayerInfo[];
+export type AdditionalLayerProperties = {
+  [K in AdditionalLayerInfo as K["key"]]?: K;
+};
 
 export interface LayerProperties {
   name: string;
@@ -88,6 +90,10 @@ export const createLayerProperties = (
     additionalLayerInfos,
   } = layerRecord;
 
+  const additionalLayerProperties = Object.fromEntries(
+    additionalLayerInfos.map((ali) => [ali.key, ali])
+  ) as AdditionalLayerProperties;
+
   return {
     name,
     top,
@@ -103,7 +109,7 @@ export const createLayerProperties = (
     text: layerText,
     textProperties: engineData,
     maskData,
-    additionalLayerProperties: additionalLayerInfos,
+    additionalLayerProperties,
   };
 };
 

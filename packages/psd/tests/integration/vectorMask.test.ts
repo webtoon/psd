@@ -7,8 +7,7 @@ import * as path from "path";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
-import PSD from "../../src/index";
-import {AliKey, PathRecordType} from "../../src/interfaces";
+import PSD, {AliKey, PathRecordType} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
@@ -20,9 +19,7 @@ describe("vector mask parsing", () => {
   });
 
   it("should return pathRecords to build vector mask", () => {
-    const vmsk = psd.layers[0].additionalProperties.find(
-      ({key}) => key === AliKey.VectorMaskSetting1
-    );
+    const vmsk = psd.layers[0].additionalProperties[AliKey.VectorMaskSetting1];
 
     expect(vmsk).toStrictEqual({
       key: "vmsk",

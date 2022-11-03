@@ -7,8 +7,7 @@ import * as path from "path";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
-import PSD from "../../src/index";
-import {AliKey} from "../../src/interfaces";
+import PSD, {AliKey} from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
@@ -22,9 +21,7 @@ describe("adjustements parsing", () => {
   });
 
   it("describe HSL changes", () => {
-    const hue = psd.layers[10].additionalProperties.find(
-      ({key}) => key === AliKey.HueSaturation
-    );
+    const hue = psd.layers[10].additionalProperties[AliKey.HueSaturation];
 
     expect(hue).toStrictEqual({
       adjustment: [

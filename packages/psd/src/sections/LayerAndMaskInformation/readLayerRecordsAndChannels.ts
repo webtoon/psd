@@ -209,7 +209,9 @@ export function readGlobalAdditionalLayerInformation(
     );
   }
 
-  return additionalLayerInfos;
+  return Object.fromEntries(
+    additionalLayerInfos.map((ali) => [ali.key, ali])
+  ) as AdditionalLayerProperties;
 }
 
 function readLayerRectangle(cursor: Cursor): [number, number, number, number] {

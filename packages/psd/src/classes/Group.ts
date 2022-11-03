@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {GroupFrame} from "../sections";
+import {GroupFrame, LayerProperties} from "../sections";
 import {NodeChild, NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
 
@@ -28,6 +28,12 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
   }
   get composedOpacity(): number {
     return this.parent.composedOpacity * (this.opacity / 255);
+  }
+
+  get additionalProperties():
+    | LayerProperties["additionalLayerProperties"]
+    | undefined {
+    return this.layerFrame?.layerProperties.additionalLayerProperties;
   }
 
   addChild(node: NodeChild): void {
