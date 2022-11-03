@@ -9,12 +9,7 @@ import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
 import PSD from "../../src/index";
-import {
-  AliKey,
-  LinkedLayerAliBlock,
-  SmartObjectPlacedLayerDataAliBlock,
-  StringDescriptorValue,
-} from "../../src/interfaces";
+import {AliKey, StringDescriptorValue} from "../../src/interfaces";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
@@ -26,21 +21,18 @@ describe("placed layer data parsing", () => {
   });
 
   it("should contain links to placed files inside layers", () => {
-    const placedObject = psd.layers[0].additionalProperties.find(
-      ({key}) => key === AliKey.PlacedLayerData
-    ) as SmartObjectPlacedLayerDataAliBlock;
+    const placedObject =
+      psd.layers[0].additionalProperties[AliKey.PlacedLayerData];
 
-    const id = placedObject.data.descriptor.items.get(
+    const id = placedObject?.data.descriptor.items.get(
       "Idnt"
     ) as StringDescriptorValue;
     expect(id.value).toStrictEqual("5a96c404-ab9c-1177-97ef-96ca454b82b7");
   });
 
   it("should contain embedded files as extra resources", () => {
-    const linkedLayer = psd.additionalLayerProperties.find(
-      ({key}) => key === AliKey.LinkedLayer2
-    ) as LinkedLayerAliBlock;
-    expect(linkedLayer.layers[0]).toContain({
+    const linkedLayer = psd.additionalLayerProperties[AliKey.LinkedLayer2];
+    expect(linkedLayer?.layers[0]).toContain({
       uniqueId: "5a96c404-ab9c-1177-97ef-96ca454b82b7",
       filename: "linked-layer.png",
       filetype: "png ",
@@ -48,7 +40,7 @@ describe("placed layer data parsing", () => {
 
     const hash = crypto
       .createHash("sha256")
-      .update(linkedLayer.layers[0].contents)
+      .update(linkedLayer?.layers[0].contents ?? "")
       .digest("hex");
 
     // NOTE: when changing the hash, please make sure the result is coherent :)
