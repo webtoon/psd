@@ -11,6 +11,7 @@ import {
   EngineData,
   GroupDivider,
 } from "../../interfaces";
+import {fromEntries} from "../../utils/object";
 
 export interface LayerRecord {
   name: string;
@@ -90,7 +91,7 @@ export const createLayerProperties = (
     additionalLayerInfos,
   } = layerRecord;
 
-  const additionalLayerProperties = Object.fromEntries(
+  const additionalLayerProperties = fromEntries(
     additionalLayerInfos.map((ali) => [ali.key, ali])
   ) as AdditionalLayerProperties;
 

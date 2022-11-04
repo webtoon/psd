@@ -23,6 +23,7 @@ import {
   InvalidBlendingModeSignature,
   ReadType,
 } from "../../utils";
+import {fromEntries} from "../../utils/object";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
 import {
   MaskData,
@@ -209,7 +210,7 @@ export function readGlobalAdditionalLayerInformation(
     );
   }
 
-  return Object.fromEntries(
+  return fromEntries(
     additionalLayerInfos.map((ali) => [ali.key, ali])
   ) as AdditionalLayerProperties;
 }
