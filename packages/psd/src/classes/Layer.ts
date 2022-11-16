@@ -2,7 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
-import {EngineData, ImageData} from "../interfaces";
+import {BlendMode, Clipping, EngineData, ImageData} from "../interfaces";
 import {decodeGrayscale} from "../methods";
 import {LayerFrame, MaskData, LayerProperties} from "../sections";
 import {area} from "../utils";
@@ -32,6 +32,7 @@ export class Layer
   get name(): string {
     return this.layerFrame.layerProperties.name;
   }
+
   get width(): number {
     return this.layerFrame.width;
   }
@@ -47,6 +48,11 @@ export class Layer
   get opacity(): number {
     return this.layerFrame.layerProperties.opacity;
   }
+
+  get blendMode(): BlendMode {
+    return this.layerFrame.layerProperties.blendMode;
+  }
+
   get composedOpacity(): number {
     return this.parent.composedOpacity * (this.opacity / 255);
   }
@@ -103,5 +109,9 @@ export class Layer
     const {red, green, blue, alpha} = this.layerFrame;
 
     return {red, green, blue, alpha};
+  }
+
+  get clipping(): Clipping {
+    return this.layerFrame.layerProperties.clippingMask;
   }
 }
