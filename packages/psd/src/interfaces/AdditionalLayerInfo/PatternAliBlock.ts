@@ -30,7 +30,7 @@ export interface PatternData {
   length: number;
   rectangle: PatterDataRectangle;
   numberOfChannels: number;
-  channels: Map<ChannelKind, ChannelBytes>;
+  channels: Map<ChannelKind, PatternDataChannel>;
 }
 
 export type ColorTable = [number, number, number][];
