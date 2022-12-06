@@ -156,6 +156,7 @@ function readLayerRecord(
 
     switch (ali.key) {
       case AliKey.SectionDividerSetting:
+      case AliKey.NestedSectionDividerSetting:
         ({dividerType} = ali);
         break;
       case AliKey.TypeToolObjectSetting: {

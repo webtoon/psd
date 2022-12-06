@@ -3,16 +3,20 @@
 // MIT License
 
 import {
+  ChannelKind,
   ColorMode,
   Depth,
+  getChannelKindOffset,
   Guide,
   ImageData,
   ParsingResult,
+  Pattern,
   ResolutionInfo,
   ResourceType,
 } from "../interfaces";
-import {parse} from "../methods";
+import {generateRgba, parse} from "../methods";
 import {AdditionalLayerProperties} from "../sections";
+import {height, width} from "../utils";
 import {Group} from "./Group";
 import {Layer} from "./Layer";
 import {assertIsNodeParent, Node, NodeChild} from "./Node";
@@ -100,12 +104,47 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
 
   protected get imageData(): ImageData {
     const {compression, red, green, blue, alpha} = this.parsingResult.imageData;
+
     return {
       red: {compression, data: red},
       green: green ? {compression, data: green} : undefined,
       blue: blue ? {compression, data: blue} : undefined,
       alpha: alpha ? {compression, data: alpha} : undefined,
     };
+  }
+
+  get patterns(): Pattern[] {
+    const {Patt, Pat2, Pat3} = this.additionalLayerProperties;
+    return [
+      ...(Patt?.data ?? []),
+      ...(Pat2?.data ?? []),
+      ...(Pat3?.data ?? []),
+    ];
+  }
+
+  public decodePattern(pattern: Pattern): Promise<Uint8ClampedArray> {
+    if (pattern.imageMode !== ColorMode.Rgb) {
+      throw new Error("Invalid color mode");
+    }
+
+    const channels = pattern.patternData?.channels;
+    const red = channels.get(ChannelKind.Red);
+
+    if (!red) {
+      throw new Error("Red is channel is missing");
+    }
+
+    const green = channels.get(ChannelKind.Green);
+    const blue = channels.get(ChannelKind.Blue);
+
+    const alphaKey = getChannelKindOffset(ChannelKind.TransparencyMask);
+
+    const alpha = channels.get(alphaKey);
+
+    const calcHeight = height(pattern.patternData.rectangle);
+    const calWidth = width(pattern.patternData.rectangle);
+
+    return generateRgba(calWidth, calcHeight, red, green, blue, alpha);
   }
 
   protected buildTreeStructure(): void {

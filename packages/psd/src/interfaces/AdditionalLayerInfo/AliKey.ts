@@ -17,6 +17,7 @@ export enum AliKey {
   SolidColorSheetSetting = "SoCo",
   PatternFillSetting = "PtFl",
   VectorStrokeContentData = "vscg",
+  VectorOriginationData = "vogk",
   BlendOptionsCapacity = "iOpa",
   VectorMaskSetting1 = "vmsk",
   VectorMaskSetting2 = "vsms",
@@ -47,4 +48,8 @@ export enum AliKey {
   Threshold = "thrs",
   GradientMapSettings = "grdm",
   SelectiveColor = "selc",
+
+  Pattern1 = "Patt",
+  Pattern2 = "Pat2",
+  Pattern3 = "Pat3",
 }

@@ -95,7 +95,7 @@ function readResourceBlock(cursor: Cursor): ImageResourceBlock {
  * of the `alignment` value.
  * If `alignment` is unspecified or 0, no alignment bytes are skipped.
  */
-function readPascalString(cursor: Cursor, alignment = 0): string {
+export function readPascalString(cursor: Cursor, alignment = 0): string {
   const length = cursor.read("u8");
   const value = cursor.readString(length);
 
