@@ -8,7 +8,7 @@ import * as crypto from "crypto";
 import {beforeAll, describe, expect, it} from "vitest";
 
 import type Psd from "../../src/index";
-import PSD, {AliKey, PathRecordType} from "../../src/index";
+import PSD from "../../src/index";
 
 const FIXTURE_DIR = path.join(__dirname, "fixtures");
 
@@ -27,7 +27,7 @@ describe("patterns parsing", () => {
   it("renders pattern", async () => {
     const [pattern] = psd.patterns;
     const pixelData = await psd.decodePattern(pattern);
-    expect(pixelData).toHaveLength(361200);
+    expect(pixelData).toHaveLength(360000);
 
     const hash = crypto.createHash("sha256").update(pixelData).digest("hex");
 
@@ -35,7 +35,7 @@ describe("patterns parsing", () => {
     // Either using https://www.npmjs.com/package/canvas or browser build (see README)
     // This looks like a window with green borders
     expect(hash).toStrictEqual(
-      "ecc109a64333e792149b04ba74ad9917db3e329228fe3401e338142f872860c8"
+      "9e8ab22ac1d75bc5f1b675ace63490910527578c4afb8410aa292273ff298e93"
     );
   });
 });

@@ -144,14 +144,7 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
     const calcHeight = height(pattern.patternData.rectangle);
     const calWidth = width(pattern.patternData.rectangle);
 
-    return generateRgba(
-      calWidth,
-      calcHeight + 1 /* ??! */,
-      red.data,
-      green?.data,
-      blue?.data,
-      alpha?.data
-    );
+    return generateRgba(calWidth, calcHeight, red, green, blue, alpha);
   }
 
   protected buildTreeStructure(): void {

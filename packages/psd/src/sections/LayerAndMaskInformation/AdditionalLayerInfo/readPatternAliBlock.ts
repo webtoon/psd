@@ -62,20 +62,20 @@ export function readRectangle(cursor: Cursor) {
   return {top, left, bottom, right};
 }
 
-function decompress(
+function readChannelBytes(
   cursor: Cursor,
   size: number,
-  compressionMode: number
+  compressionMode: number,
+  height: number
 ): ChannelBytes {
   if (compressionMode === 0) {
     return {compression: ChannelCompression.RawData, data: cursor.take(size)};
   }
 
-  const currentPosition = cursor.position;
-
-  const height = cursor.read("u16");
-  cursor.pass(height * 2);
-  const data = cursor.take(size + currentPosition - cursor.position);
+  const scanlineSize = Array.from(Array(height), () =>
+    cursor.read("u16")
+  ).reduce((a, b) => a + b);
+  const data = cursor.take(scanlineSize);
 
   return {
     compression: ChannelCompression.RleCompressed,
@@ -83,7 +83,10 @@ function decompress(
   };
 }
 
-export function readChannel(cursor: Cursor): PatternDataChannel | null {
+export function readChannel(
+  cursor: Cursor,
+  height: number
+): PatternDataChannel | null {
   const written = cursor.read("u32");
 
   if (!written) {
@@ -95,12 +98,18 @@ export function readChannel(cursor: Cursor): PatternDataChannel | null {
   if (!length) {
     return null;
   }
-  const posAtLength = cursor.position;
+
+  const {position} = cursor;
+
   const pixelDepth1 = cursor.read("u32");
   const rectangle = readRectangle(cursor);
   const pixelDepth2 = cursor.read("u16");
   const compression = cursor.read("u8");
-  const variable = length - (cursor.position - posAtLength);
+
+  const size = length - (cursor.position - position);
+  const channelBytes = readChannelBytes(cursor, size, compression, height);
+
+  console.log("__channelData", channelBytes.data.length);
 
   return {
     written: Boolean(written),
@@ -108,14 +117,13 @@ export function readChannel(cursor: Cursor): PatternDataChannel | null {
     pixelDepth1,
     rectangle,
     pixelDepth2,
-    compression,
-    data: decompress(cursor, variable, compression),
+    ...channelBytes,
   };
 }
 
 //https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#VirtualMemoryArrayList
 //The following is a virtual memory array, repeated for the number of channels + one for a user mask + one for a sheet mask.
-export function readPatternData(cursor: Cursor): PatternData {
+export function readPatternData(cursor: Cursor, height: number): PatternData {
   const version = cursor.read("u32");
   console.log("____patternVersion", version);
   const length = cursor.read("u32");
@@ -127,7 +135,7 @@ export function readPatternData(cursor: Cursor): PatternData {
   const channels = new Map();
 
   for (let i = 0; i < numberOfChannels + 2; i++) {
-    const channel = readChannel(cursor);
+    const channel = readChannel(cursor, height);
     channels.set(i, channel);
   }
 
@@ -140,8 +148,8 @@ export function readPattern(cursor: Cursor): Pattern {
   const imageMode = cursor.read("u32");
   console.log("__imageMode", imageMode);
 
-  const point = readPoint(cursor);
-  console.log("___point", point);
+  const {vert: height, horiz: width} = readPoint(cursor);
+  console.log("___point", {width, height});
   const name = cursor.readUnicodeString(0);
   console.log("____name", name);
   const id = readPascalString(cursor);
@@ -151,12 +159,13 @@ export function readPattern(cursor: Cursor): Pattern {
     imageMode === ImageMode.Indexed ? readColorTable(cursor) : undefined;
   //console.log("____colortable", colorTable);
 
-  const patternData = readPatternData(cursor);
+  const patternData = readPatternData(cursor, height);
   console.log("____patternData", patternData);
   return {
     version,
     imageMode,
-    point,
+    width,
+    height,
     name,
     id,
     ...(colorTable ? {colorTable} : null),

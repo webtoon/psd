@@ -15,14 +15,12 @@ export interface PatterDataRectangle {
   right: number;
 }
 
-export interface PatternDataChannel {
+export interface PatternDataChannel extends ChannelBytes {
   written: boolean;
   length: number;
   pixelDepth1: number;
   rectangle: PatterDataRectangle;
   pixelDepth2: number;
-  compression: number;
-  data: ChannelBytes;
 }
 
 export interface PatternData {
@@ -38,7 +36,8 @@ export type ColorTable = [number, number, number][];
 export interface Pattern {
   version: number;
   imageMode: number;
-  point: Point;
+  width: number;
+  height: number;
   name: string;
   id: string;
   colorTable?: [number, number, number][];
