@@ -8,7 +8,7 @@ import {
   Point,
   VectorMaskSettingAliBlock,
 } from "../../../interfaces";
-import {Cursor} from "../../../utils";
+import {Cursor, UnknownPathRecordType} from "../../../utils";
 import {AliBlockBody} from "./AliBlockBody";
 
 /**
@@ -101,7 +101,9 @@ function readPathRecord(cursor: Cursor): PathRecord {
     case PathRecordType.OpenSubpathBezierKnotUnlinked:
       return readBezierKnot(cursor, type);
     default:
-      throw new Error(`Unknown PathRecordType: ${type} (bug in offsets?)`);
+      throw new UnknownPathRecordType(
+        `Unknown PathRecordType: ${type} (bug in offsets?)`
+      );
   }
 }
 

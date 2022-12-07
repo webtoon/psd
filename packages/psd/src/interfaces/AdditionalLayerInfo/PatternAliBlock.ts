@@ -6,7 +6,6 @@ import {ChannelBytes} from "../ChannelBytes";
 import {ChannelKind} from "../ChannelKind";
 import {KnownAliBlock} from "./AliBlockBase";
 import {AliKey} from "./AliKey";
-import {Point} from "./VectorMaskSettingAliBlock";
 
 export interface PatterDataRectangle {
   top: number;

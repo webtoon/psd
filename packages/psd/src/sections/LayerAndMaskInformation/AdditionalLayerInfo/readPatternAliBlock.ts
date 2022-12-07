@@ -40,7 +40,6 @@ export function readColorTable(cursor: Cursor): ColorTable {
     const red = cursor.read("u8");
     const green = cursor.read("u8");
     const blue = cursor.read("u8");
-    console.log("____rgb", red, green, blue);
     table.push([red, green, blue]);
   }
   cursor.pass(4);
@@ -109,8 +108,6 @@ export function readChannel(
   const size = length - (cursor.position - position);
   const channelBytes = readChannelBytes(cursor, size, compression, height);
 
-  console.log("__channelData", channelBytes.data.length);
-
   return {
     written: Boolean(written),
     length,
@@ -125,13 +122,9 @@ export function readChannel(
 //The following is a virtual memory array, repeated for the number of channels + one for a user mask + one for a sheet mask.
 export function readPatternData(cursor: Cursor, height: number): PatternData {
   const version = cursor.read("u32");
-  console.log("____patternVersion", version);
   const length = cursor.read("u32");
-  console.log("___length");
   const rectangle = readRectangle(cursor);
-  console.log("___rectangle", rectangle);
   const numberOfChannels = cursor.read("u32");
-  console.log("____umOfChannels", numberOfChannels);
   const channels = new Map();
 
   for (let i = 0; i < numberOfChannels + 2; i++) {
@@ -144,23 +137,17 @@ export function readPatternData(cursor: Cursor, height: number): PatternData {
 
 export function readPattern(cursor: Cursor): Pattern {
   const version = cursor.read("u32");
-  console.log("___version", version);
   const imageMode = cursor.read("u32");
-  console.log("__imageMode", imageMode);
 
   const {vert: height, horiz: width} = readPoint(cursor);
-  console.log("___point", {width, height});
   const name = cursor.readUnicodeString(0);
-  console.log("____name", name);
   const id = readPascalString(cursor);
-  console.log("___id", id);
 
   const colorTable =
     imageMode === ImageMode.Indexed ? readColorTable(cursor) : undefined;
-  //console.log("____colortable", colorTable);
 
   const patternData = readPatternData(cursor, height);
-  console.log("____patternData", patternData);
+
   return {
     version,
     imageMode,
@@ -180,24 +167,20 @@ export function readPatternAliBlock(
   if (size === 0) {
     return {data: []};
   }
-  console.log("___readPattern");
+
   const startPosition = cursor.position;
 
   let currentPosition = cursor.position;
   const data: Pattern[] = [];
   while (currentPosition - startPosition < size) {
-    console.log("___current start size", currentPosition - startPosition, size);
     const patternLength = cursor.read("u32");
-    console.log("____patternLength", patternLength);
     currentPosition = currentPosition + patternLength;
 
     if (currentPosition - startPosition >= size) {
       break;
     }
-    console.log("___data push");
     data.push(readPattern(cursor));
   }
-  console.log("___cursor pass");
   cursor.pass(size - (currentPosition - startPosition));
 
   return {

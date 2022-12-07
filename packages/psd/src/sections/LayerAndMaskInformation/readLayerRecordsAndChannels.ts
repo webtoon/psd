@@ -21,6 +21,7 @@ import {
   Cursor,
   height,
   InvalidBlendingModeSignature,
+  MissingRealMaskData,
   ReadType,
 } from "../../utils";
 import {fromEntries} from "../../utils/object";
@@ -254,7 +255,7 @@ function readLayerFlags(cursor: Cursor): {
 function realMask(layerRecord: LayerRecord): MaskData {
   const maskData = layerRecord.maskData.realData;
   if (!maskData) {
-    throw new Error("missing real mask data");
+    throw new MissingRealMaskData();
   }
   return maskData;
 }

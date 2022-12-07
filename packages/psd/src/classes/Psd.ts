@@ -16,7 +16,7 @@ import {
 } from "../interfaces";
 import {generateRgba, parse} from "../methods";
 import {AdditionalLayerProperties} from "../sections";
-import {height, width} from "../utils";
+import {height, InvalidColorMode, MissingColorChannel, width} from "../utils";
 import {Group} from "./Group";
 import {Layer} from "./Layer";
 import {assertIsNodeParent, Node, NodeChild} from "./Node";
@@ -124,14 +124,14 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
 
   public decodePattern(pattern: Pattern): Promise<Uint8ClampedArray> {
     if (pattern.imageMode !== ColorMode.Rgb) {
-      throw new Error("Invalid color mode");
+      throw new InvalidColorMode();
     }
 
     const channels = pattern.patternData?.channels;
     const red = channels.get(ChannelKind.Red);
 
     if (!red) {
-      throw new Error("Red is channel is missing");
+      throw new MissingColorChannel("missing red channel");
     }
 
     const green = channels.get(ChannelKind.Green);
