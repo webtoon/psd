@@ -29,7 +29,8 @@ import {AliBlockBody} from "./AliBlockBody";
  *  represents the bottom-right.
  */
 function readFixedPoint32bit(cursor: Cursor): number {
-  const [beforeValue, ...afterPoint] = cursor.take(4);
+  const beforeValue = cursor.read("i8");
+  const afterPoint = cursor.take(3);
   const afterValue =
     afterPoint[0] * 2 ** 16 + afterPoint[1] * 2 ** 8 + afterPoint[2];
   return beforeValue + afterValue / 2 ** 24;

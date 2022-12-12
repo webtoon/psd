@@ -16,7 +16,7 @@ import {
 } from "../interfaces";
 import {generateRgba, parse} from "../methods";
 import {AdditionalLayerProperties} from "../sections";
-import {height, InvalidColorMode, MissingColorChannel, width} from "../utils";
+import {dimensions, InvalidColorMode, MissingColorChannel} from "../utils";
 import {Group} from "./Group";
 import {Layer} from "./Layer";
 import {assertIsNodeParent, Node, NodeChild} from "./Node";
@@ -141,10 +141,9 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
 
     const alpha = channels.get(alphaKey);
 
-    const calcHeight = height(pattern.patternData.rectangle);
-    const calWidth = width(pattern.patternData.rectangle);
+    const {width, height} = dimensions(pattern.patternData.rectangle);
 
-    return generateRgba(calWidth, calcHeight, red, green, blue, alpha);
+    return generateRgba(width, height, red, green, blue, alpha);
   }
 
   protected buildTreeStructure(): void {

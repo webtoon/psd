@@ -60,7 +60,6 @@ export type PathRecord =
 export interface VectorMaskSettingAliBlock
   extends KnownAliBlock<AliKey.VectorMaskSetting1 | AliKey.VectorMaskSetting2> {
   version: number;
-
   invert: boolean;
   notLink: boolean;
   disable: boolean;

@@ -24,7 +24,7 @@ describe("patterns parsing", () => {
     expect(Array.isArray(psd.patterns)).toEqual(true);
   });
 
-  it("should have correct fielfds", () => {
+  it("should have correct fields", () => {
     expect(psd.patterns[0]).toEqual({
       version: 1,
       imageMode: 3,

@@ -15,7 +15,7 @@ export interface PatterDataRectangle {
 }
 
 export interface PatternDataChannel extends ChannelBytes {
-  written: boolean;
+  written: true;
   length: number;
   pixelDepth1: number;
   rectangle: PatterDataRectangle;
@@ -39,7 +39,7 @@ export interface Pattern {
   height: number;
   name: string;
   id: string;
-  colorTable?: [number, number, number][];
+  colorTable?: ColorTable;
   patternData: PatternData;
 }
 

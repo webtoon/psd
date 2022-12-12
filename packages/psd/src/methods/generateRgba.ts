@@ -72,6 +72,7 @@ export async function decodeRgb(
   alpha?: ChannelBytes
 ) {
   await wasmDecoder.init;
+
   validateSupportedCompression(red.compression);
   validateSupportedCompression(blue.compression);
   validateSupportedCompression(red.compression);

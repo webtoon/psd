@@ -3,7 +3,6 @@
 // MIT License
 
 import {
-  Point,
   PatternAliBlock,
   ColorTable,
   PatternData,
@@ -11,26 +10,16 @@ import {
   ChannelCompression,
   ChannelBytes,
   Pattern,
+  ImageMode,
 } from "../../../interfaces";
 import {Cursor} from "../../../utils";
-import {readPascalString} from "../../ImageResource";
 import {AliBlockBody} from "./AliBlockBody";
-export function readPoint(cursor: Cursor): Point {
-  const vert = cursor.read("u16");
-  const horiz = cursor.read("u16");
 
-  return {vert, horiz};
-}
+export function readPoint(cursor: Cursor): {height: number; width: number} {
+  const height = cursor.read("u16");
+  const width = cursor.read("u16");
 
-enum ImageMode {
-  Bitmap = 0,
-  GrayScale = 1,
-  Indexed = 2,
-  RGB = 3,
-  CMKYK = 4,
-  MultiChannel = 7,
-  Duotone = 8,
-  Lab = 9,
+  return {height, width};
 }
 
 export function readColorTable(cursor: Cursor): ColorTable {
@@ -42,15 +31,14 @@ export function readColorTable(cursor: Cursor): ColorTable {
     const blue = cursor.read("u8");
     table.push([red, green, blue]);
   }
+
+  /**
+   * There is 4 bytes padding at the end of each table.
+   * This is not documented in Adobe Photoshop  File FormatsSpecification
+   */
   cursor.pass(4);
   return table;
 }
-
-//[[u8, u8, u8], []];
-
-//4 length is u32
-//2 length is u16
-//1 length is u8
 
 export function readRectangle(cursor: Cursor) {
   const top = cursor.read("u32");
@@ -71,9 +59,7 @@ function readChannelBytes(
     return {compression: ChannelCompression.RawData, data: cursor.take(size)};
   }
 
-  const scanlineSize = Array.from(Array(height), () =>
-    cursor.read("u16")
-  ).reduce((a, b) => a + b);
+  const scanlineSize = cursor.rleCompressedSize(height, "u16");
   const data = cursor.take(scanlineSize);
 
   return {
@@ -109,7 +95,7 @@ export function readChannel(
   const channelBytes = readChannelBytes(cursor, size, compression, height);
 
   return {
-    written: Boolean(written),
+    written: true,
     length,
     pixelDepth1,
     rectangle,
@@ -139,9 +125,9 @@ export function readPattern(cursor: Cursor): Pattern {
   const version = cursor.read("u32");
   const imageMode = cursor.read("u32");
 
-  const {vert: height, horiz: width} = readPoint(cursor);
+  const {height, width} = readPoint(cursor);
   const name = cursor.readUnicodeString(0);
-  const id = readPascalString(cursor);
+  const id = cursor.readPascalString();
 
   const colorTable =
     imageMode === ImageMode.Indexed ? readColorTable(cursor) : undefined;
@@ -155,7 +141,7 @@ export function readPattern(cursor: Cursor): Pattern {
     height,
     name,
     id,
-    ...(colorTable ? {colorTable} : null),
+    colorTable,
     patternData,
   };
 }
@@ -164,26 +150,13 @@ export function readPatternAliBlock(
   cursor: Cursor,
   size: number
 ): AliBlockBody<PatternAliBlock> {
-  if (size === 0) {
-    return {data: []};
-  }
-
-  const startPosition = cursor.position;
-
-  let currentPosition = cursor.position;
+  const endAt = cursor.position + size;
   const data: Pattern[] = [];
-  while (currentPosition - startPosition < size) {
-    const patternLength = cursor.read("u32");
-    currentPosition = currentPosition + patternLength;
 
-    if (currentPosition - startPosition >= size) {
-      break;
-    }
+  while (cursor.position + 4 < endAt && cursor.read("u32")) {
     data.push(readPattern(cursor));
   }
-  cursor.pass(size - (currentPosition - startPosition));
+  cursor.pass(endAt - cursor.position);
 
-  return {
-    data,
-  };
+  return {data};
 }
