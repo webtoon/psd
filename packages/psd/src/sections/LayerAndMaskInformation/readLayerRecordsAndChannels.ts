@@ -21,7 +21,7 @@ import {
   Cursor,
   height,
   InvalidBlendingModeSignature,
-  ReadType,
+  MissingRealMaskData,
 } from "../../utils";
 import {fromEntries} from "../../utils/object";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
@@ -109,8 +109,8 @@ function readLayerRecord(
   if (cursor.readString(4) !== EXPECTED_BLENDING_MODE_SIGNATURE) {
     throw new InvalidBlendingModeSignature();
   }
-
-  const blendMode: BlendMode = matchBlendMode(cursor.readString(4));
+  const bmRead = cursor.readString(4);
+  const blendMode: BlendMode = matchBlendMode(bmRead);
   const opacity = cursor.read("u8");
   const clipping: Clipping = matchClipping(cursor.read("u8"));
   const {hidden, transparencyLocked} = readLayerFlags(cursor);
@@ -156,6 +156,7 @@ function readLayerRecord(
 
     switch (ali.key) {
       case AliKey.SectionDividerSetting:
+      case AliKey.NestedSectionDividerSetting:
         ({dividerType} = ali);
         break;
       case AliKey.TypeToolObjectSetting: {
@@ -253,7 +254,7 @@ function readLayerFlags(cursor: Cursor): {
 function realMask(layerRecord: LayerRecord): MaskData {
   const maskData = layerRecord.maskData.realData;
   if (!maskData) {
-    throw new Error("missing real mask data");
+    throw new MissingRealMaskData();
   }
   return maskData;
 }
@@ -301,8 +302,7 @@ function readLayerChannels(
           // This is needed because some layers (e.g. gradient fill layers) may
           // have empty channel data (channelDataLength === 0).
           channelDataLength > 0
-            ? rleCompressedSize(
-                cursor,
+            ? cursor.rleCompressedSize(
                 calcLayerHeight(layerRecord, channelKind),
                 fileVersionSpec.rleScanlineLengthFieldReadType
               )
@@ -315,15 +315,6 @@ function readLayerChannels(
   }
 
   return channels;
-}
-
-function rleCompressedSize(
-  cursor: Cursor,
-  scanLines: number,
-  readType: ReadType
-): number {
-  const sizes = Array.from(Array(scanLines), () => cursor.read(readType));
-  return sizes.reduce((a, b) => a + b);
 }
 
 function readMaskData(cursor: Cursor): MaskData {

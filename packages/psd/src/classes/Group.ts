@@ -2,6 +2,7 @@
 // Copyright 2021-present NAVER WEBTOON
 // MIT License
 
+import {BlendMode, Clipping} from "../interfaces";
 import {GroupFrame, LayerProperties} from "../sections";
 import {NodeChild, NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
@@ -46,5 +47,21 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
   freeze(): void {
     this.children.forEach((node) => (node as NodeBase).freeze?.());
     Object.freeze(this.children);
+  }
+
+  get blendMode(): BlendMode | undefined {
+    return this.layerFrame?.layerProperties.blendMode;
+  }
+
+  get isHidden(): boolean {
+    return this.layerFrame?.layerProperties.hidden ?? false;
+  }
+
+  get clipping(): Clipping {
+    return this.layerFrame?.layerProperties.clippingMask ?? Clipping.Base;
+  }
+
+  get id(): number | undefined {
+    return this.layerFrame?.id;
   }
 }

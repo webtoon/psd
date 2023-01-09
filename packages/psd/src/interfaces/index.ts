@@ -18,3 +18,4 @@ export * from "./ParsingResult";
 export * from "./resources";
 export * from "./Reference";
 export * from "./EngineData";
+export * from "./ImageMode";

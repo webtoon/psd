@@ -15,6 +15,7 @@ import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
 import {readLayerIdAliBlock} from "./readLayerIdAliBlock";
 import {readLinkedLayerAliBlock} from "./readLinkedLayerAliBlock";
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
+import {readPatternAliBlock} from "./readPatternAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
 import {readSectionDividerSettingAliBlock} from "./readSectionDividerSettingAliBlock";
 import {readSmartObjectPlacedLayerDataAliBlock} from "./readSmartObjectPlacedLayerDataAliBlock";
@@ -22,6 +23,7 @@ import {readSolidColorSheetSettingAliBlock} from "./readSolidColorSheetSettingAl
 import {readTypeToolObjectSettingAliBlock} from "./readTypeToolObjectSettingAliBlock";
 import {readUnicodeLayerNameAliBlock} from "./readUnicodeLayerNameAliBlock";
 import {readVectorMaskSettingAliBlock} from "./readVectorMaskSettingAliBlock";
+import {readVectorOriginationDataAliBLock} from "./readVectorOriginationDataAliBlock";
 import {readVectorStrokeContentDataAliBlock} from "./readVectorStrokeContentDataAliBlock";
 import {readVectorStrokeDataAliBlock} from "./readVectorStrokeDataAliBlock";
 
@@ -96,11 +98,17 @@ function readAliBlockBody(
       return {signature, key, ...readPatternFillSettingAliBlock(cursor)};
     case AliKey.VectorStrokeContentData:
       return {signature, key, ...readVectorStrokeContentDataAliBlock(cursor)};
+    case AliKey.VectorOriginationData:
+      return {signature, key, ...readVectorOriginationDataAliBLock(cursor)};
     case AliKey.BlendOptionsCapacity:
       return {signature, key, ...readBlendOptionsCapacityAliBlock(cursor)};
     case AliKey.VectorMaskSetting1:
     case AliKey.VectorMaskSetting2:
       return {signature, key, ...readVectorMaskSettingAliBlock(cursor, size)};
+    case AliKey.Pattern1:
+    case AliKey.Pattern2:
+    case AliKey.Pattern3:
+      return {signature, key, ...readPatternAliBlock(cursor, size)};
     case AliKey.HueSaturation:
       return {signature, key, ...readHueSaturationAliBlock(cursor)};
     case AliKey.LayerId:

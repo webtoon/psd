@@ -36,7 +36,7 @@ function readResourceBlock(cursor: Cursor): ImageResourceBlock {
   }
 
   const id = cursor.read("i16");
-  const name = readPascalString(cursor, 2);
+  const name = cursor.readPascalString(2);
 
   const dataLength = cursor.read("u32");
   const expectedDataEnd = cursor.position + dataLength;
@@ -78,33 +78,4 @@ function readResourceBlock(cursor: Cursor): ImageResourceBlock {
   }
 
   return {id, name, resource};
-}
-
-/**
- * Parses a "Pascal string", as described in Adobe's documentation.
- * A Pascal string is structured as:
- *
- * | Size (bytes) |         Content        |
- * |--------------|------------------------|
- * | 1            | Length                 |
- * | 0 ~ 255      | Characters             |
- * | 0 ~ ?        | Alignment (whitespace) |
- *
- * If {@link alignment} is provided, this function _may_ skip alignment bytes
- * until the total of (length field) + (characters) + (alignment) is a multiple
- * of the `alignment` value.
- * If `alignment` is unspecified or 0, no alignment bytes are skipped.
- */
-function readPascalString(cursor: Cursor, alignment = 0): string {
-  const length = cursor.read("u8");
-  const value = cursor.readString(length);
-
-  if (alignment) {
-    const remainder = (length + 1) % alignment;
-    if (remainder > 0) {
-      cursor.pass(alignment - remainder);
-    }
-  }
-
-  return value;
 }
