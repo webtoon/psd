@@ -291,6 +291,7 @@ function readLayerChannels(
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
     switch (compression) {
+      case ChannelCompression.ZipWithoutPrediction:
       case ChannelCompression.RawData: {
         const data = cursor.take(channelDataLength);
         channels.set(channelKind, {compression, data});
