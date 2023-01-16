@@ -16,7 +16,7 @@ import {
   matchChannelCompression,
   matchClipping,
 } from "../../interfaces";
-import {parseEngineData} from "../../methods";
+import {parseEngineData, validateSupportedCompression} from "../../methods";
 import {
   Cursor,
   height,
@@ -290,6 +290,8 @@ function readLayerChannels(
     // This is different from the PSD Image Data section, which uses a single
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
+    validateSupportedCompression(compression);
+
     switch (compression) {
       case ChannelCompression.RawData: {
         const data = cursor.take(channelDataLength);

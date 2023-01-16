@@ -49,7 +49,7 @@ export async function generateRgba(
   );
 }
 
-function validateSupportedCompression(
+export function validateSupportedCompression(
   compression: ChannelCompression
 ): asserts compression is
   | ChannelCompression.RawData
