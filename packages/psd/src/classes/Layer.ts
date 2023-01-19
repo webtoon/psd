@@ -56,6 +56,7 @@ export class Layer
   get composedOpacity(): number {
     return this.parent.composedOpacity * (this.opacity / 255);
   }
+
   get maskData(): MaskData {
     return this.layerFrame.layerProperties.maskData;
   }

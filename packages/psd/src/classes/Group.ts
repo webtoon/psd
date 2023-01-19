@@ -3,7 +3,7 @@
 // MIT License
 
 import {BlendMode, Clipping} from "../interfaces";
-import {GroupFrame, LayerProperties} from "../sections";
+import {GroupFrame, LayerProperties, MaskData} from "../sections";
 import {NodeChild, NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
 
@@ -55,6 +55,10 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
 
   get isHidden(): boolean {
     return this.layerFrame?.layerProperties.hidden ?? false;
+  }
+
+  get maskData(): MaskData | undefined {
+    return this.layerFrame?.layerProperties.maskData;
   }
 
   get clipping(): Clipping {
