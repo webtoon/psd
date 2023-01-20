@@ -3,7 +3,9 @@
 // MIT License
 
 import {BlendMode, Clipping} from "../interfaces";
+import {decodeGrayscale} from "../methods";
 import {GroupFrame, LayerProperties, MaskData} from "../sections";
+import {area} from "../utils";
 import {NodeChild, NodeParent} from "./Node";
 import {NodeBase} from "./NodeBase";
 
@@ -67,5 +69,31 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
 
   get id(): number | undefined {
     return this.layerFrame?.id;
+  }
+
+  async userMask(): Promise<Uint8Array | undefined> {
+    const userMask = this.layerFrame?.userMask;
+
+    if (!userMask) {
+      return undefined;
+    }
+    const {maskData} = this;
+
+    if (!maskData) {
+      return;
+    }
+
+    return decodeGrayscale(area(maskData), userMask);
+  }
+
+  async realUserMask(): Promise<Uint8Array | undefined> {
+    const maskData = this.maskData?.realData;
+    const userMask = this.layerFrame?.realUserMask;
+
+    if (!maskData || !userMask) {
+      return undefined;
+    }
+
+    return decodeGrayscale(area(maskData), userMask);
   }
 }

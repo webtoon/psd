@@ -70,15 +70,25 @@ export class GroupFrame {
     name: string,
     id: number,
     layerRecord: LayerRecord,
+    channels: LayerChannels,
     groupId?: number
   ): GroupFrame {
     const layerProperties = createLayerProperties(name, layerRecord, groupId);
 
-    return new GroupFrame(id, layerProperties);
+    return new GroupFrame(id, layerProperties, channels);
   }
 
   constructor(
     public readonly id: number,
-    public readonly layerProperties: LayerProperties
+    public readonly layerProperties: LayerProperties,
+    public readonly channels: LayerChannels
   ) {}
+
+  get userMask(): ChannelBytes | undefined {
+    return this.channels.get(ChannelKind.UserSuppliedLayerMask);
+  }
+
+  get realUserMask(): ChannelBytes | undefined {
+    return this.channels.get(ChannelKind.RealUserSuppliedLayerMask);
+  }
 }
