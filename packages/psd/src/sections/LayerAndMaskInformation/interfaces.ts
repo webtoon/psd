@@ -44,6 +44,7 @@ export interface Frame {
   groupId: number;
   parentGroupId: number;
   layerRecord?: LayerRecord;
+  channels?: LayerChannels;
 }
 
 export type AdditionalLayerProperties = {
