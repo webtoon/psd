@@ -110,6 +110,7 @@ export function parseLayerAndMaskInformation(
       orders.push("G");
     } else if (dividerType === GroupDivider.BoundingSection) {
       // Indicates the end of a layer group
+
       const frame: Frame | undefined = stack.pop();
       if (frame === undefined) {
         throw new PanicFrameStackUnmatched();
@@ -117,7 +118,7 @@ export function parseLayerAndMaskInformation(
 
       const groupId = frame.groupId > 0 ? frame.groupId : undefined;
       const _layerRecord = frame.layerRecord || layerRecord;
-      const _channels = frame.channels || channels;
+      const _channels = frame.channels;
       groups.push(
         GroupFrame.create(
           _layerRecord.name,

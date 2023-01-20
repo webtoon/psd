@@ -73,13 +73,9 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
 
   async userMask(): Promise<Uint8Array | undefined> {
     const userMask = this.layerFrame?.userMask;
-
-    if (!userMask) {
-      return undefined;
-    }
     const {maskData} = this;
 
-    if (!maskData) {
+    if (!maskData || !userMask) {
       return;
     }
 
@@ -91,7 +87,7 @@ export class Group implements NodeBase<NodeParent, NodeChild> {
     const userMask = this.layerFrame?.realUserMask;
 
     if (!maskData || !userMask) {
-      return undefined;
+      return;
     }
 
     return decodeGrayscale(area(maskData), userMask);
