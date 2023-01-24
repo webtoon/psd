@@ -121,7 +121,7 @@ export function readPatternData(cursor: Cursor, height: number): PatternData {
   return {version, length, rectangle, numberOfChannels, channels};
 }
 
-export function readPattern(cursor: Cursor): Pattern {
+export function readPattern(cursor: Cursor, length: number): Pattern {
   const version = cursor.read("u32");
   const imageMode = cursor.read("u32");
 
@@ -133,6 +133,8 @@ export function readPattern(cursor: Cursor): Pattern {
     imageMode === ImageMode.Indexed ? readColorTable(cursor) : undefined;
 
   const patternData = readPatternData(cursor, height);
+  const padding = length % 4 ? 4 - (length % 4) : 0;
+  cursor.take(padding);
 
   return {
     version,
@@ -152,9 +154,10 @@ export function readPatternAliBlock(
 ): AliBlockBody<PatternAliBlock> {
   const endAt = cursor.position + size;
   const data: Pattern[] = [];
+  let length;
 
-  while (cursor.position + 4 < endAt && cursor.read("u32")) {
-    data.push(readPattern(cursor));
+  while (cursor.position + 4 < endAt && (length = cursor.read("u32"))) {
+    data.push(readPattern(cursor, length));
   }
   cursor.pass(endAt - cursor.position);
 
