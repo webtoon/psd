@@ -134,7 +134,7 @@ export function readPattern(cursor: Cursor, length: number): Pattern {
 
   const patternData = readPatternData(cursor, height);
   const padding = length % 4 ? 4 - (length % 4) : 0;
-  cursor.take(padding);
+  cursor.pass(padding);
 
   return {
     version,
