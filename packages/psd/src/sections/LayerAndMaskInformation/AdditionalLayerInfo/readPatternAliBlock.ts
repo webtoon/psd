@@ -133,8 +133,7 @@ export function readPattern(cursor: Cursor, length: number): Pattern {
     imageMode === ImageMode.Indexed ? readColorTable(cursor) : undefined;
 
   const patternData = readPatternData(cursor, height);
-  const padding = length % 4 ? 4 - (length % 4) : 0;
-  cursor.pass(padding);
+  cursor.padding(length, 4);
 
   return {
     version,
