@@ -20,6 +20,7 @@ import {parseEngineData, validateSupportedCompression} from "../../methods";
 import {
   Cursor,
   height,
+  InvalidAdditionalLayerInfoSignature,
   InvalidBlendingModeSignature,
   MissingRealMaskData,
 } from "../../utils";
@@ -142,7 +143,17 @@ function readLayerRecord(
 
   const additionalLayerInfos: AdditionalLayerInfo[] = [];
   while (cursor.position - layerExtraDataBegin < layerExtraDataSize) {
-    additionalLayerInfos.push(readAdditionalLayerInfo(cursor, fileVersionSpec));
+    try {
+      additionalLayerInfos.push(
+        readAdditionalLayerInfo(cursor, fileVersionSpec)
+      );
+    } catch (error) {
+      if (error instanceof InvalidAdditionalLayerInfoSignature) {
+        cursor.unpass(4);
+        break;
+      }
+      throw error;
+    }
   }
 
   // Extract useful information from additionalLayerInfos and expose them as
@@ -206,9 +217,17 @@ export function readGlobalAdditionalLayerInformation(
 ): AdditionalLayerProperties {
   const additionalLayerInfos = [];
   while (cursor.position < cursor.length) {
-    additionalLayerInfos.push(
-      readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
-    );
+    try {
+      additionalLayerInfos.push(
+        readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
+      );
+    } catch (error) {
+      if (error instanceof InvalidAdditionalLayerInfoSignature) {
+        cursor.unpass(4);
+        break;
+      }
+      throw error;
+    }
   }
 
   return fromEntries(
