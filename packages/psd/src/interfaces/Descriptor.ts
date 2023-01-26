@@ -185,6 +185,14 @@ export enum UnitFloatType {
   Pixels = "#Pxl",
   /** Tagged unit value */
   Points = "#Pnt",
+
+  /**
+   *  Following descriptions were taken from https://psd-tools.readthedocs.io/en/latest/reference/psd_tools.terminology.html#psd_tools.terminology.Enum.RulerCm
+   *  */
+  /** Ruler centimeter */
+  RulerCm = "RrCm",
+  /**Ruler inches */
+  RulerInches = "RrIn",
 }
 
 /**
