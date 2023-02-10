@@ -57,7 +57,7 @@ export class Layer
     return this.parent.composedOpacity * (this.opacity / 255);
   }
 
-  get maskData(): MaskData {
+  get maskData(): MaskData | undefined {
     return this.layerFrame.layerProperties.maskData;
   }
 
@@ -70,7 +70,7 @@ export class Layer
   }
 
   async realUserMask(): Promise<Uint8Array | undefined> {
-    const maskData = this.maskData.realData;
+    const maskData = this.maskData?.realData;
     const userMask = this.layerFrame.realUserMask;
     if (!maskData || !userMask) {
       return undefined;
