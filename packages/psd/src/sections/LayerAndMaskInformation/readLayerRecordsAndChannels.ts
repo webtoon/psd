@@ -271,7 +271,7 @@ function readLayerFlags(cursor: Cursor): {
 }
 
 function realMask(layerRecord: LayerRecord): MaskData {
-  const maskData = layerRecord.maskData.realData;
+  const maskData = layerRecord.maskData?.realData;
   if (!maskData) {
     throw new MissingRealMaskData();
   }
@@ -338,8 +338,13 @@ function readLayerChannels(
   return channels;
 }
 
-function readMaskData(cursor: Cursor): MaskData {
+function readMaskData(cursor: Cursor): MaskData | undefined {
   const length = cursor.read("u32");
+
+  if (!length) {
+    return;
+  }
+
   const startsAt = cursor.position;
   const [top, left, bottom, right] = readBounds(cursor);
   const backgroundColor = cursor.read("u8");
