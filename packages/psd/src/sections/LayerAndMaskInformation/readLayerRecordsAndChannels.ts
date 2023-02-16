@@ -238,22 +238,8 @@ export function readGlobalAdditionalLayerInformation(
 function readLayerRectangle(cursor: Cursor): [number, number, number, number] {
   const top = cursor.read("i32");
   const left = cursor.read("i32");
-
-  // Subtract 1 to make the offset start at 0.
-  // However, when the layer is completely transparent, the `bottom` value is
-  // already 0, so we don't need to subtract 1.
-  let bottom = cursor.read("i32");
-  if (bottom !== 0) {
-    bottom -= 1;
-  }
-
-  // Subtract 1 to make the offset start at 0.
-  // However, when the layer is completely transparent, the `right` value is
-  // already 0, so we don't need to subtract 1.
-  let right = cursor.read("i32");
-  if (right !== 0) {
-    right -= 1;
-  }
+  const bottom = cursor.read("i32");
+  const right = cursor.read("i32");
 
   return [top, left, bottom, right];
 }
@@ -288,7 +274,7 @@ function calcLayerHeight(
     case ChannelKind.RealUserSuppliedLayerMask:
       return height(realMask(layerRecord));
     default:
-      return height(layerRecord) + 1;
+      return height(layerRecord);
   }
 }
 
@@ -299,10 +285,10 @@ function readLayerChannels(
   fileVersionSpec: FileVersionSpec
 ): LayerChannels {
   const channels = new Map<ChannelKind, ChannelBytes>();
-
   const {length} = channelInformation;
   for (let i = 0; i < length; i++) {
     const [channelKind, channelDataLength] = channelInformation[i];
+    const start = cursor.position;
 
     // Each channel has its own compression method; a layer may contain multiple
     // channels with different compression methods.
@@ -332,6 +318,12 @@ function readLayerChannels(
         channels.set(channelKind, {compression, data});
         break;
       }
+    }
+
+    const remainder = channelDataLength - cursor.position + start;
+
+    if (remainder > 0) {
+      cursor.pass(remainder);
     }
   }
 

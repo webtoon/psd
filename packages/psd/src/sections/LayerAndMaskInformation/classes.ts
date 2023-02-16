@@ -57,11 +57,11 @@ export class LayerFrame {
 
   get width(): number {
     const {right, left} = this.layerProperties;
-    return right - left + 1;
+    return right - left;
   }
   get height(): number {
     const {bottom, top} = this.layerProperties;
-    return bottom - top + 1;
+    return bottom - top;
   }
 }
 
