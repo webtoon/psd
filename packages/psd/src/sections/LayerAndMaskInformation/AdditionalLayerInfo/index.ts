@@ -14,6 +14,7 @@ import {readGradientFillSettingAliBlock} from "./readGradientFillSettingAliBlock
 import {readHueSaturationAliBlock} from "./readHueSaturationAliBlock";
 import {readLayerIdAliBlock} from "./readLayerIdAliBlock";
 import {readLinkedLayerAliBlock} from "./readLinkedLayerAliBlock";
+import {readMultipleObjectBasedEffectsAliBlock} from "./readMultipleObjectBasedEffectsAliBlock";
 import {readObjectBasedEffectsAliBlock} from "./readObjectBasedEffectsAliBlock";
 import {readPatternAliBlock} from "./readPatternAliBlock";
 import {readPatternFillSettingAliBlock} from "./readPatternFillSettingAliBlock";
@@ -26,6 +27,7 @@ import {readVectorMaskSettingAliBlock} from "./readVectorMaskSettingAliBlock";
 import {readVectorOriginationDataAliBLock} from "./readVectorOriginationDataAliBlock";
 import {readVectorStrokeContentDataAliBlock} from "./readVectorStrokeContentDataAliBlock";
 import {readVectorStrokeDataAliBlock} from "./readVectorStrokeDataAliBlock";
+import {readObjectBasedUndocumentedAliBlock} from "./readObjectBasedUndocumentedAliBlock";
 
 /**
  * Reads a single Additional Layer Information block from the current
@@ -90,6 +92,18 @@ function readAliBlockBody(
       return {signature, key, ...readVectorStrokeDataAliBlock(cursor)};
     case AliKey.ObjectBasedEffects:
       return {signature, key, ...readObjectBasedEffectsAliBlock(cursor)};
+    case AliKey.MultipleObjectBasedEffects:
+      return {
+        signature,
+        key,
+        ...readMultipleObjectBasedEffectsAliBlock(cursor),
+      };
+    case AliKey.ObjectBasedUndocumented:
+      return {
+        signature,
+        key,
+        ...readObjectBasedUndocumentedAliBlock(cursor),
+      };
     case AliKey.GradientFillSetting:
       return {signature, key, ...readGradientFillSettingAliBlock(cursor)};
     case AliKey.SolidColorSheetSetting:
