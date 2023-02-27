@@ -22,6 +22,8 @@ import {VectorOriginationDataAliBlock} from "./VectorOriginationDataAliBlock";
 import {VectorStrokeContentDataAliBlock} from "./VectorStrokeContentDataAliBlock";
 import {VectorStrokeDataAliBlock} from "./VectorStrokeDataAliBlock";
 import {PatternAliBlock} from "./PatternAliBlock";
+import {MultipleObjectBasedEffectsAliBlock} from "./MultipleObjectBasedEffectsAliBlock";
+import {ObjectBasedUndocumentedAliBlock} from "./ObjectBasedUndocumentedAliBlock";
 
 export * from "./AliKey";
 export * from "./SectionDividerSettingAliBlock";
@@ -33,6 +35,8 @@ export * from "./HueSaturationAliBlock";
 export * from "./LayerIdAliBlock";
 export * from "./NestedSectionDividerSettingAliBlock";
 export * from "./ObjectBasedEffectsAliBlock";
+export * from "./MultipleObjectBasedEffectsAliBlock";
+export * from "./ObjectBasedUndocumentedAliBlock";
 export * from "./PatternFillSettingAliBlock";
 export * from "./SolidColorSheetSettingAliBlock";
 export * from "./VectorMaskSettingAliBlock";
@@ -52,6 +56,8 @@ export type AdditionalLayerInfo =
   | UnicodeLayerNameAliBlock
   | VectorStrokeDataAliBlock
   | ObjectBasedEffectsAliBlock
+  | MultipleObjectBasedEffectsAliBlock
+  | ObjectBasedUndocumentedAliBlock
   | GradientFillSettingAliBlock
   | SolidColorSheetSettingAliBlock
   | PatternFillSettingAliBlock

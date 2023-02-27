@@ -13,6 +13,8 @@ export enum AliKey {
 
   VectorStrokeData = "vstk",
   ObjectBasedEffects = "lfx2",
+  MultipleObjectBasedEffects = "lmfx",
+  ObjectBasedUndocumented = "lfxs",
   GradientFillSetting = "GdFl",
   SolidColorSheetSetting = "SoCo",
   PatternFillSetting = "PtFl",
