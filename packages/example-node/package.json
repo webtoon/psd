@@ -9,7 +9,7 @@
     "@webtoon/psd": "*"
   },
   "devDependencies": {
-    "wireit": "^0.7.2"
+    "wireit": "^0.9.5"
   },
   "wireit": {
     "start": {
