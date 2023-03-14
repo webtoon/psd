@@ -4,9 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "wireit",
-    "build:psd": "wireit",
-    "start": "wireit",
-    "start:vite": "vite"
+    "start": "wireit"
   },
   "dependencies": {
     "@webtoon/psd": "*"
@@ -21,18 +19,17 @@
     "build": {
       "command": "vite build",
       "dependencies": [
-        "build:psd"
-      ]
-    },
-    "build:psd": {
-      "dependencies": [
         "../psd:build"
       ]
     },
     "start": {
-      "command": "run-p 'build:psd --watch' start:vite",
+      "command": "vite",
+      "service": true,
       "dependencies": [
-        "build:psd"
+        {
+          "script": "../psd:build",
+          "cascade": false
+        }
       ]
     }
   }
