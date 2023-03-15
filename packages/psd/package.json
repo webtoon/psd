@@ -23,12 +23,12 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^5.1.1",
-    "@rollup/plugin-typescript": "^9.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@webtoon/psd-decoder": "*",
     "release-it": "^15.5.0",
-    "typescript": "^4.8.4",
-    "vite": "^3.1.8",
-    "vitest": "^0.24.3",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.4",
+    "vitest": "^0.29.2",
     "wireit": "^0.9.5"
   },
   "publishConfig": {
