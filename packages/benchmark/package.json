@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@webtoon/psd": "*",
-    "ag-psd": "^15.0.0",
+    "ag-psd": "^15.0.5",
     "chart.js": "^4.2.1"
   },
   "devDependencies": {
