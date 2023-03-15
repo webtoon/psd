@@ -9,10 +9,10 @@
     "test": "wasm-pack test --node"
   },
   "devDependencies": {
-    "typescript": "^4.8.4",
-    "vite": "^3.1.8",
-    "vite-plugin-top-level-await": "^1.1.1",
-    "vite-plugin-wasm": "^3.0.0",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.4",
+    "vite-plugin-top-level-await": "^1.3.0",
+    "vite-plugin-wasm": "^3.2.2",
     "wasm-pack": "^0.10.3",
     "wireit": "^0.9.5"
   },
