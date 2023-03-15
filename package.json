@@ -5,7 +5,7 @@
   ],
   "scripts": {
     "build": "npm -w @webtoon/psd run build",
-    "clear": "rimraf packages/*/dist/ dist-web/",
+    "clear": "rimraf --glob 'packages/*/dist/' dist-web/",
     "deploy": "npm -w @webtoon/psd-example-browser -w @webtoon/psd-benchmark run build && gh-pages -d dist-web/",
     "fix": "eslint --fix . && prettier --write .",
     "lint": "eslint . && prettier --check .",
@@ -36,7 +36,7 @@
     "husky": "^8.0.3",
     "prettier": "^2.8.4",
     "prettier-plugin-packagejson": "^2.4.3",
-    "rimraf": "^3.0.2"
+    "rimraf": "^4.4.0"
   },
   "engines": {
     "npm": ">= 7"
