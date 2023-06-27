@@ -24,19 +24,19 @@
     "node >= 12"
   ],
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.55.0",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
     "env-cmd": "^10.1.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.7.0",
-    "eslint-plugin-compat": "^4.1.2",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-compat": "^4.1.4",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.27.5",
     "gh-pages": "^5.0.0",
     "husky": "^8.0.3",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.8",
     "prettier-plugin-packagejson": "^2.4.3",
-    "rimraf": "^4.4.0"
+    "rimraf": "^5.0.1"
   },
   "engines": {
     "npm": ">= 7"
