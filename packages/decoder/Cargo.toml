@@ -33,8 +33,9 @@ console_error_panic_hook = { version = "0.1.7", optional = true }
 # compared to the default allocator's ~10K. It is slower than the default
 # allocator, however.
 #
-# Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
-wee_alloc = { version = "0.4.5", optional = true }
+# Unfortunately, `wee_alloc` is unmaintained and is deemed a security risk as of
+# GHSA-rc23-xxgq-x27g. Since we don't use `wee_alloc` anyway, let's remove it.
+# wee_alloc = { version = "0.4.5", optional = true }
 
 # The `web-sys` crate allows you to interact with the various browser APIs,
 # like the DOM.
