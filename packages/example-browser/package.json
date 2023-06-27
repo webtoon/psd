@@ -7,7 +7,7 @@
     "start": "wireit"
   },
   "dependencies": {
-    "@webtoon/psd": "^0.3.0"
+    "@webtoon/psd": "*"
   },
   "devDependencies": {
     "typescript": "^5.1.3",
