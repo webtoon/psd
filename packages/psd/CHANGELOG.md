@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.0](https://github.com/webtoon/psd/compare/0.3.0...0.4.0) (2023-06-27)
+
+### ⚠ BREAKING CHANGES
+
+- `Layer#additionalLayerProperties` is now an object instead of an array.
+  This should make it easier to access individual keys. ([#65](https://github.com/webtoon/psd/pull/65)) ([33fd2f9](https://github.com/webtoon/psd/commit/33fd2f9ffc7fd6c6dff31fd05885781fc9038a51))
+  Thanks Lukasz Czaplinski ([@scoiatael](https://github.com/scoiatael))
+
+### Features
+
+- Added `Group#additionalProperties` ([#65](https://github.com/webtoon/psd/pull/65)) ([33fd2f9](https://github.com/webtoon/psd/commit/33fd2f9ffc7fd6c6dff31fd05885781fc9038a51))
+  Thanks Lukasz Czaplinski ([@scoiatael](https://github.com/scoiatael))
+
 ## [0.3.0](https://github.com/webtoon/psd/compare/0.2.0...0.3.0) (2022-10-20)
 
 ### Features
