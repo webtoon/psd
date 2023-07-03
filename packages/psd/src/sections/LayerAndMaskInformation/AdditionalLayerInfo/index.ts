@@ -144,11 +144,12 @@ function getAliLengthFieldSizeType(
       case "Mtrn":
       case "Alph":
       case "FMsk":
-      case "Ink2":
+      case "lnk2":
       case "FEid":
       case "FXid":
       case "PxSD":
       case "cinf": // Undocumented in Adobe's docs
+      case "lnkE": // Undocumented in Adobe's docs
         return "u64";
     }
   }
