@@ -7,7 +7,7 @@ import {ChannelKind} from "../ChannelKind";
 import {KnownAliBlock} from "./AliBlockBase";
 import {AliKey} from "./AliKey";
 
-export interface PatterDataRectangle {
+export interface PatternDataRectangle {
   top: number;
   left: number;
   bottom: number;
@@ -18,14 +18,14 @@ export interface PatternDataChannel extends ChannelBytes {
   written: true;
   length: number;
   pixelDepth1: number;
-  rectangle: PatterDataRectangle;
+  rectangle: PatternDataRectangle;
   pixelDepth2: number;
 }
 
 export interface PatternData {
   version: number;
   length: number;
-  rectangle: PatterDataRectangle;
+  rectangle: PatternDataRectangle;
   numberOfChannels: number;
   channels: Map<ChannelKind, PatternDataChannel>;
 }
