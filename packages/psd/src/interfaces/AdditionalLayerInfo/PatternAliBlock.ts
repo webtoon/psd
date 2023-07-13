@@ -3,7 +3,6 @@
 // MIT License
 
 import {ChannelBytes} from "../ChannelBytes";
-import {ChannelKind} from "../ChannelKind";
 import {KnownAliBlock} from "./AliBlockBase";
 import {AliKey} from "./AliKey";
 
@@ -27,7 +26,7 @@ export interface PatternData {
   length: number;
   rectangle: PatternDataRectangle;
   numberOfChannels: number;
-  channels: Map<ChannelKind, PatternDataChannel>;
+  channels: (PatternDataChannel | null)[];
 }
 
 export type ColorTable = [number, number, number][];

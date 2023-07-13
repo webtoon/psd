@@ -111,11 +111,11 @@ export function readPatternData(cursor: Cursor, height: number): PatternData {
   const length = cursor.read("u32");
   const rectangle = readRectangle(cursor);
   const numberOfChannels = cursor.read("u32");
-  const channels = new Map();
+  const channels = [];
 
   for (let i = 0; i < numberOfChannels + 2; i++) {
     const channel = readChannel(cursor, height);
-    channels.set(i, channel);
+    channels.push(channel);
   }
 
   return {version, length, rectangle, numberOfChannels, channels};

@@ -42,12 +42,12 @@ describe("patterns parsing", () => {
       length: 26338,
       rectangle: {top: 0, left: 0, bottom: 300, right: 300},
       numberOfChannels: 24,
-      channels: expect.any(Map),
+      channels: expect.any(Array),
     });
   });
 
   it("pattern.data first channel should have correct fields", () => {
-    expect(psd.patterns[0].patternData.channels.get(0)).toEqual({
+    expect(psd.patterns[0].patternData.channels[0]).toEqual({
       written: true,
       length: 8533,
       pixelDepth1: 8,
@@ -59,9 +59,7 @@ describe("patterns parsing", () => {
   });
 
   it("pattern.data length should have numberOfChannels + 2 length", () => {
-    const channelsLength = Array.from(
-      psd.patterns[0].patternData.channels.keys()
-    ).length;
+    const channelsLength = psd.patterns[0].patternData.channels.length;
 
     expect(channelsLength).toEqual(
       psd.patterns[0].patternData.numberOfChannels + 2

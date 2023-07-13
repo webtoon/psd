@@ -128,18 +128,17 @@ export class Psd extends Synthesizable implements NodeBase<never, NodeChild> {
     }
 
     const channels = pattern.patternData?.channels;
-    const red = channels.get(ChannelKind.Red);
 
+    const red = channels[getChannelKindOffset(ChannelKind.Red)];
     if (!red) {
       throw new MissingColorChannel("missing red channel");
     }
 
-    const green = channels.get(ChannelKind.Green);
-    const blue = channels.get(ChannelKind.Blue);
-
-    const alphaKey = getChannelKindOffset(ChannelKind.TransparencyMask);
-
-    const alpha = channels.get(alphaKey);
+    const green =
+      channels[getChannelKindOffset(ChannelKind.Green)] || undefined;
+    const blue = channels[getChannelKindOffset(ChannelKind.Blue)] || undefined;
+    const alpha =
+      channels[getChannelKindOffset(ChannelKind.TransparencyMask)] || undefined;
 
     const {width, height} = dimensions(pattern.patternData.rectangle);
 
