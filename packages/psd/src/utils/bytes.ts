@@ -239,6 +239,35 @@ export class Cursor {
   }
 
   /**
+   * Parses a "Pascal string", as described in Adobe's documentation.
+   * A Pascal string is structured as:
+   *
+   * | Size (bytes) |         Content        |
+   * |--------------|------------------------|
+   * | 1            | Length                 |
+   * | 0 ~ 255      | Characters             |
+   * | 0 ~ ?        | Alignment (whitespace) |
+   *
+   * If {@link alignment} is provided, this function _may_ skip alignment bytes
+   * until the total of (length field) + (characters) + (alignment) is a multiple
+   * of the `alignment` value.
+   * If `alignment` is unspecified or 0, no alignment bytes are skipped.
+   */
+  readPascalString(alignment = 0): string {
+    const length = this.read("u8");
+    const value = this.readString(length);
+
+    if (alignment) {
+      const remainder = (length + 1) % alignment;
+      if (remainder > 0) {
+        this.pass(alignment - remainder);
+      }
+    }
+
+    return value;
+  }
+
+  /**
    * Reads the length of the string (u32 field) at the current cursor position,
    * then reads the rest of the string and decodes it as UTF-16BE.
    * This advances the cursor.
@@ -311,5 +340,15 @@ export class Cursor {
     if (remainder > 0) {
       this.pass(divisor - remainder);
     }
+  }
+
+  /**
+   * Reads size of compressed data
+   * @param scanLines is number of lines and each line holds size information about part compressed data
+   *  we extract the sum of each individual read field.
+   */
+  rleCompressedSize(scanLines: number, readType: ReadType): number {
+    const sizes = Array.from(Array(scanLines), () => this.read(readType));
+    return sizes.reduce((a, b) => a + b);
   }
 }

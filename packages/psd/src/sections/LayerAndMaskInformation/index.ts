@@ -105,6 +105,7 @@ export function parseLayerAndMaskInformation(
         groupId: alreadyViewed,
         parentGroupId: currentGroupId,
         layerRecord,
+        channels,
       });
       orders.push("G");
     } else if (dividerType === GroupDivider.BoundingSection) {
@@ -117,12 +118,13 @@ export function parseLayerAndMaskInformation(
 
       const groupId = frame.groupId > 0 ? frame.groupId : undefined;
       const _layerRecord = frame.layerRecord || layerRecord;
-
+      const _channels = frame.channels;
       groups.push(
         GroupFrame.create(
           _layerRecord.name,
           frame.groupId,
           _layerRecord,
+          _channels,
           groupId
         )
       );

@@ -30,6 +30,9 @@ export class InvalidBlendingModeSignature extends PsdError {}
 export class InvalidGroupDividerType extends PsdError {}
 export class UnknownBlendingMode extends PsdError {}
 export class InvalidCompression extends PsdError {}
+export class MissingColorChannel extends PsdError {}
+export class MissingRealMaskData extends PsdError {}
+export class UnknownPathRecordType extends PsdError {}
 
 /**
  * Error thrown when the PSD file uses a compression format that is valid, but

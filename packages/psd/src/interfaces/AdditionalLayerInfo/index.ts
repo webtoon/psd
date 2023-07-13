@@ -18,8 +18,12 @@ import {SolidColorSheetSettingAliBlock} from "./SolidColorSheetSettingAliBlock";
 import {TypeToolObjectSettingAliBlock} from "./TypeToolObjectSettingAliBlock";
 import {UnicodeLayerNameAliBlock} from "./UnicodeLayerNameAliBlock";
 import {VectorMaskSettingAliBlock} from "./VectorMaskSettingAliBlock";
+import {VectorOriginationDataAliBlock} from "./VectorOriginationDataAliBlock";
 import {VectorStrokeContentDataAliBlock} from "./VectorStrokeContentDataAliBlock";
 import {VectorStrokeDataAliBlock} from "./VectorStrokeDataAliBlock";
+import {PatternAliBlock} from "./PatternAliBlock";
+import {MultipleObjectBasedEffectsAliBlock} from "./MultipleObjectBasedEffectsAliBlock";
+import {ObjectBasedUndocumentedAliBlock} from "./ObjectBasedUndocumentedAliBlock";
 
 export * from "./AliKey";
 export * from "./SectionDividerSettingAliBlock";
@@ -31,6 +35,8 @@ export * from "./HueSaturationAliBlock";
 export * from "./LayerIdAliBlock";
 export * from "./NestedSectionDividerSettingAliBlock";
 export * from "./ObjectBasedEffectsAliBlock";
+export * from "./MultipleObjectBasedEffectsAliBlock";
+export * from "./ObjectBasedUndocumentedAliBlock";
 export * from "./PatternFillSettingAliBlock";
 export * from "./SolidColorSheetSettingAliBlock";
 export * from "./VectorMaskSettingAliBlock";
@@ -39,6 +45,7 @@ export * from "./VectorStrokeDataAliBlock";
 export * from "./ArtboardDataAliBlock";
 export * from "./SmartObjectPlacedLayerDataAliBlock";
 export * from "./LinkedLayerAliBlock";
+export * from "./PatternAliBlock";
 
 /**
  * Represents a single Additional Layer Info block ("ALI block").
@@ -49,16 +56,21 @@ export type AdditionalLayerInfo =
   | UnicodeLayerNameAliBlock
   | VectorStrokeDataAliBlock
   | ObjectBasedEffectsAliBlock
+  | MultipleObjectBasedEffectsAliBlock
+  | ObjectBasedUndocumentedAliBlock
   | GradientFillSettingAliBlock
   | SolidColorSheetSettingAliBlock
   | PatternFillSettingAliBlock
   | VectorStrokeContentDataAliBlock
+  | VectorOriginationDataAliBlock
   | BlendOptionsCapacityAliBlock
   | VectorMaskSettingAliBlock
+  | PatternFillSettingAliBlock
   | HueSaturationAliBlock
   | NestedSectionDividerSettingAliBlock
   | LayerIdAliBlock
   | ArtboardDataAliBlock
   | SmartObjectPlacedLayerDataAliBlock
   | LinkedLayerAliBlock
+  | PatternAliBlock
   | UnknownAliBlock;

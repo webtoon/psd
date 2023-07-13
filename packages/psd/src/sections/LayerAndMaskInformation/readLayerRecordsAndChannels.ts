@@ -16,12 +16,13 @@ import {
   matchChannelCompression,
   matchClipping,
 } from "../../interfaces";
-import {parseEngineData} from "../../methods";
+import {parseEngineData, validateSupportedCompression} from "../../methods";
 import {
   Cursor,
   height,
+  InvalidAdditionalLayerInfoSignature,
   InvalidBlendingModeSignature,
-  ReadType,
+  MissingRealMaskData,
 } from "../../utils";
 import {fromEntries} from "../../utils/object";
 import {readAdditionalLayerInfo} from "./AdditionalLayerInfo";
@@ -109,8 +110,8 @@ function readLayerRecord(
   if (cursor.readString(4) !== EXPECTED_BLENDING_MODE_SIGNATURE) {
     throw new InvalidBlendingModeSignature();
   }
-
-  const blendMode: BlendMode = matchBlendMode(cursor.readString(4));
+  const bmRead = cursor.readString(4);
+  const blendMode: BlendMode = matchBlendMode(bmRead);
   const opacity = cursor.read("u8");
   const clipping: Clipping = matchClipping(cursor.read("u8"));
   const {hidden, transparencyLocked} = readLayerFlags(cursor);
@@ -142,7 +143,17 @@ function readLayerRecord(
 
   const additionalLayerInfos: AdditionalLayerInfo[] = [];
   while (cursor.position - layerExtraDataBegin < layerExtraDataSize) {
-    additionalLayerInfos.push(readAdditionalLayerInfo(cursor, fileVersionSpec));
+    try {
+      additionalLayerInfos.push(
+        readAdditionalLayerInfo(cursor, fileVersionSpec)
+      );
+    } catch (error) {
+      if (error instanceof InvalidAdditionalLayerInfoSignature) {
+        cursor.unpass(4);
+        break;
+      }
+      throw error;
+    }
   }
 
   // Extract useful information from additionalLayerInfos and expose them as
@@ -156,6 +167,7 @@ function readLayerRecord(
 
     switch (ali.key) {
       case AliKey.SectionDividerSetting:
+      case AliKey.NestedSectionDividerSetting:
         ({dividerType} = ali);
         break;
       case AliKey.TypeToolObjectSetting: {
@@ -205,9 +217,17 @@ export function readGlobalAdditionalLayerInformation(
 ): AdditionalLayerProperties {
   const additionalLayerInfos = [];
   while (cursor.position < cursor.length) {
-    additionalLayerInfos.push(
-      readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
-    );
+    try {
+      additionalLayerInfos.push(
+        readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
+      );
+    } catch (error) {
+      if (error instanceof InvalidAdditionalLayerInfoSignature) {
+        cursor.unpass(4);
+        break;
+      }
+      throw error;
+    }
   }
 
   return fromEntries(
@@ -218,22 +238,8 @@ export function readGlobalAdditionalLayerInformation(
 function readLayerRectangle(cursor: Cursor): [number, number, number, number] {
   const top = cursor.read("i32");
   const left = cursor.read("i32");
-
-  // Subtract 1 to make the offset start at 0.
-  // However, when the layer is completely transparent, the `bottom` value is
-  // already 0, so we don't need to subtract 1.
-  let bottom = cursor.read("i32");
-  if (bottom !== 0) {
-    bottom -= 1;
-  }
-
-  // Subtract 1 to make the offset start at 0.
-  // However, when the layer is completely transparent, the `right` value is
-  // already 0, so we don't need to subtract 1.
-  let right = cursor.read("i32");
-  if (right !== 0) {
-    right -= 1;
-  }
+  const bottom = cursor.read("i32");
+  const right = cursor.read("i32");
 
   return [top, left, bottom, right];
 }
@@ -251,9 +257,9 @@ function readLayerFlags(cursor: Cursor): {
 }
 
 function realMask(layerRecord: LayerRecord): MaskData {
-  const maskData = layerRecord.maskData.realData;
+  const maskData = layerRecord.maskData?.realData;
   if (!maskData) {
-    throw new Error("missing real mask data");
+    throw new MissingRealMaskData();
   }
   return maskData;
 }
@@ -268,7 +274,7 @@ function calcLayerHeight(
     case ChannelKind.RealUserSuppliedLayerMask:
       return height(realMask(layerRecord));
     default:
-      return height(layerRecord) + 1;
+      return height(layerRecord);
   }
 }
 
@@ -279,16 +285,18 @@ function readLayerChannels(
   fileVersionSpec: FileVersionSpec
 ): LayerChannels {
   const channels = new Map<ChannelKind, ChannelBytes>();
-
   const {length} = channelInformation;
   for (let i = 0; i < length; i++) {
     const [channelKind, channelDataLength] = channelInformation[i];
+    const start = cursor.position;
 
     // Each channel has its own compression method; a layer may contain multiple
     // channels with different compression methods.
     // This is different from the PSD Image Data section, which uses a single
     // compression method for all channels.
     const compression = matchChannelCompression(cursor.read("u16"));
+    validateSupportedCompression(compression);
+
     switch (compression) {
       case ChannelCompression.RawData: {
         const data = cursor.take(channelDataLength);
@@ -301,8 +309,7 @@ function readLayerChannels(
           // This is needed because some layers (e.g. gradient fill layers) may
           // have empty channel data (channelDataLength === 0).
           channelDataLength > 0
-            ? rleCompressedSize(
-                cursor,
+            ? cursor.rleCompressedSize(
                 calcLayerHeight(layerRecord, channelKind),
                 fileVersionSpec.rleScanlineLengthFieldReadType
               )
@@ -312,22 +319,24 @@ function readLayerChannels(
         break;
       }
     }
+
+    const remainder = channelDataLength - cursor.position + start;
+
+    if (remainder > 0) {
+      cursor.pass(remainder);
+    }
   }
 
   return channels;
 }
 
-function rleCompressedSize(
-  cursor: Cursor,
-  scanLines: number,
-  readType: ReadType
-): number {
-  const sizes = Array.from(Array(scanLines), () => cursor.read(readType));
-  return sizes.reduce((a, b) => a + b);
-}
-
-function readMaskData(cursor: Cursor): MaskData {
+function readMaskData(cursor: Cursor): MaskData | undefined {
   const length = cursor.read("u32");
+
+  if (!length) {
+    return;
+  }
+
   const startsAt = cursor.position;
   const [top, left, bottom, right] = readBounds(cursor);
   const backgroundColor = cursor.read("u8");

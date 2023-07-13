@@ -14,7 +14,9 @@ export {
   ResolutionUnit,
   AliKey,
   PathRecordType,
+  DescriptorValueType,
+  UnitFloatType,
 } from "./interfaces";
-export type {Guide} from "./interfaces";
+export type {Guide, AdditionalLayerInfo} from "./interfaces";
 
 export default Psd;

@@ -57,11 +57,11 @@ export class LayerFrame {
 
   get width(): number {
     const {right, left} = this.layerProperties;
-    return right - left + 1;
+    return right - left;
   }
   get height(): number {
     const {bottom, top} = this.layerProperties;
-    return bottom - top + 1;
+    return bottom - top;
   }
 }
 
@@ -70,15 +70,25 @@ export class GroupFrame {
     name: string,
     id: number,
     layerRecord: LayerRecord,
+    channels: LayerChannels | undefined,
     groupId?: number
   ): GroupFrame {
     const layerProperties = createLayerProperties(name, layerRecord, groupId);
 
-    return new GroupFrame(id, layerProperties);
+    return new GroupFrame(id, layerProperties, channels);
   }
 
   constructor(
     public readonly id: number,
-    public readonly layerProperties: LayerProperties
+    public readonly layerProperties: LayerProperties,
+    public readonly channels: LayerChannels | undefined
   ) {}
+
+  get userMask(): ChannelBytes | undefined {
+    return this.channels?.get(ChannelKind.UserSuppliedLayerMask);
+  }
+
+  get realUserMask(): ChannelBytes | undefined {
+    return this.channels?.get(ChannelKind.RealUserSuppliedLayerMask);
+  }
 }

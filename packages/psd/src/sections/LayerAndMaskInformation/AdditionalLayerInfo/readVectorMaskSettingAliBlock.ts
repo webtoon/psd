@@ -8,7 +8,7 @@ import {
   Point,
   VectorMaskSettingAliBlock,
 } from "../../../interfaces";
-import {Cursor} from "../../../utils";
+import {Cursor, UnknownPathRecordType} from "../../../utils";
 import {AliBlockBody} from "./AliBlockBody";
 
 /**
@@ -29,7 +29,8 @@ import {AliBlockBody} from "./AliBlockBody";
  *  represents the bottom-right.
  */
 function readFixedPoint32bit(cursor: Cursor): number {
-  const [beforeValue, ...afterPoint] = cursor.take(4);
+  const beforeValue = cursor.read("i8");
+  const afterPoint = cursor.take(3);
   const afterValue =
     afterPoint[0] * 2 ** 16 + afterPoint[1] * 2 ** 8 + afterPoint[2];
   return beforeValue + afterValue / 2 ** 24;
@@ -101,7 +102,9 @@ function readPathRecord(cursor: Cursor): PathRecord {
     case PathRecordType.OpenSubpathBezierKnotUnlinked:
       return readBezierKnot(cursor, type);
     default:
-      throw new Error(`Unknown PathRecordType: ${type} (bug in offsets?)`);
+      throw new UnknownPathRecordType(
+        `Unknown PathRecordType: ${type} (bug in offsets?)`
+      );
   }
 }
 
