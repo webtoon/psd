@@ -9,7 +9,7 @@ import {BenchmarkMeasurements} from "./model";
 // Use the require() function provided by the browser bundle of PSD.js
 // Because TypeScript prevents us from calling `require()` inside an ESM module,
 // we must call `globalThis.require()` instead
-const PsdJs = globalThis.require("psd") as typeof import("./psd-js");
+const PsdJs = globalThis.require("psd") as typeof import("psd");
 
 export function benchmarkPsdJs(arrayBuffer: ArrayBuffer) {
   const parseBegin = performance.now();
@@ -19,7 +19,7 @@ export function benchmarkPsdJs(arrayBuffer: ArrayBuffer) {
   const parseEnd = performance.now();
 
   const imageRenderBegin = performance.now();
-  psd.image.pixelData; // trigger getter
+  psd.image?.pixelData; // trigger getter
   const imageRenderEnd = performance.now();
 
   const layerRenderBegin = performance.now();
