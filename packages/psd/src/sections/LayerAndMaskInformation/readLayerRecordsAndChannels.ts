@@ -161,6 +161,7 @@ function readLayerRecord(
   let dividerType: LayerRecord["dividerType"];
   let layerText: LayerRecord["layerText"];
   let engineData: LayerRecord["engineData"];
+  let layerId = -1;
 
   for (const ali of additionalLayerInfos) {
     if (ali._isUnknown) continue;
@@ -188,6 +189,9 @@ function readLayerRecord(
         // Use unicode name instead of ASCII name
         ({name} = ali);
         break;
+      case AliKey.LayerId:
+        layerId = ali.value;
+        break;
     }
   }
 
@@ -208,6 +212,7 @@ function readLayerRecord(
     layerText,
     engineData,
     maskData,
+    layerId,
   };
 }
 

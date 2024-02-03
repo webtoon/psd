@@ -35,6 +35,7 @@ export interface LayerRecord {
   /** If defined, containts extra text properties */
   engineData?: EngineData;
   maskData?: MaskData;
+  layerId: number;
 }
 
 export type LayerChannels = Map<ChannelKind, ChannelBytes>;
@@ -69,6 +70,7 @@ export interface LayerProperties {
   textProperties?: EngineData;
   maskData?: MaskData;
   additionalLayerProperties: AdditionalLayerProperties;
+  layerId: number;
 }
 
 export const createLayerProperties = (
@@ -90,6 +92,7 @@ export const createLayerProperties = (
     engineData,
     maskData,
     additionalLayerInfos,
+    layerId,
   } = layerRecord;
 
   const additionalLayerProperties = fromEntries(
@@ -112,6 +115,7 @@ export const createLayerProperties = (
     textProperties: engineData,
     maskData,
     additionalLayerProperties,
+    layerId,
   };
 };
 
