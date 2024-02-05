@@ -115,4 +115,8 @@ export class Layer
   get clipping(): Clipping {
     return this.layerFrame.layerProperties.clippingMask;
   }
+
+  get layerId(): number {
+    return this.layerFrame.layerProperties.layerId;
+  }
 }
