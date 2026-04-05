@@ -57,7 +57,7 @@ export function parseLayerAndMaskInformation(
 
   // Skip over Global layer mask info
   // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
-  cursor.pass(cursor.read("u32"));
+  skipGlobalLayerMaskInfo(cursor);
 
   const globalAdditionalLayerInformation = readGlobalAdditionalLayerInformation(
     cursor,
@@ -139,4 +139,23 @@ export function parseLayerAndMaskInformation(
   groups.sort((a, b) => a.id - b.id);
 
   return {layers, groups, orders, globalAdditionalLayerInformation};
+}
+
+function skipGlobalLayerMaskInfo(cursor: Cursor): void {
+  // Some PSD writers omit the Global Layer Mask Info block entirely and leave
+  // only alignment padding after LayerInfo. In those cases, treat the block as
+  // empty instead of forcing a 4-byte length read past the end of the section.
+  if (cursor.position + 4 > cursor.length) {
+    return;
+  }
+
+  const length = cursor.read("u32");
+  const remaining = cursor.length - cursor.position;
+
+  if (length > remaining) {
+    cursor.unpass(4);
+    return;
+  }
+
+  cursor.pass(length);
 }

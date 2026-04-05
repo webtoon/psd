@@ -216,7 +216,7 @@ export function readGlobalAdditionalLayerInformation(
   fileVersionSpec: FileVersionSpec
 ): AdditionalLayerProperties {
   const additionalLayerInfos = [];
-  while (cursor.position < cursor.length) {
+  while (cursor.position + 12 <= cursor.length) {
     try {
       additionalLayerInfos.push(
         readAdditionalLayerInfo(cursor, fileVersionSpec, /* padding */ 4)
